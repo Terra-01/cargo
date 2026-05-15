@@ -5,6 +5,17 @@ export interface PaletteColor {
   hex: string;
 }
 
+export interface MoodboardSpecimen {
+  // Background, foreground (text), and accent shape colors for the SVG specimen card.
+  // Hexes — chosen explicitly per moodboard so each card has the right contrast.
+  bg: string;
+  fg: string;
+  accent: string;
+  // Fallback CSS font-family stack when the real heading face isn't installed.
+  // Picks a system family that captures the vibe (display, serif, mono, etc.).
+  headingFallback: string;
+}
+
 export interface Moodboard {
   id: string;
   number: string; // 01..06, padded
@@ -14,6 +25,7 @@ export interface Moodboard {
   palette: PaletteColor[]; // always 4 colors
   fonts: { heading: string; body: string };
   textures: string;
+  specimen: MoodboardSpecimen;
 }
 
 export const moodboards: Moodboard[] = [
@@ -31,6 +43,12 @@ export const moodboards: Moodboard[] = [
     ],
     fonts: { heading: 'Instrument Serif', body: 'General Sans' },
     textures: 'matte clay, raw linen',
+    specimen: {
+      bg: '#C2410C',
+      fg: '#FCD34D',
+      accent: '#4D7C0F',
+      headingFallback: 'Georgia, "Times New Roman", serif',
+    },
   },
   {
     id: '90s-memphis',
@@ -46,6 +64,12 @@ export const moodboards: Moodboard[] = [
     ],
     fonts: { heading: 'Druk', body: 'IBM Plex Sans' },
     textures: 'checkerboard, neon plastic, squiggles',
+    specimen: {
+      bg: '#0F0F0E',
+      fg: '#FACC15',
+      accent: '#EC4899',
+      headingFallback: '"Helvetica Neue", "Arial Black", sans-serif',
+    },
   },
   {
     id: 'scandinavian-quiet',
@@ -61,6 +85,12 @@ export const moodboards: Moodboard[] = [
     ],
     fonts: { heading: 'Söhne', body: 'Plain' },
     textures: 'bleached wood, wool, ceramic',
+    specimen: {
+      bg: '#F5F1EA',
+      fg: '#44403C',
+      accent: '#84A98C',
+      headingFallback: '"Helvetica Neue", Helvetica, system-ui, sans-serif',
+    },
   },
   {
     id: 'tokyo-at-3am',
@@ -76,6 +106,12 @@ export const moodboards: Moodboard[] = [
     ],
     fonts: { heading: 'Migra', body: 'Pangea' },
     textures: 'wet asphalt, neon glass, condensation',
+    specimen: {
+      bg: '#0A0A0A',
+      fg: '#67E8F9',
+      accent: '#FB7185',
+      headingFallback: 'Georgia, "Playfair Display", serif',
+    },
   },
   {
     id: 'brutalist-office',
@@ -91,6 +127,12 @@ export const moodboards: Moodboard[] = [
     ],
     fonts: { heading: 'Druk', body: 'JetBrains Mono' },
     textures: 'concrete, manila card, rubber stamp',
+    specimen: {
+      bg: '#F5F1E8',
+      fg: '#18181B',
+      accent: '#F59E0B',
+      headingFallback: '"Arial Black", "Helvetica Neue", Impact, sans-serif',
+    },
   },
   {
     id: 'soft-lab',
@@ -106,6 +148,12 @@ export const moodboards: Moodboard[] = [
     ],
     fonts: { heading: 'PP Editorial New', body: 'General Sans' },
     textures: 'frosted glass, soft suede, ceramic',
+    specimen: {
+      bg: '#DDD6FE',
+      fg: '#3F2E78',
+      accent: '#FBD3D4',
+      headingFallback: '"Playfair Display", Georgia, "Times New Roman", serif',
+    },
   },
 ];
 

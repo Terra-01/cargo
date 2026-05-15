@@ -144,9 +144,6 @@ export function MockupWrapper() {
     if (frame === 'browser') {
       // Bottom-only rounded rect for the image body
       roundRectBottomOnly(ctx, x, y + chromeHeight, drawW, drawH, radius);
-    } else if (frame === 'phone') {
-      // Tall rounded silhouette — exaggerate the radius
-      roundRect(ctx, x, y, drawW, drawH, Math.max(radius * 2, 24));
     } else {
       // 'card' — just a rounded rect
       roundRect(ctx, x, y, drawW, drawH, radius);

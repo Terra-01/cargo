@@ -2,6 +2,8 @@
 import { useState, useMemo } from 'react';
 import {
   ratios,
+  fontOptions,
+  TEXT_MAX_LENGTH,
   generateTypeScale,
   generateSpacingScale,
   generateCss,
@@ -9,7 +11,7 @@ import {
   type SpaceStep,
 } from '@/lib/type-scale';
 
-const SAMPLE_TEXT = 'Hello, Cargo.';
+const DEFAULT_SAMPLE_TEXT = 'Hello, Cargo.';
 const PREVIEW_FONT_CAP = 72; // largest rendered font-size in the preview; metadata still shows the true value
 
 export function TypeScale() {
@@ -18,7 +20,15 @@ export function TypeScale() {
   const [stepsUp, setStepsUp] = useState(6);
   const [stepsDown, setStepsDown] = useState(2);
   const [spacingBase, setSpacingBase] = useState(4);
+  const [fontId, setFontId] = useState('sans');
+  const [sampleText, setSampleText] = useState(DEFAULT_SAMPLE_TEXT);
   const [copied, setCopied] = useState(false);
+
+  const fontStack = useMemo(
+    () => fontOptions.find((f) => f.id === fontId)?.stack ?? fontOptions[0].stack,
+    [fontId]
+  );
+  const renderedText = sampleText.length > 0 ? sampleText : DEFAULT_SAMPLE_TEXT;
 
   const typeSteps: TypeStep[] = useMemo(
     () => generateTypeScale(base, ratioValue, stepsUp, stepsDown),
@@ -74,7 +84,7 @@ export function TypeScale() {
           grid-template-columns: 90px 56px 1fr;
           align-items: baseline;
           gap: var(--space-3);
-          padding: var(--space-2) 0;
+          padding: var(--space-3) 0 var(--space-2);
           border-bottom: 1px solid var(--border);
         }
         .ts-type-row:last-child { border-bottom: none; }
@@ -92,10 +102,11 @@ export function TypeScale() {
         }
         .ts-type-row__sample {
           color: var(--text);
-          font-family: var(--font-sans);
           font-weight: 500;
           letter-spacing: -0.02em;
-          line-height: 1.05;
+          /* line-height >= 1.25 keeps descenders (g, y, p, etc.) inside the line box so 'overflow: hidden' on long text doesn't clip them */
+          line-height: 1.25;
+          padding-bottom: 0.05em;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -198,6 +209,36 @@ export function TypeScale() {
               className="slider"
             />
           </div>
+          <div className="field" style={{ marginBottom: 'var(--space-5)' }}>
+            <label className="field__label" htmlFor="font"><span>preview font</span></label>
+            <select
+              id="font"
+              className="select"
+              value={fontId}
+              onChange={(e) => setFontId(e.target.value)}
+              data-testid="font-select"
+            >
+              {fontOptions.map((opt) => (
+                <option key={opt.id} value={opt.id}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="field" style={{ marginBottom: 'var(--space-5)' }}>
+            <label className="field__label" htmlFor="sample-text">
+              <span>sample text</span>
+              <span className="field__value" data-testid="sample-text-count">{sampleText.length}/{TEXT_MAX_LENGTH}</span>
+            </label>
+            <input
+              id="sample-text"
+              type="text"
+              className="input"
+              maxLength={TEXT_MAX_LENGTH}
+              value={sampleText}
+              onChange={(e) => setSampleText(e.target.value)}
+              placeholder={DEFAULT_SAMPLE_TEXT}
+              data-testid="sample-text-input"
+            />
+          </div>
           <div className="field">
             <label className="field__label"><span>spacing base</span></label>
             <div className="tint-toggle" role="group" aria-label="Spacing base unit">
@@ -230,9 +271,12 @@ export function TypeScale() {
                   <span className="ts-type-row__size">{step.size}px</span>
                   <span
                     className="ts-type-row__sample"
-                    style={{ fontSize: `${Math.min(step.size, PREVIEW_FONT_CAP)}px` }}
+                    style={{
+                      fontSize: `${Math.min(step.size, PREVIEW_FONT_CAP)}px`,
+                      fontFamily: fontStack,
+                    }}
                   >
-                    {SAMPLE_TEXT}
+                    {renderedText}
                   </span>
                 </div>
               ))}

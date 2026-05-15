@@ -32,8 +32,58 @@ test.describe('Type & Spacing Scale tool', () => {
     await expect(page.getByTestId('base-slider')).toBeVisible();
     await expect(page.getByTestId('ratio-select')).toBeVisible();
     await expect(page.getByTestId('steps-up-slider')).toBeVisible();
+    await expect(page.getByTestId('font-select')).toBeVisible();
+    await expect(page.getByTestId('sample-text-input')).toBeVisible();
     await expect(page.getByTestId('space-base-4')).toBeVisible();
     await expect(page.getByTestId('space-base-8')).toBeVisible();
+  });
+
+  test('preview samples render the default sample text', async ({ page }) => {
+    await page.goto('/tools/type-scale');
+    const samples = page.locator('[data-testid="type-specimen"] .ts-type-row__sample');
+    await expect(samples.first()).toContainText('Hello, Cargo.');
+  });
+
+  test('changing the sample text updates every preview row', async ({ page }) => {
+    await page.goto('/tools/type-scale');
+    const input = page.getByTestId('sample-text-input');
+    await input.fill('Quick brown fox');
+    const samples = page.locator('[data-testid="type-specimen"] .ts-type-row__sample');
+    const first = samples.first();
+    const last = samples.last();
+    await expect(first).toContainText('Quick brown fox');
+    await expect(last).toContainText('Quick brown fox');
+  });
+
+  test('sample-text input enforces a 15-character maxLength', async ({ page }) => {
+    await page.goto('/tools/type-scale');
+    const input = page.getByTestId('sample-text-input');
+    await expect(input).toHaveAttribute('maxLength', '15');
+    await input.fill('123456789012345EXTRA'); // 20 chars; only first 15 should land
+    await expect(input).toHaveValue('123456789012345');
+    await expect(page.getByTestId('sample-text-count')).toHaveText('15/15');
+  });
+
+  test('switching the preview font swaps the sample font-family', async ({ page }) => {
+    await page.goto('/tools/type-scale');
+    const sample = page.locator('[data-testid="type-specimen"] .ts-type-row__sample').first();
+    const sansFamily = await sample.evaluate((el) => getComputedStyle(el).fontFamily);
+    await page.getByTestId('font-select').selectOption('mono');
+    const monoFamily = await sample.evaluate((el) => getComputedStyle(el).fontFamily);
+    expect(monoFamily).not.toBe(sansFamily);
+    expect(monoFamily.toLowerCase()).toMatch(/mono|menlo|monospace/);
+  });
+
+  test('descender room: sample line-height is at least 1.2', async ({ page }) => {
+    await page.goto('/tools/type-scale');
+    const sample = page.locator('[data-testid="type-specimen"] .ts-type-row__sample').first();
+    const ratio = await sample.evaluate((el) => {
+      const cs = getComputedStyle(el);
+      const fontSize = parseFloat(cs.fontSize);
+      const lineHeight = parseFloat(cs.lineHeight);
+      return lineHeight / fontSize;
+    });
+    expect(ratio).toBeGreaterThanOrEqual(1.2);
   });
 
   test('default state generates expected rows (6 up + 1 base + 2 down = 9 type rows)', async ({ page }) => {

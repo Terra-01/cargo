@@ -27,11 +27,16 @@ test.describe('Mockup Wrapper tool', () => {
     await page.goto('/tools/mockup-wrapper');
     await expect(page.getByTestId('mw-drop')).toBeVisible();
     await expect(page.getByTestId('mw-frame-browser')).toBeVisible();
-    await expect(page.getByTestId('mw-frame-phone')).toBeVisible();
     await expect(page.getByTestId('mw-frame-card')).toBeVisible();
     await expect(page.getByTestId('mw-bg-dusk')).toBeVisible();
     await expect(page.getByTestId('mw-padding-slider')).toBeVisible();
     await expect(page.getByTestId('mw-shadow-toggle')).toBeVisible();
+  });
+
+  test('only browser and card frames are offered (phone removed)', async ({ page }) => {
+    await page.goto('/tools/mockup-wrapper');
+    await expect(page.locator('[data-testid^="mw-frame-"]')).toHaveCount(2);
+    await expect(page.locator('[data-testid="mw-frame-phone"]')).toHaveCount(0);
   });
 
   test('canvas element is present', async ({ page }) => {
@@ -53,10 +58,10 @@ test.describe('Mockup Wrapper tool', () => {
   test('clicking a frame toggle changes the active state', async ({ page }) => {
     await page.goto('/tools/mockup-wrapper');
     const browser = page.getByTestId('mw-frame-browser');
-    const phone = page.getByTestId('mw-frame-phone');
+    const card = page.getByTestId('mw-frame-card');
     await expect(browser).toHaveClass(/tint-toggle__option--active/);
-    await phone.click();
-    await expect(phone).toHaveClass(/tint-toggle__option--active/);
+    await card.click();
+    await expect(card).toHaveClass(/tint-toggle__option--active/);
     await expect(browser).not.toHaveClass(/tint-toggle__option--active/);
   });
 

@@ -1,4 +1,4 @@
-export type FrameStyle = 'browser' | 'phone' | 'card';
+export type FrameStyle = 'browser' | 'card';
 
 export interface BackgroundPreset {
   id: string;
@@ -19,6 +19,5 @@ export const backgroundPresets: BackgroundPreset[] = [
 
 export const frameStyles: { id: FrameStyle; label: string; description: string }[] = [
   { id: 'browser', label: 'Browser', description: 'Mac-style window chrome with traffic lights' },
-  { id: 'phone',   label: 'Phone',   description: 'Rounded silhouette' },
   { id: 'card',    label: 'Card',    description: 'Just radius + shadow, no chrome' },
 ];

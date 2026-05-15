@@ -42,6 +42,29 @@ test.describe('Moodboard Library tool', () => {
     swatchCounts.forEach((count) => expect(count).toBe(4));
   });
 
+  test('each card embeds an SVG specimen with the heading font name', async ({ page }) => {
+    await page.goto('/tools/moodboard-library');
+    const specimens = page.locator('.mb-card__specimen');
+    await expect(specimens).toHaveCount(6);
+    // Each specimen is a real <svg>, not an <img>, and has the per-moodboard data attribute
+    const tagNames = await specimens.evaluateAll((nodes) =>
+      nodes.map((n) => n.tagName.toLowerCase())
+    );
+    tagNames.forEach((tag) => expect(tag).toBe('svg'));
+    // Mediterranean Dusk's specimen should mention its heading font
+    const dusk = page.getByTestId('mb-card-mediterranean-dusk');
+    await expect(dusk.locator('.mb-card__specimen')).toContainText('INSTRUMENT SERIF');
+    await expect(dusk.locator('.mb-card__specimen')).toContainText('General Sans');
+  });
+
+  test('each specimen renders the "Aa" sample glyph', async ({ page }) => {
+    await page.goto('/tools/moodboard-library');
+    const samples = page.locator('.mb-card__specimen [data-testid="specimen-sample"]');
+    await expect(samples).toHaveCount(6);
+    const texts = await samples.allTextContents();
+    texts.forEach((t) => expect(t.trim()).toBe('Aa'));
+  });
+
   test('each card shows an italic-serif tagline', async ({ page }) => {
     await page.goto('/tools/moodboard-library');
     const taglines = page.locator('.mb-card__tagline');

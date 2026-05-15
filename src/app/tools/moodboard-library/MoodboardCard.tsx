@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import type { Moodboard } from '@/lib/moodboards';
 import { buildMoodboardSnippet } from '@/lib/moodboards';
+import { MoodboardSpecimen } from './MoodboardSpecimen';
 
 interface MoodboardCardProps {
   moodboard: Moodboard;
@@ -34,6 +35,7 @@ export function MoodboardCard({ moodboard: mb }: MoodboardCardProps) {
         <span className="mb-card__name">{mb.name}</span>
         <span className="mb-card__category">{mb.category}</span>
       </div>
+      <MoodboardSpecimen moodboard={mb} />
       <div className="mb-card__palette" aria-hidden="true">
         {mb.palette.map((c) => (
           <div

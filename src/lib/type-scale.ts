@@ -4,6 +4,22 @@ export interface RatioOption {
   value: number;
 }
 
+export interface FontOption {
+  id: string;
+  label: string;
+  // Concrete CSS font-family stack (not a CSS variable so the inline style applies independently of the page tokens)
+  stack: string;
+}
+
+export const fontOptions: FontOption[] = [
+  { id: 'sans',   label: 'Sans',         stack: '"Inter", "Helvetica Neue", system-ui, -apple-system, sans-serif' },
+  { id: 'serif',  label: 'Serif',        stack: '"Instrument Serif", "Times New Roman", Georgia, serif' },
+  { id: 'mono',   label: 'Mono',         stack: '"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace' },
+  { id: 'system', label: 'System',       stack: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' },
+];
+
+export const TEXT_MAX_LENGTH = 15;
+
 export const ratios: RatioOption[] = [
   { id: 'major-second',   label: 'Major Second · 1.125',   value: 1.125 },
   { id: 'minor-third',    label: 'Minor Third · 1.2',      value: 1.2 },

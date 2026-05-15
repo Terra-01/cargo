@@ -61,9 +61,18 @@ export function MoodboardLibrary() {
           text-transform: uppercase;
           color: var(--text-faint);
         }
+        .mb-card__specimen {
+          display: block;
+          width: 100%;
+          height: auto;
+          aspect-ratio: 280 / 140;
+          border-radius: var(--radius-md);
+          overflow: hidden;
+          border: 1px solid var(--border);
+        }
         .mb-card__palette {
           display: flex;
-          height: 84px;
+          height: 56px;
           border-radius: var(--radius-md);
           overflow: hidden;
           border: 1px solid var(--border);
