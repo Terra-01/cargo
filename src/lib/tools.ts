@@ -85,7 +85,7 @@ export const tools: Tool[] = [
     description: 'Pick a component, style, and framework. Get a sharp prompt you paste into Claude, v0, or Lovable.',
     tags: ['ai', 'prompts', 'vibe-coding'],
     href: '/tools/prompt-builder',
-    status: 'coming_soon',
+    status: 'shipped',
     Preview: PromptBuilderPreview,
   },
   {
