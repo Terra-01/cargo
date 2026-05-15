@@ -101,7 +101,7 @@ test.describe('Hub page foundation', () => {
     // Wait an extra moment for fonts and animations to settle
     await page.waitForTimeout(800);
     await page.screenshot({
-      path: `./screenshots/hub-phase2-${testInfo.project.name}.png`,
+      path: `./screenshots/hub-phase2-polished-${testInfo.project.name}.png`,
       fullPage: true,
     });
   });

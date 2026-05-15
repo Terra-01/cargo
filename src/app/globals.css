@@ -605,7 +605,7 @@ a { color: inherit; text-decoration: none; }
 
 /* Tool card — coming soon state */
 .tool-card--coming-soon {
-  opacity: 0.62;
+  opacity: 0.72;
   cursor: default;
   transition: opacity var(--t-base) var(--ease);
 }

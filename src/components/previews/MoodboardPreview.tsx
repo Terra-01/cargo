@@ -1,5 +1,5 @@
 export function MoodboardPreview() {
-  const swatches = ['#C2410C', '#D97757', '#F0EFE9', '#57534E'];
+  const swatches = ['#C2410C', '#FCD34D', '#4D7C0F', '#1E40AF'];
   return (
     <div
       style={{
