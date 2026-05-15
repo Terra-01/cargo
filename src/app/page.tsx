@@ -1,23 +1,44 @@
 import { ManifestStrip } from '@/components/ManifestStrip';
+import { ToolCard } from '@/components/ToolCard';
+import { tools, shippedCount, plannedCount } from '@/lib/tools';
 
 export default function Home() {
+  const shipped = shippedCount();
+  const planned = plannedCount();
+
   return (
     <main className="container">
       <section className="hero">
-        <p className="eyebrow hero__eyebrow">// design system · v0.1</p>
+        <p className="eyebrow hero__eyebrow">// a workshop · est. 2026</p>
         <h1 className="hero__title">
           Small tools for people who <em>make things</em> on the web.
         </h1>
         <p className="hero__lead">
-          A workshop of single-purpose utilities for designers and vibe coders. The first batch is in the workshop right now.
+          A workshop of single-purpose utilities for designers and vibe coders. Free, forever. Built one Saturday at a time.
         </p>
       </section>
 
-      <ManifestStrip shipped={0} planned={13} version="0.1.0" />
+      <ManifestStrip shipped={shipped} planned={planned} version="0.1.0" />
 
-      <section style={{ padding: 'var(--space-12) 0', textAlign: 'center' }}>
-        <p className="serif-flourish" style={{ fontSize: 'var(--text-xl)', color: 'var(--text-muted)' }}>
-          The first tools are arriving soon.
+      <section className="hub-section">
+        <div className="hub-section__header">
+          <span className="eyebrow">// the workshop</span>
+        </div>
+        <h2 className="heading heading--lg" style={{ marginBottom: 'var(--space-8)', maxWidth: '20ch' }}>
+          What&apos;s being built.
+        </h2>
+
+        <div className="tool-list" data-testid="tool-list">
+          {tools.map((tool) => (
+            <ToolCard key={tool.id} tool={tool} />
+          ))}
+        </div>
+      </section>
+
+      <section className="principle">
+        <p className="eyebrow principle__eyebrow">// the cargo principle</p>
+        <p className="principle__quote">
+          &ldquo;Build the tool you wish existed, then ship it on a Saturday.&rdquo;
         </p>
       </section>
     </main>

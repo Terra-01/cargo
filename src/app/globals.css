@@ -602,3 +602,78 @@ a { color: inherit; text-decoration: none; }
   .tool-card__preview { height: 100px; }
   .manifest { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
 }
+
+/* Tool card — coming soon state */
+.tool-card--coming-soon {
+  opacity: 0.62;
+  cursor: default;
+  transition: opacity var(--t-base) var(--ease);
+}
+.tool-card--coming-soon:hover {
+  opacity: 0.85;
+  border-color: var(--border);
+}
+.tool-card--coming-soon:hover .tool-card__title {
+  color: var(--text);
+}
+
+/* "soon" tag variant — no + prefix, dotted border */
+.tag--soon {
+  color: var(--text-faint);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-pill);
+  padding: 1px 8px;
+  letter-spacing: 0.04em;
+}
+.tag--soon::before {
+  content: '';
+  margin-right: 0;
+}
+
+/* Hub section spacing */
+.hub-section {
+  padding: var(--space-12) 0 var(--space-8);
+}
+.hub-section__header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+/* Tool list */
+.tool-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Cargo principle / pull quote section */
+.principle {
+  padding: var(--space-20) 0;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-12);
+}
+.principle__eyebrow {
+  margin-bottom: var(--space-5);
+}
+.principle__quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--text-2xl);
+  color: var(--text);
+  max-width: 28ch;
+  margin: 0 auto;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+.principle__attribution {
+  margin-top: var(--space-5);
+  color: var(--text-faint);
+}
+
+@media (max-width: 720px) {
+  .principle__quote { font-size: var(--text-xl); }
+}
