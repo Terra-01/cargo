@@ -41,7 +41,7 @@ export const tools: Tool[] = [
     description: 'Every cubic-bezier and spring curve, visualized side-by-side with a draggable demo so you can feel the difference.',
     tags: ['animation', 'reference'],
     href: '/tools/easing-cookbook',
-    status: 'coming_soon',
+    status: 'shipped',
     Preview: EasingCookbookPreview,
   },
   {
