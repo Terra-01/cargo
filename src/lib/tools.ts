@@ -74,7 +74,7 @@ export const tools: Tool[] = [
     description: 'Build a modular type scale and spacing system. Export as CSS variables or Tailwind config.',
     tags: ['typography', 'design-systems'],
     href: '/tools/type-scale',
-    status: 'coming_soon',
+    status: 'shipped',
     Preview: TypeScalePreview,
   },
   {
@@ -96,7 +96,7 @@ export const tools: Tool[] = [
     description: 'Hand-curated vibes with palette, fonts, and texture suggestions. From dusty Tokyo sunset to 90s Memphis.',
     tags: ['inspiration', 'color', 'palette'],
     href: '/tools/moodboard-library',
-    status: 'coming_soon',
+    status: 'shipped',
     Preview: MoodboardPreview,
   },
 ];
