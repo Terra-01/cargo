@@ -677,3 +677,172 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 720px) {
   .principle__quote { font-size: var(--text-xl); }
 }
+
+/* — Tool page shell — */
+.tool-page {
+  padding: var(--space-12) 0 var(--space-16);
+}
+.tool-page__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--space-8);
+  letter-spacing: 0.04em;
+  transition: color var(--t-fast) var(--ease);
+}
+.tool-page__back:hover { color: var(--text); }
+.tool-page__back::before {
+  content: '←';
+  margin-right: 2px;
+}
+.tool-page__header { margin-bottom: var(--space-10); }
+.tool-page__eyebrow { margin-bottom: var(--space-4); }
+.tool-page__title {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: var(--text-3xl);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin-bottom: var(--space-4);
+}
+.tool-page__desc {
+  font-size: var(--text-md);
+  color: var(--text-muted);
+  line-height: 1.65;
+  max-width: 60ch;
+}
+
+/* — Lab layout (CSS Effect Lab + future labs) — */
+.lab {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  grid-template-areas:
+    'panel preview'
+    'code code';
+  gap: var(--space-5);
+}
+.lab__panel { grid-area: panel; }
+.lab__preview-wrap { grid-area: preview; }
+.lab__code-wrap { grid-area: code; margin-top: var(--space-2); }
+
+.lab__preview {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+  min-height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+}
+.lab__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(at 18% 24%, #FF6B35 0%, transparent 48%),
+    radial-gradient(at 82% 18%, #4ECDC4 0%, transparent 48%),
+    radial-gradient(at 60% 78%, #FFD93D 0%, transparent 48%),
+    radial-gradient(at 90% 92%, #6C5CE7 0%, transparent 48%),
+    #1A1A2E;
+}
+.lab__glass {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-6) var(--space-8);
+  min-width: 220px;
+  text-align: left;
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+}
+.lab__glass-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: var(--space-2);
+}
+.lab__glass-value {
+  font-family: var(--font-sans);
+  font-size: var(--text-2xl);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-1);
+}
+.lab__glass-meta {
+  font-size: var(--text-sm);
+  opacity: 0.75;
+}
+
+/* — Tint toggle (light/dark base for glass) — */
+.tint-toggle {
+  display: flex;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  width: 100%;
+}
+.tint-toggle__option {
+  flex: 1;
+  padding: 7px 12px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--t-fast) var(--ease);
+  letter-spacing: 0.04em;
+}
+.tint-toggle__option:hover { color: var(--text); }
+.tint-toggle__option--active {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* — Bool toggle (on/off chip) — */
+.bool-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.bool-toggle__btn {
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  padding: 3px 12px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all var(--t-fast) var(--ease);
+  letter-spacing: 0.04em;
+}
+.bool-toggle__btn:hover { color: var(--text); border-color: var(--text); }
+.bool-toggle__btn--on {
+  background: var(--accent);
+  color: #FFFFFF;
+  border-color: var(--accent);
+}
+.bool-toggle__btn--on:hover { color: #FFFFFF; border-color: var(--accent); }
+
+/* — Field stack inside the lab panel — */
+.lab__panel .field { margin-bottom: var(--space-5); }
+.lab__panel .field:last-child { margin-bottom: 0; }
+
+@media (max-width: 860px) {
+  .lab {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'preview'
+      'panel'
+      'code';
+  }
+  .lab__preview { min-height: 320px; }
+}

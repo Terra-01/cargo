@@ -30,7 +30,7 @@ export const tools: Tool[] = [
     description: 'A live playground for glassmorphism, mesh gradients, and animated borders.',
     tags: ['css', 'design', 'playground'],
     href: '/tools/css-effect-lab',
-    status: 'coming_soon',
+    status: 'shipped',
     Preview: CssEffectLabPreview,
   },
   {

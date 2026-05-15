@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { TopbarNav } from './TopbarNav';
 import { ThemeToggle } from './ThemeToggle';
 
 export function Topbar() {
@@ -9,11 +10,7 @@ export function Topbar() {
           <span className="topbar__mark" aria-hidden="true"></span>
           <span>CARGO</span>
         </Link>
-        <nav className="topbar__nav">
-          <Link href="/" className="is-active">Tools</Link>
-          <Link href="/notes">Notes</Link>
-          <Link href="/about">About</Link>
-        </nav>
+        <TopbarNav />
         <ThemeToggle />
       </div>
     </header>

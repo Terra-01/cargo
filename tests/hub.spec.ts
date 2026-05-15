@@ -60,32 +60,40 @@ test.describe('Hub page foundation', () => {
     ]);
   });
 
-  test('all tool cards are currently coming soon (none shipped)', async ({ page }) => {
+  test('hub shows 1 shipped + 6 coming-soon tool cards', async ({ page }) => {
     await page.goto('/');
     const shippedCards = page.locator('.tool-card[data-status="shipped"]');
     const soonCards = page.locator('.tool-card[data-status="coming_soon"]');
-    await expect(shippedCards).toHaveCount(0);
-    await expect(soonCards).toHaveCount(7);
+    await expect(shippedCards).toHaveCount(1);
+    await expect(soonCards).toHaveCount(6);
   });
 
-  test('coming-soon cards are not links', async ({ page }) => {
+  test('shipped tool card (css-effect-lab) is a navigable link', async ({ page }) => {
     await page.goto('/');
-    const firstCard = page.locator('.tool-card').first();
-    const tagName = await firstCard.evaluate((el) => el.tagName.toLowerCase());
+    const card = page.locator('.tool-card[data-tool-id="css-effect-lab"]');
+    const tagName = await card.evaluate((el) => el.tagName.toLowerCase());
+    expect(tagName).toBe('a');
+    await expect(card).toHaveAttribute('href', '/tools/css-effect-lab');
+  });
+
+  test('coming-soon cards are not links (uses card 02)', async ({ page }) => {
+    await page.goto('/');
+    const secondCard = page.locator('.tool-card').nth(1);
+    const tagName = await secondCard.evaluate((el) => el.tagName.toLowerCase());
     expect(tagName).toBe('div');
-    await expect(firstCard).toHaveAttribute('aria-disabled', 'true');
+    await expect(secondCard).toHaveAttribute('aria-disabled', 'true');
   });
 
   test('each coming-soon card has a "soon" tag', async ({ page }) => {
     await page.goto('/');
     const soonTags = page.locator('.tool-card .tag--soon');
-    await expect(soonTags).toHaveCount(7);
+    await expect(soonTags).toHaveCount(6);
   });
 
   test('manifest derives counts from the tool array', async ({ page }) => {
     await page.goto('/');
     const toolsShipped = page.locator('.manifest__item').nth(1).locator('.manifest__value');
-    await expect(toolsShipped).toContainText('00 / 7 planned');
+    await expect(toolsShipped).toContainText('01 / 7 planned');
   });
 
   test('cargo principle pull quote renders', async ({ page }) => {
@@ -101,7 +109,7 @@ test.describe('Hub page foundation', () => {
     // Wait an extra moment for fonts and animations to settle
     await page.waitForTimeout(800);
     await page.screenshot({
-      path: `./screenshots/hub-phase2-polished-${testInfo.project.name}.png`,
+      path: `./screenshots/hub-phase3-${testInfo.project.name}.png`,
       fullPage: true,
     });
   });
