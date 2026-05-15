@@ -30,6 +30,7 @@ test.describe('CSS Effect Lab tool', () => {
 
   test('back link returns to the hub', async ({ page }) => {
     await page.goto('/tools/css-effect-lab');
+    await page.waitForLoadState('networkidle');
     await page.locator('.tool-page__back').click();
     await page.waitForURL('/');
     await expect(page.locator('.hero__title')).toBeVisible();

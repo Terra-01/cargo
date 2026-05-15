@@ -6,6 +6,9 @@ import { MockupWrapperPreview } from '@/components/previews/MockupWrapperPreview
 import { TypeScalePreview } from '@/components/previews/TypeScalePreview';
 import { PromptBuilderPreview } from '@/components/previews/PromptBuilderPreview';
 import { MoodboardPreview } from '@/components/previews/MoodboardPreview';
+import { TextAnimationsPreview } from '@/components/previews/TextAnimationsPreview';
+import { ShaderGradientLabPreview } from '@/components/previews/ShaderGradientLabPreview';
+import { UiPatternDictionaryPreview } from '@/components/previews/UiPatternDictionaryPreview';
 
 export type ToolStatus = 'shipped' | 'coming_soon';
 
@@ -98,6 +101,39 @@ export const tools: Tool[] = [
     href: '/tools/moodboard-library',
     status: 'shipped',
     Preview: MoodboardPreview,
+  },
+  {
+    id: 'text-animations',
+    number: '08',
+    category: 'learning_tools',
+    title: 'Text Animation Library',
+    description: '100 hand-crafted CSS text animations. Hover, copy, or pick several to bundle as one snippet.',
+    tags: ['css', 'animation', 'motion'],
+    href: '/tools/text-animations',
+    status: 'shipped',
+    Preview: TextAnimationsPreview,
+  },
+  {
+    id: 'shader-gradient-lab',
+    number: '09',
+    category: 'visual_creator',
+    title: 'Shader Gradient Lab',
+    description: 'Custom WebGL gradient generator. Tweak waves, colors, and grain in real-time. Export as PNG or JS config.',
+    tags: ['webgl', 'gradient', 'background'],
+    href: '/tools/shader-gradient-lab',
+    status: 'coming_soon',
+    Preview: ShaderGradientLabPreview,
+  },
+  {
+    id: 'ui-pattern-dictionary',
+    number: '10',
+    category: 'reference',
+    title: 'UI Pattern Dictionary',
+    description: 'A searchable reference of UI patterns — what each one means, when to use it, when not to.',
+    tags: ['reference', 'patterns', 'ui'],
+    href: '/tools/ui-pattern-dictionary',
+    status: 'coming_soon',
+    Preview: UiPatternDictionaryPreview,
   },
 ];
 

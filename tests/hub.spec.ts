@@ -40,13 +40,13 @@ test.describe('Hub page foundation', () => {
     await expect(page.locator('.hero__title em')).toContainText('make things');
   });
 
-  test('renders all 7 tool cards', async ({ page }) => {
+  test('renders all 10 tool cards', async ({ page }) => {
     await page.goto('/');
     const cards = page.locator('.tool-card');
-    await expect(cards).toHaveCount(7);
+    await expect(cards).toHaveCount(10);
   });
 
-  test('tool cards show manifest numbers 01 through 07', async ({ page }) => {
+  test('tool cards show manifest numbers 01 through 10', async ({ page }) => {
     await page.goto('/');
     const manifests = await page.locator('.tool-card__manifest').allTextContents();
     expect(manifests).toEqual([
@@ -57,15 +57,18 @@ test.describe('Hub page foundation', () => {
       'CARGO/05',
       'CARGO/06',
       'CARGO/07',
+      'CARGO/08',
+      'CARGO/09',
+      'CARGO/10',
     ]);
   });
 
-  test('hub shows all 7 tools shipped, no coming-soon cards', async ({ page }) => {
+  test('hub shows 8 shipped + 2 coming-soon tool cards', async ({ page }) => {
     await page.goto('/');
     const shippedCards = page.locator('.tool-card[data-status="shipped"]');
     const soonCards = page.locator('.tool-card[data-status="coming_soon"]');
-    await expect(shippedCards).toHaveCount(7);
-    await expect(soonCards).toHaveCount(0);
+    await expect(shippedCards).toHaveCount(8);
+    await expect(soonCards).toHaveCount(2);
   });
 
   test('shipped tool card (css-effect-lab) is a navigable link', async ({ page }) => {
@@ -124,23 +127,40 @@ test.describe('Hub page foundation', () => {
     await expect(card).toHaveAttribute('href', '/tools/mockup-wrapper');
   });
 
-  test('every tool card is a navigable link', async ({ page }) => {
+  test('shipped tool card (text-animations) is a navigable link', async ({ page }) => {
     await page.goto('/');
-    const allCards = page.locator('.tool-card');
-    const tagNames = await allCards.evaluateAll((nodes) => nodes.map((n) => n.tagName.toLowerCase()));
-    expect(tagNames).toEqual(['a', 'a', 'a', 'a', 'a', 'a', 'a']);
+    const card = page.locator('.tool-card[data-tool-id="text-animations"]');
+    const tagName = await card.evaluate((el) => el.tagName.toLowerCase());
+    expect(tagName).toBe('a');
+    await expect(card).toHaveAttribute('href', '/tools/text-animations');
   });
 
-  test('no "soon" tags remain on the hub', async ({ page }) => {
+  test('shipped tool cards are navigable links', async ({ page }) => {
+    await page.goto('/');
+    const shippedCards = page.locator('.tool-card[data-status="shipped"]');
+    const tagNames = await shippedCards.evaluateAll((nodes) => nodes.map((n) => n.tagName.toLowerCase()));
+    expect(tagNames.length).toBe(8);
+    tagNames.forEach((t) => expect(t).toBe('a'));
+  });
+
+  test('coming-soon tool cards are NOT navigable', async ({ page }) => {
+    await page.goto('/');
+    const soonCards = page.locator('.tool-card[data-status="coming_soon"]');
+    const tagNames = await soonCards.evaluateAll((nodes) => nodes.map((n) => n.tagName.toLowerCase()));
+    expect(tagNames.length).toBe(2);
+    tagNames.forEach((t) => expect(t).not.toBe('a'));
+  });
+
+  test('exactly 2 "soon" tags appear on the hub', async ({ page }) => {
     await page.goto('/');
     const soonTags = page.locator('.tool-card .tag--soon');
-    await expect(soonTags).toHaveCount(0);
+    await expect(soonTags).toHaveCount(2);
   });
 
   test('manifest derives counts from the tool array', async ({ page }) => {
     await page.goto('/');
     const toolsShipped = page.locator('.manifest__item').nth(1).locator('.manifest__value');
-    await expect(toolsShipped).toContainText('07 / 7 planned');
+    await expect(toolsShipped).toContainText('08 / 10 planned');
   });
 
   test('cargo principle pull quote renders', async ({ page }) => {
@@ -156,7 +176,7 @@ test.describe('Hub page foundation', () => {
     // Wait an extra moment for fonts and animations to settle
     await page.waitForTimeout(800);
     await page.screenshot({
-      path: `./screenshots/hub-phase9-${testInfo.project.name}.png`,
+      path: `./screenshots/hub-phase10b-${testInfo.project.name}.png`,
       fullPage: true,
     });
   });

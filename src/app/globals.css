@@ -1071,3 +1071,104 @@ a { color: inherit; text-decoration: none; }
   overflow-wrap: anywhere;
   line-height: 1.7;
 }
+
+/* ============ Picker tray (multi-select) ============ */
+.picker-tray {
+  position: sticky;
+  bottom: var(--space-4);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  margin-top: var(--space-6);
+  min-height: 52px;
+  transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+}
+:root[data-theme="dark"] .picker-tray,
+.picker-tray:where([data-theme="dark"] *) {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+.picker-tray[data-empty="true"] {
+  opacity: 0.6;
+}
+.picker-tray__count {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.picker-tray__count-num {
+  color: var(--text);
+  font-weight: 500;
+}
+.picker-tray__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+}
+.picker-tray__actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.picker-tray__empty-hint {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  letter-spacing: 0.02em;
+}
+.picker-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 8px 4px 10px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.picker-chip:hover {
+  background: var(--surface);
+  border-color: var(--border-strong);
+}
+.picker-chip__name {
+  font-family: var(--font-mono);
+  letter-spacing: 0.01em;
+}
+.picker-chip__remove {
+  font-family: var(--font-mono);
+  color: var(--text-faint);
+  font-size: 13px;
+  line-height: 1;
+  padding: 2px 4px;
+  margin-left: 2px;
+  border-radius: var(--radius-sm);
+}
+.picker-chip:hover .picker-chip__remove {
+  color: var(--accent);
+}
+@media (max-width: 640px) {
+  .picker-tray {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+  .picker-tray__actions {
+    margin-left: 0;
+  }
+}
