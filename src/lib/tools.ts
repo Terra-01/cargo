@@ -52,7 +52,7 @@ export const tools: Tool[] = [
     description: 'Skeleton loaders, spinners, and empty states with copy-pasteable code. The thing every project needs.',
     tags: ['ui', 'patterns', 'reference'],
     href: '/tools/loading-states',
-    status: 'coming_soon',
+    status: 'shipped',
     Preview: LoadingStatesPreview,
   },
   {

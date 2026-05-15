@@ -1003,3 +1003,15 @@ a { color: inherit; text-decoration: none; }
 .easing-card[data-copied="true"] {
   border-color: var(--accent);
 }
+
+/* Loader card — extends .easing-card with a different preview area */
+.loader-card__preview {
+  background: var(--surface-muted);
+  border-radius: var(--radius-md);
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  overflow: hidden;
+}
