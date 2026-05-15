@@ -1,8 +1,9 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { LoadingStates } from './LoadingStates';
 import { tools } from '@/lib/tools';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Loading States Gallery — Cargo',
   description: 'Eight curated CSS loading states. Click any card to copy HTML + CSS.',
 };

@@ -1,8 +1,9 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PromptBuilder } from './PromptBuilder';
 import { tools } from '@/lib/tools';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Component Prompt Builder — Cargo',
   description: 'Generate sharp prompts for AI coding tools. Pick component, style, and framework.',
 };

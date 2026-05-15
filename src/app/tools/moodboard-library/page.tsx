@@ -1,8 +1,9 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { MoodboardLibrary } from './MoodboardLibrary';
 import { tools } from '@/lib/tools';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Moodboard Library — Cargo',
   description: 'Six hand-curated moodboards. Palettes, fonts, and texture direction. Copy as CSS.',
 };

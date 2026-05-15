@@ -1,8 +1,9 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { CssEffectLab } from './CssEffectLab';
 import { tools } from '@/lib/tools';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'CSS Effect Lab — Cargo',
   description: 'A live playground for glassmorphism. Tweak parameters, copy the CSS.',
 };

@@ -1,8 +1,9 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { TypeScale } from './TypeScale';
 import { tools } from '@/lib/tools';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Type & Spacing Scale — Cargo',
   description: 'Build a modular type and spacing system. Export as CSS variables.',
 };

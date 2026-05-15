@@ -63,7 +63,7 @@ export const tools: Tool[] = [
     description: 'Drop in a screenshot, get it framed in a browser chrome, phone, or floating-card mockup. Export as PNG.',
     tags: ['mockup', 'image'],
     href: '/tools/mockup-wrapper',
-    status: 'coming_soon',
+    status: 'shipped',
     Preview: MockupWrapperPreview,
   },
   {

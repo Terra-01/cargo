@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { EasingCookbook } from './EasingCookbook';
+import { MockupWrapper } from './MockupWrapper';
 import { tools } from '@/lib/tools';
 
 export const metadata: Metadata = {
-  title: 'Easing Cookbook — Cargo',
-  description: 'Sixteen curated CSS easing functions, side by side. Click to copy.',
+  title: 'Mockup Wrapper — Cargo',
+  description: 'Drop in a screenshot, get it framed in a browser chrome, phone, or card. Export as PNG.',
 };
 
-export default function EasingCookbookPage() {
-  const tool = tools.find((t) => t.id === 'easing-cookbook')!;
+export default function MockupWrapperPage() {
+  const tool = tools.find((t) => t.id === 'mockup-wrapper')!;
 
   return (
     <main className="container">
@@ -21,10 +21,10 @@ export default function EasingCookbookPage() {
           </p>
           <h1 className="tool-page__title">{tool.title}</h1>
           <p className="tool-page__desc">
-            Sixteen curated cubic-bezier easings, drawn and animated side by side. Click any card to copy its value.
+            Drop in a screenshot. Pick a frame, a background, a little shadow. Download the PNG.
           </p>
         </header>
-        <EasingCookbook />
+        <MockupWrapper />
       </div>
     </main>
   );
