@@ -1123,7 +1123,7 @@ a { color: inherit; text-decoration: none; }
   bottom: var(--space-4);
   z-index: 10;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
   background: var(--surface);
@@ -1131,8 +1131,43 @@ a { color: inherit; text-decoration: none; }
   border-radius: var(--radius-lg);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   margin-top: var(--space-6);
-  min-height: 52px;
   transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+}
+/* The summary is always a single fixed-height row — the tray can never grow
+   unbounded; picking more only changes the count, never the collapsed height. */
+.picker-tray__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 36px;
+}
+.picker-tray__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.picker-tray__toggle:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+.picker-tray__toggle:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.picker-tray__caret {
+  font-size: 10px;
+  line-height: 1;
 }
 :root[data-theme="dark"] .picker-tray,
 .picker-tray:where([data-theme="dark"] *) {
@@ -1153,13 +1188,18 @@ a { color: inherit; text-decoration: none; }
   color: var(--text);
   font-weight: 500;
 }
+/* Expanded chip list — capped height + internal scroll. Even with 50+ picks
+   the tray cannot grow past this; it scrolls instead of pushing the viewport. */
 .picker-tray__chips {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  flex: 1;
-  min-width: 0;
-  align-items: center;
+  align-items: flex-start;
+  align-content: flex-start;
+  max-height: 160px;
+  overflow-y: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
 }
 .picker-tray__actions {
   display: flex;
@@ -1208,8 +1248,8 @@ a { color: inherit; text-decoration: none; }
   color: var(--accent);
 }
 @media (max-width: 640px) {
-  .picker-tray {
-    flex-direction: column;
+  .picker-tray__summary {
+    flex-wrap: wrap;
     align-items: stretch;
     gap: var(--space-2);
   }

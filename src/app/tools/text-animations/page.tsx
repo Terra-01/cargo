@@ -5,7 +5,7 @@ import { tools } from '@/lib/tools';
 
 export const metadata: Metadata = {
   title: 'Text Animation Library — Cargo',
-  description: '100 hand-crafted CSS text animations. Browse, copy, or pick several to bundle.',
+  description: '146 hand-crafted text animations — CSS and JS-driven. Browse, copy, or pick several to bundle.',
 };
 
 export default function TextAnimationsPage() {
@@ -21,7 +21,7 @@ export default function TextAnimationsPage() {
           </p>
           <h1 className="tool-page__title">{tool.title}</h1>
           <p className="tool-page__desc">
-            A catalog of CSS text animations. Hover a card to watch it play. Click to copy. Pick several at once and grab them as a bundle.
+            A catalog of 146 text animations — CSS and JS-driven. Hover a card to watch it play. Click to copy. Pick several at once and grab them as a bundle.
           </p>
         </header>
         <TextAnimationLibrary />
