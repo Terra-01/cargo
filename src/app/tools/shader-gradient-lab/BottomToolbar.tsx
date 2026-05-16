@@ -1,29 +1,19 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import type { TextOverlayConfig } from '@/lib/shader-types';
-import type { ShaderPreset } from '@/lib/shader-presets';
-import { LookPicker } from './LookPicker';
 import { FpsCounter } from './FpsCounter';
 import { TextStyleControls } from './TextOverlay';
 
 interface Props {
-  shaderId: string;
-  activePresetId: string | null;
   textOverlay: TextOverlayConfig;
   fps: number;
-  fpsMin: number | null;
-  fpsMax: number | null;
-  onPickPreset: (preset: ShaderPreset) => void;
-  onPickShader: (id: string) => void;
   onTextChange: (text: string) => void;
   onTextStyleChange: (patch: Partial<TextOverlayConfig>) => void;
   onEditDials: () => void;
-  onHideUI: () => void;
   onDownload: () => void;
   onExportHtml: () => void;
   onCopySnippet: () => void;
   onExportJson: () => void;
-  onImportJson: (file: File) => void;
 }
 
 export function BottomToolbar(props: Props) {
@@ -51,14 +41,8 @@ export function BottomToolbar(props: Props) {
 
   return (
     <div className="sg-toolbar" data-testid="sg-toolbar">
-      <div className="sg-toolbar__group">
-        <LookPicker
-          shaderId={props.shaderId}
-          activePresetId={props.activePresetId}
-          onPickPreset={props.onPickPreset}
-          onPickShader={props.onPickShader}
-        />
-
+      {/* LEFT — text content + typography */}
+      <div className="sg-toolbar__group sg-toolbar__group--left">
         <input
           type="text"
           className="sg-toolbar__text"
@@ -72,7 +56,7 @@ export function BottomToolbar(props: Props) {
         <div className="sg-look" ref={styleRef}>
           <button
             type="button"
-            className="sg-toolbar__btn"
+            className="sg-toolbar__btn sg-toolbar__btn--icon"
             data-testid="sg-text-style-trigger"
             aria-haspopup="dialog"
             aria-expanded={styleOpen}
@@ -95,8 +79,8 @@ export function BottomToolbar(props: Props) {
         </div>
       </div>
 
-      <div className="sg-toolbar__group">
-        <FpsCounter fps={props.fps} min={props.fpsMin} max={props.fpsMax} />
+      {/* CENTER — primary actions */}
+      <div className="sg-toolbar__group sg-toolbar__group--center">
         <button
           type="button"
           className="sg-toolbar__btn"
@@ -105,31 +89,14 @@ export function BottomToolbar(props: Props) {
         >
           edit dials
         </button>
+        <span className="sg-toolbar__div" aria-hidden="true" />
         <button
           type="button"
-          className="sg-toolbar__btn"
-          data-testid="sg-hide-ui"
-          title="Hide UI — clean gradient view"
-          onClick={props.onHideUI}
-        >
-          ⤢ hide
-        </button>
-        <button
-          type="button"
-          className="sg-toolbar__btn"
+          className="sg-toolbar__btn sg-toolbar__btn--primary"
           data-testid="sg-download"
           onClick={props.onDownload}
         >
           Download PNG
-        </button>
-        <button
-          type="button"
-          className="sg-toolbar__btn"
-          data-testid="sg-export-html"
-          title="Download a self-contained, zero-dependency .html of this look"
-          onClick={props.onExportHtml}
-        >
-          Export HTML
         </button>
         <button
           type="button"
@@ -148,26 +115,26 @@ export function BottomToolbar(props: Props) {
         <button
           type="button"
           className="sg-toolbar__btn"
+          data-testid="sg-export-html"
+          title="Download a self-contained, zero-dependency .html of this look"
+          onClick={props.onExportHtml}
+        >
+          Export HTML
+        </button>
+        <button
+          type="button"
+          className="sg-toolbar__btn"
           data-testid="sg-export-json"
           title="Download the config as JSON"
           onClick={props.onExportJson}
         >
           Export JSON
         </button>
-        <label className="sg-toolbar__btn" data-testid="sg-import-json" title="Import a config JSON">
-          Import
-          <input
-            type="file"
-            accept="application/json,.json"
-            style={{ display: 'none' }}
-            data-testid="sg-import-json-input"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) props.onImportJson(f);
-              e.target.value = '';
-            }}
-          />
-        </label>
+      </div>
+
+      {/* RIGHT — live FPS, fixed-width so it never shifts the layout */}
+      <div className="sg-toolbar__group sg-toolbar__group--right">
+        <FpsCounter fps={props.fps} />
       </div>
     </div>
   );

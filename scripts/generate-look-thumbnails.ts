@@ -30,24 +30,27 @@ const THUMB_W = 320;
 const THUMB_H = 200;
 const CURATED = ['rainbow-warp', 'ether'];
 
-// goto + wait for React hydration, then open the look popover (retry: a click
-// that lands before hydration is a no-op).
+// goto + wait for React hydration. The look palette is an always-visible
+// swatch grid now (no popover) — wait for it + at least one rendered tile
+// (retry: the grid mounts only after hydration).
 async function loadAndOpen(page: Page) {
   await page.goto(TOOL, { waitUntil: 'load' });
   await page.waitForLoadState('networkidle');
   await page.getByTestId('sg-canvas').waitFor();
-  const trigger = page.getByTestId('sg-look-trigger');
-  const popover = page.getByTestId('sg-look-popover');
+  const grid = page.getByTestId('sg-look-grid');
   for (let attempt = 0; attempt < 6; attempt++) {
-    await trigger.click();
     try {
-      await popover.waitFor({ timeout: 2000 });
+      await grid.waitFor({ timeout: 2000 });
+      await page
+        .locator('button[data-testid^="sg-look-preset-"]')
+        .first()
+        .waitFor({ timeout: 2000 });
       return;
     } catch {
       await page.waitForTimeout(500);
     }
   }
-  throw new Error('look-picker popover never opened');
+  throw new Error('look swatch grid never appeared');
 }
 
 async function main() {

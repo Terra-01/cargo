@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
@@ -9,10 +9,10 @@ import { DEFAULT_CONFIG } from '../src/lib/shader-types';
 const URL = '/tools/shader-gradient-lab';
 const CURATED = ['rainbow-warp', 'ether'] as const;
 
-// Open the unified look-picker popover.
+// The look palette is an always-visible swatch grid (no dropdown). This just
+// asserts it's present so existing call sites read clearly.
 async function openLooks(page: import('@playwright/test').Page) {
-  await page.getByTestId('sg-look-trigger').click();
-  await expect(page.getByTestId('sg-look-popover')).toBeVisible();
+  await expect(page.getByTestId('sg-look-grid')).toBeVisible();
 }
 
 // Open the dials modal (where ShaderControls now live).
@@ -62,13 +62,17 @@ test.describe('Shader Gradient Lab tool', () => {
 
   // ---- unified look-picker ----
 
-  test('look-picker shows the current look and opens a popover', async ({ page }) => {
+  test('swatch grid marks the active look', async ({ page }) => {
     await page.goto(URL);
-    await expect(page.getByTestId('sg-look-trigger')).toContainText('Neat');
     await openLooks(page);
+    // default look is Neat — surfaced as the active swatch
+    await expect(page.getByTestId('sg-look-preset-neat')).toHaveAttribute(
+      'data-active',
+      'true'
+    );
   });
 
-  test('look-picker lists 23 presets, a divider, then 2 shaders', async ({ page }) => {
+  test('look-picker has 23 presets, 2 shaders and a divider', async ({ page }) => {
     await page.goto(URL);
     await openLooks(page);
     await expect(
@@ -78,6 +82,31 @@ test.describe('Shader Gradient Lab tool', () => {
     for (const id of CURATED) {
       await expect(page.getByTestId(`sg-look-shader-${id}`)).toBeVisible();
     }
+  });
+
+  test('the grid leads with Rainbow Warp, Ether, Funky, Yex, Virus', async ({
+    page,
+  }) => {
+    await page.goto(URL);
+    await openLooks(page);
+    const tiles = await page
+      .locator('.sg-swatches__strip [data-testid^="sg-look-"]')
+      .evaluateAll((els) =>
+        els
+          .map((e) => (e as HTMLElement).dataset.testid as string)
+          .filter(
+            (t) =>
+              t.startsWith('sg-look-preset-') ||
+              t.startsWith('sg-look-shader-')
+          )
+      );
+    expect(tiles.slice(0, 5)).toEqual([
+      'sg-look-shader-rainbow-warp',
+      'sg-look-shader-ether',
+      'sg-look-preset-funky',
+      'sg-look-preset-yex',
+      'sg-look-preset-virus',
+    ]);
   });
 
   test('the 4 procedural presets are in the look-picker', async ({ page }) => {
@@ -94,8 +123,10 @@ test.describe('Shader Gradient Lab tool', () => {
     await page.goto(URL);
     await openLooks(page);
     await page.getByTestId('sg-look-preset-virus').click();
-    await expect(page.getByTestId('sg-look-popover')).toHaveCount(0);
-    await expect(page.getByTestId('sg-look-trigger')).toContainText('Virus');
+    await expect(page.getByTestId('sg-look-preset-virus')).toHaveAttribute(
+      'data-active',
+      'true'
+    );
     await page.waitForTimeout(800);
     await expect(page.getByTestId('sg-canvas')).toBeVisible();
     await openDials(page);
@@ -109,7 +140,32 @@ test.describe('Shader Gradient Lab tool', () => {
     await page.goto(URL);
     await openLooks(page);
     await page.getByTestId('sg-look-shader-ether').click();
-    await expect(page.getByTestId('sg-look-trigger')).toContainText('Ether');
+    await expect(page.getByTestId('sg-look-shader-ether')).toHaveAttribute(
+      'data-active',
+      'true'
+    );
+  });
+
+  test('the preset palette is labelled "// Presets"', async ({ page }) => {
+    await page.goto(URL);
+    await expect(page.getByTestId('sg-look-grid')).toContainText('// Presets');
+    await expect(page.getByTestId('sg-look-grid')).not.toContainText('// looks');
+  });
+
+  test('Funky / Yex / Virus / Ether default to resolution 0.70', async ({
+    page,
+  }) => {
+    await page.goto(URL);
+    for (const id of ['funky', 'yex', 'virus']) {
+      await page.getByTestId(`sg-look-preset-${id}`).click();
+      await openDials(page);
+      await expect(page.getByTestId('sg-resolution-slider')).toHaveValue('0.7');
+      await page.getByTestId('sg-dials-close').click();
+    }
+    // Rainbow Warp / Ether have no preset config — set on selection
+    await page.getByTestId('sg-look-shader-ether').click();
+    await openDials(page);
+    await expect(page.getByTestId('sg-resolution-slider')).toHaveValue('0.7');
   });
 
   // ---- dials modal ----
@@ -214,44 +270,63 @@ test.describe('Shader Gradient Lab tool', () => {
     await expect(page.getByTestId('sg-text-overlay')).toContainText('Persist');
   });
 
-  // ---- FPS, hide-UI, export ----
+  // ---- FPS, export ----
 
-  test('FPS counter shows current + min + max', async ({ page }) => {
+  test('FPS counter is a clean read-only live indicator', async ({ page }) => {
     await page.goto(URL);
     await page.waitForTimeout(1300);
     const fps = page.getByTestId('sg-fps');
     await expect(fps).toContainText('fps');
-    await expect(fps).toContainText('▲');
-    await expect(fps).toContainText('▼');
+    await expect(fps).toContainText(/\d/);
+    // no min/max controls or readout anymore
+    await expect(fps).not.toContainText('▲');
+    await expect(fps).not.toContainText('▼');
   });
 
-  test('hide-UI collapses chrome; un-hide restores it', async ({ page }) => {
+  test('FPS counter is a fixed-width box on the far right of the toolbar', async ({
+    page,
+  }) => {
+    await page.goto(URL);
+    await page.waitForTimeout(1200);
+    const fpsBox = await page.getByTestId('sg-fps').boundingBox();
+    const exportJson = await page.getByTestId('sg-export-json').boundingBox();
+    const toolbar = await page.getByTestId('sg-toolbar').boundingBox();
+    // sits to the right of the action buttons, near the toolbar's right edge
+    expect(fpsBox!.x).toBeGreaterThan(exportJson!.x + exportJson!.width);
+    expect(toolbar!.x + toolbar!.width - (fpsBox!.x + fpsBox!.width)).toBeLessThan(
+      40
+    );
+    // 4-digit-optimised: width holds whether the value is 1 or 4 digits
+    const minW = await page
+      .getByTestId('sg-fps')
+      .evaluate((el) => parseFloat(getComputedStyle(el).minWidth));
+    expect(minW).toBeGreaterThanOrEqual(88);
+  });
+
+  test('the Hide UI control is fully removed', async ({ page }) => {
     await page.goto(URL);
     await expect(page.getByTestId('sg-toolbar')).toBeVisible();
-    await page.getByTestId('sg-hide-ui').click();
-    await expect(page.getByTestId('sg-toolbar')).toHaveCount(0);
-    await expect(page.getByTestId('sg-fps')).toHaveCount(0);
-    await expect(page.getByTestId('sg-canvas')).toBeVisible();
-    await expect(page.getByTestId('sg-show-ui')).toBeVisible();
-    await page.getByTestId('sg-show-ui').click();
-    await expect(page.getByTestId('sg-toolbar')).toBeVisible();
+    await expect(page.getByTestId('sg-hide-ui')).toHaveCount(0);
+    await expect(page.getByTestId('sg-show-ui')).toHaveCount(0);
   });
 
-  test('hide-UI also hides an open dials modal', async ({ page }) => {
-    await page.goto(URL);
-    await openDials(page);
-    await page.getByTestId('sg-hide-ui').click();
-    await expect(page.getByTestId('sg-dials-modal')).toHaveCount(0);
-    await expect(page.getByTestId('sg-toolbar')).toHaveCount(0);
-  });
-
-  test('export + import controls are present on the toolbar', async ({ page }) => {
+  test('export actions are present and Import is fully gone', async ({ page }) => {
     await page.goto(URL);
     await expect(page.getByTestId('sg-download')).toBeVisible();
     await expect(page.getByTestId('sg-export-html')).toBeVisible();
     await expect(page.getByTestId('sg-copy-snippet')).toBeVisible();
     await expect(page.getByTestId('sg-export-json')).toBeVisible();
-    await expect(page.getByTestId('sg-import-json')).toBeVisible();
+    // Import removed completely — no button, label, or hidden file input
+    await expect(page.getByTestId('sg-import-json')).toHaveCount(0);
+    await expect(page.getByTestId('sg-import-json-input')).toHaveCount(0);
+    await expect(page.locator('input[type="file"]')).toHaveCount(0);
+    // Copy Snippet sits to the LEFT of Export HTML in the action group
+    const order = await page
+      .locator('[data-testid="sg-copy-snippet"], [data-testid="sg-export-html"]')
+      .evaluateAll((els) =>
+        els.map((e) => (e as HTMLElement).dataset.testid)
+      );
+    expect(order).toEqual(['sg-copy-snippet', 'sg-export-html']);
   });
 
   test('Copy Snippet shows a confirmation', async ({ page }) => {
@@ -350,7 +425,7 @@ test.describe('Shader Gradient Lab tool', () => {
     expect(html).not.toContain('http://');
   });
 
-  test('Export JSON downloads the config and round-trips on import', async ({ page }) => {
+  test('Export JSON downloads a valid serialised config', async ({ page }) => {
     await page.goto(URL);
     // change a dial so the look is distinct from default
     await openDials(page);
@@ -364,14 +439,13 @@ test.describe('Shader Gradient Lab tool', () => {
       page.waitForEvent('download'),
       page.getByTestId('sg-export-json').click(),
     ]);
-    const path = await dl.path();
     expect(dl.suggestedFilename()).toMatch(/\.json$/);
-    // mutate, then re-import the saved file
-    await openLooks(page);
-    await page.getByTestId('sg-look-preset-bloom').click();
-    await page.getByTestId('sg-import-json-input').setInputFiles(path!);
-    await openDials(page);
-    await expect(page.getByTestId('sg-speed-slider')).toHaveValue('9');
+    const path = await dl.path();
+    const data = JSON.parse(await readFile(path!, 'utf8'));
+    expect(data.version).toBe(1);
+    expect(data.shaderId).toBe('neat-gradient');
+    expect(data.config.speed).toBe(9);
+    expect(data.config).toHaveProperty('textOverlay');
   });
 
   test('back link returns to the hub', async ({ page }) => {
@@ -413,14 +487,14 @@ test.describe('Shader Gradient Lab tool', () => {
     expect(realConsoleErrors(errors, [/webgl/i])).toEqual([]);
   });
 
-  // ---- screenshots (phase11d-6) ----
+  // ---- screenshots (redesign) ----
 
   test('screenshot the tool page', async ({ page }, testInfo) => {
     await page.goto(URL);
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
     await page.screenshot({
-      path: `./screenshots/tool-shader-gradient-lab-phase11d-6-${testInfo.project.name}.png`,
+      path: `./screenshots/tool-shader-gradient-lab-redesign-${testInfo.project.name}.png`,
       fullPage: true,
     });
   });
@@ -431,31 +505,27 @@ test.describe('Shader Gradient Lab tool', () => {
     await openDials(page);
     await page.waitForTimeout(400);
     await page.screenshot({
-      path: `./screenshots/shader-dials-modal-phase11d-6-${testInfo.project.name}.png`,
+      path: `./screenshots/shader-dials-modal-redesign-${testInfo.project.name}.png`,
       fullPage: true,
     });
   });
 
-  test('screenshot the look-picker popover', async ({ page }, testInfo) => {
+  test('screenshot the swatch grid palette', async ({ page }, testInfo) => {
     await page.goto(URL);
     await page.waitForTimeout(700);
     await openLooks(page);
     await page.waitForTimeout(300);
     await page.screenshot({
-      path: `./screenshots/shader-look-picker-phase11d-6-${testInfo.project.name}.png`,
+      path: `./screenshots/shader-look-picker-redesign-${testInfo.project.name}.png`,
       fullPage: true,
     });
   });
 
-  test('screenshot the hide-UI clean state', async ({ page }, testInfo) => {
+  test('screenshot the clean canvas frame', async ({ page }, testInfo) => {
     await page.goto(URL);
     await page.waitForTimeout(900);
-    await page.getByTestId('sg-hide-ui').click();
-    await page.waitForTimeout(300);
-    await page.addStyleTag({ content: '.topbar { display: none !important; }' });
-    await page.waitForTimeout(100);
     await page.getByTestId('sg-canvas').screenshot({
-      path: `./screenshots/shader-hide-ui-phase11d-6-${testInfo.project.name}.png`,
+      path: `./screenshots/shader-hide-ui-redesign-${testInfo.project.name}.png`,
     });
   });
 
@@ -464,12 +534,8 @@ test.describe('Shader Gradient Lab tool', () => {
     await openLooks(page);
     await page.getByTestId('sg-look-preset-virus').click();
     await page.waitForTimeout(1200);
-    await page.getByTestId('sg-hide-ui').click();
-    await page.waitForTimeout(200);
-    await page.addStyleTag({ content: '.topbar { display: none !important; }' });
-    await page.waitForTimeout(100);
     await page.getByTestId('sg-canvas').screenshot({
-      path: `./screenshots/shader-neat-procedural-phase11d-6-${testInfo.project.name}.png`,
+      path: `./screenshots/shader-neat-procedural-redesign-${testInfo.project.name}.png`,
     });
   });
 
@@ -493,12 +559,8 @@ test.describe('Shader Gradient Lab tool', () => {
         await page.getByTestId(`sg-look-shader-${id}`).click();
       }
       await page.waitForTimeout(1100);
-      await page.getByTestId('sg-hide-ui').click();
-      await page.waitForTimeout(200);
-      await page.addStyleTag({ content: '.topbar { display: none !important; }' });
-      await page.waitForTimeout(100);
       await page.getByTestId('sg-canvas').screenshot({
-        path: `./screenshots/shader-${id}-phase11d-6-${testInfo.project.name}.png`,
+        path: `./screenshots/shader-${id}-redesign-${testInfo.project.name}.png`,
       });
     });
   }

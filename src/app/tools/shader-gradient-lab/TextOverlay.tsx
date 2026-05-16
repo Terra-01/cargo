@@ -38,6 +38,13 @@ export function TextOverlay({ overlay }: OverlayProps) {
   const justify =
     row === 'top' ? 'flex-start' : row === 'bottom' ? 'flex-end' : 'center';
 
+  // Adaptive scrim: a soft radial darkening centred on the text anchor so the
+  // preview type stays readable over bright / high-saturation shaders without
+  // dimming the whole frame. UI-only — the PNG/HTML/embed exports keep the
+  // clean gradient and rely on the user's own drop-shadow choice.
+  const cx = col === 'left' ? '24%' : col === 'right' ? '76%' : '50%';
+  const cy = row === 'top' ? '22%' : row === 'bottom' ? '78%' : '50%';
+
   const wrap: CSSProperties = {
     position: 'absolute',
     inset: 0,
@@ -49,6 +56,20 @@ export function TextOverlay({ overlay }: OverlayProps) {
     pointerEvents: 'none',
   };
 
+  const scrim: CSSProperties = {
+    position: 'absolute',
+    inset: 0,
+    pointerEvents: 'none',
+    background: `radial-gradient(ellipse 58% 46% at ${cx} ${cy}, rgba(0,0,0,0.46), rgba(0,0,0,0.2) 45%, rgba(0,0,0,0) 72%)`,
+  };
+
+  // Always carry a tight contrast halo so light text never dissolves into a
+  // bright shader; the user's drop-shadow toggle adds a softer offset cast.
+  const halo = '0 0 2px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.6)';
+  const cast = overlay.dropShadow
+    ? `, 0 2px ${Math.max(4, overlay.fontSize * 0.12)}px rgba(0,0,0,0.55)`
+    : '';
+
   const textStyle: CSSProperties = {
     fontFamily: overlay.fontFamily,
     fontSize: `${overlay.fontSize}px`,
@@ -59,13 +80,13 @@ export function TextOverlay({ overlay }: OverlayProps) {
     lineHeight: 1.15,
     textAlign: col,
     whiteSpace: 'pre-wrap',
-    textShadow: overlay.dropShadow
-      ? `0 2px ${Math.max(4, overlay.fontSize * 0.12)}px rgba(0,0,0,0.55)`
-      : 'none',
+    position: 'relative',
+    textShadow: `${halo}${cast}`,
   };
 
   return (
     <div style={wrap} data-testid="sg-text-overlay-wrap" aria-hidden="true">
+      <div style={scrim} data-testid="sg-text-overlay-scrim" />
       <span style={textStyle} data-testid="sg-text-overlay">
         {overlay.text}
       </span>

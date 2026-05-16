@@ -5,7 +5,7 @@
 //     any browser from file://.
 //   • buildEmbedSnippet — a guest-safe <script> drop-in (Shadow-DOM isolated)
 //     pasted into a page the user is already building.
-//   • buildConfigJson / parseConfigJson — a round-trippable JSON config.
+//   • buildConfigJson — the current look serialised to JSON (download only).
 //
 // All three share ONE inlined core (PROCEDURAL_JS + CORE_JS + emitPayload):
 // the runtime, the GLSL, the procedural Canvas2D generator and the config are
@@ -14,7 +14,6 @@
 // dual-precision discipline, so exports work in Firefox too.
 
 import { getProgramById } from './shader-program';
-import { DEFAULT_CONFIG } from './shader-types';
 import type { ShaderConfig } from './shader-types';
 
 export interface ExportedLook {
@@ -43,32 +42,6 @@ function htmlEscape(s: string): string {
 export function buildConfigJson(shaderId: string, config: ShaderConfig): string {
   const payload: ExportedLook = { version: 1, shaderId, config };
   return JSON.stringify(payload, null, 2);
-}
-
-export function parseConfigJson(
-  text: string
-): { shaderId: string; config: ShaderConfig } | null {
-  try {
-    const data = JSON.parse(text) as Partial<ExportedLook>;
-    if (!data || typeof data !== 'object') return null;
-    const shaderId =
-      typeof data.shaderId === 'string' && getProgramById(data.shaderId)
-        ? data.shaderId
-        : 'neat-gradient';
-    if (!data.config || typeof data.config !== 'object') return null;
-    // Merge over DEFAULT_CONFIG so a partial / older JSON still restores.
-    const config: ShaderConfig = {
-      ...DEFAULT_CONFIG,
-      ...data.config,
-      textOverlay: {
-        ...DEFAULT_CONFIG.textOverlay,
-        ...(data.config.textOverlay ?? {}),
-      },
-    };
-    return { shaderId, config };
-  } catch {
-    return null;
-  }
 }
 
 // ---- the inlined procedural Canvas2D generator (plain JS, zero-dep) ----

@@ -10,11 +10,11 @@ import {
   buildStandaloneHtml,
   buildEmbedSnippet,
   buildConfigJson,
-  parseConfigJson,
 } from '@/lib/standalone-export';
 import { ShaderControls } from './ShaderControls';
 import { TextOverlay, drawTextOverlay } from './TextOverlay';
 import { BottomToolbar } from './BottomToolbar';
+import { SwatchGrid } from './SwatchGrid';
 import { DialsModal } from './DialsModal';
 
 export function ShaderGradientLab() {
@@ -23,10 +23,7 @@ export function ShaderGradientLab() {
   const [activePresetId, setActivePresetId] = useState<string | null>('neat');
   const [glError, setGlError] = useState<string | null>(null);
   const [fps, setFps] = useState(0);
-  const [fpsMin, setFpsMin] = useState<number | null>(null);
-  const [fpsMax, setFpsMax] = useState<number | null>(null);
   const [dialsOpen, setDialsOpen] = useState(false);
-  const [uiHidden, setUiHidden] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const runtimeRef = useRef<ShaderRuntime | null>(null);
@@ -36,8 +33,8 @@ export function ShaderGradientLab() {
     [shaderId]
   );
 
-  // Create the runtime once. The canvas is always mounted (hide-UI only
-  // collapses chrome), so the runtime persists across UI toggles.
+  // Create the runtime once. The canvas is always mounted, so the runtime
+  // persists for the lifetime of the tool.
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -51,12 +48,7 @@ export function ShaderGradientLab() {
     const fpsTimer = window.setInterval(() => {
       const rt = runtimeRef.current;
       if (!rt) return;
-      const v = rt.getFps();
-      setFps(v);
-      if (v > 0) {
-        setFpsMin((m) => (m == null ? v : Math.min(m, v)));
-        setFpsMax((m) => (m == null ? v : Math.max(m, v)));
-      }
+      setFps(rt.getFps());
     }, 500);
     return () => {
       window.clearInterval(fpsTimer);
@@ -82,15 +74,14 @@ export function ShaderGradientLab() {
     runtimeRef.current?.setConfig(config);
   }, [config]);
 
-  const resetFps = () => {
-    setFpsMin(null);
-    setFpsMax(null);
-  };
-
   const handlePickShader = (id: string) => {
     setShaderId(id);
-    if (id !== 'neat-gradient') setActivePresetId(null);
-    resetFps();
+    if (id !== 'neat-gradient') {
+      setActivePresetId(null);
+      // Curated shaders (Rainbow Warp / Ether) have no preset config of
+      // their own — give them a sensible default resolution on selection.
+      setConfig((prev) => ({ ...prev, resolution: 0.7 }));
+    }
   };
 
   const handlePreset = (preset: ShaderPreset) => {
@@ -99,7 +90,6 @@ export function ShaderGradientLab() {
     // independent and user-owned — preserve it across preset switches.
     setConfig((prev) => ({ ...applyPreset(preset), textOverlay: prev.textOverlay }));
     setActivePresetId(preset.id);
-    resetFps();
   };
 
   const handleChange = (patch: Partial<ShaderConfig>) => {
@@ -196,23 +186,41 @@ export function ShaderGradientLab() {
     );
   };
 
-  const handleImportJson = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const parsed = parseConfigJson(String(reader.result ?? ''));
-      if (!parsed) return; // invalid JSON — ignore silently
-      setShaderId(parsed.shaderId);
-      setConfig(parsed.config);
-      setActivePresetId(null);
-      resetFps();
-    };
-    reader.readAsText(file);
-  };
-
   return (
-    <div className="sg-lab" data-ui-hidden={uiHidden ? 'true' : 'false'}>
+    <div className="sg-lab">
       <style>{`
         .sg-lab { display: flex; flex-direction: column; gap: var(--space-4); }
+
+        /* Shared frosted-glass surface: a translucent panel kept LEGIBLE over
+           bright / high-saturation shaders by stacking a soft adaptive dark
+           wash over the tinted glass + a stronger blur and depth shadow.
+           Still see-through — just no longer washed out. */
+        .sg-glass,
+        .sg-toolbar,
+        .sg-swatches,
+        .sg-modal,
+        .sg-look__popover {
+          background:
+            linear-gradient(rgba(8, 8, 11, 0.46), rgba(8, 8, 11, 0.46)),
+            var(--glass-bg);
+          border: 1px solid var(--glass-border);
+          box-shadow:
+            0 12px 44px rgba(0, 0, 0, 0.52),
+            inset 0 1px 0 rgba(255, 255, 255, 0.09);
+          backdrop-filter: blur(calc(var(--glass-blur) * 1.7)) saturate(140%);
+          -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 1.7)) saturate(140%);
+        }
+        @media (prefers-color-scheme: light) {
+          .sg-glass,
+          .sg-toolbar,
+          .sg-swatches,
+          .sg-modal,
+          .sg-look__popover {
+            background:
+              linear-gradient(rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.34)),
+              var(--glass-bg);
+          }
+        }
 
         /* ---- the gradient canvas: the hero ---- */
         .sg-stage {
@@ -231,111 +239,144 @@ export function ShaderGradientLab() {
           font-family: var(--font-mono); font-size: var(--text-sm);
           color: var(--text-muted);
         }
-        .sg-show-ui {
-          position: absolute; top: var(--space-3); right: var(--space-3);
-          z-index: 5;
-          font-family: var(--font-mono); font-size: var(--text-xs);
-          letter-spacing: 0.04em;
-          padding: 6px 12px; border-radius: var(--radius-pill);
-          background: var(--glass-bg);
-          border: 1px solid var(--glass-border);
-          color: var(--text);
-          backdrop-filter: blur(var(--glass-blur));
-          -webkit-backdrop-filter: blur(var(--glass-blur));
-          box-shadow: var(--glass-shadow);
-          cursor: pointer;
-        }
-
         /* ---- glass bottom toolbar ---- */
         .sg-toolbar {
           display: flex; align-items: center; justify-content: space-between;
           gap: var(--space-4); flex-wrap: wrap;
           padding: var(--space-3) var(--space-4);
           border-radius: var(--radius-lg);
-          background: var(--glass-bg);
-          border: 1px solid var(--glass-border);
-          box-shadow: var(--glass-shadow);
-          backdrop-filter: blur(var(--glass-blur));
-          -webkit-backdrop-filter: blur(var(--glass-blur));
         }
         .sg-toolbar__group {
           display: flex; align-items: center; gap: var(--space-3);
           flex-wrap: wrap;
         }
+        .sg-toolbar__group--center {
+          gap: var(--space-2); flex: 1 1 auto; justify-content: center;
+        }
+        .sg-toolbar__group--right { flex: none; justify-content: flex-end; }
+        .sg-toolbar__div {
+          width: 1px; height: 22px; flex: none;
+          background: var(--glass-border);
+        }
         .sg-toolbar__text {
           font-family: var(--font-mono); font-size: var(--text-xs);
-          padding: 7px 12px; min-width: 180px;
-          background: var(--surface); color: var(--text);
+          padding: 8px 12px; min-width: 170px;
+          background: rgba(0, 0, 0, 0.34); color: var(--text);
           border: 1px solid var(--border-strong);
           border-radius: var(--radius-md);
         }
-        .sg-toolbar__text:focus { outline: none; border-color: var(--accent); }
+        .sg-toolbar__text::placeholder { color: var(--text-faint); }
+        .sg-toolbar__text:focus {
+          outline: none; border-color: var(--accent);
+          background: rgba(0, 0, 0, 0.46);
+        }
         .sg-toolbar__btn {
           font-family: var(--font-mono); font-size: var(--text-xs);
-          letter-spacing: 0.02em;
-          padding: 7px 14px; border-radius: var(--radius-md);
+          letter-spacing: 0.02em; white-space: nowrap;
+          padding: 8px 14px; border-radius: var(--radius-md);
           border: 1px solid var(--border-strong);
-          background: var(--surface); color: var(--text-muted);
+          background: rgba(0, 0, 0, 0.28); color: var(--text);
+          text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
           cursor: pointer; transition: all var(--t-fast) var(--ease);
         }
-        .sg-toolbar__btn:hover { color: var(--text); border-color: var(--text); }
-
-        /* ---- look picker ---- */
-        .sg-look { position: relative; }
-        .sg-look__trigger {
-          display: flex; align-items: center; gap: var(--space-2);
-          font-family: var(--font-mono); font-size: var(--text-xs);
-          padding: 6px 12px 6px 6px; border-radius: var(--radius-pill);
-          border: 1px solid var(--border-strong);
-          background: var(--surface); color: var(--text);
-          cursor: pointer;
+        .sg-toolbar__btn:hover {
+          color: var(--text); border-color: var(--text);
+          background: rgba(0, 0, 0, 0.42);
         }
-        .sg-look__trigger:hover { border-color: var(--accent); }
-        .sg-look__swatch {
-          width: 28px; height: 18px; border-radius: var(--radius-sm);
-          border: 1px solid var(--border-strong);
-        }
-        .sg-look__caret { color: var(--text-faint); }
-        .sg-look__popover {
-          position: absolute; bottom: calc(100% + 8px); left: 0;
-          z-index: 20;
-          width: 248px; max-height: 360px; overflow-y: auto;
-          padding: var(--space-2);
-          border-radius: var(--radius-lg);
-          background: var(--glass-bg);
-          border: 1px solid var(--glass-border);
-          box-shadow: var(--glass-shadow);
-          backdrop-filter: blur(calc(var(--glass-blur) * 1.4));
-          -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 1.4));
-        }
-        .sg-look__row {
-          display: flex; align-items: center; gap: var(--space-3);
-          width: 100%; text-align: left;
-          font-family: var(--font-mono); font-size: var(--text-xs);
-          padding: 6px 8px; border-radius: var(--radius-md);
-          border: 1px solid transparent; background: transparent;
-          color: var(--text-muted); cursor: pointer;
-        }
-        .sg-look__row:hover { background: var(--surface-muted); color: var(--text); }
-        .sg-look__row[data-active="true"] {
+        .sg-toolbar__btn--icon { padding: 8px 12px; }
+        .sg-toolbar__btn--primary {
           border-color: var(--accent); color: var(--accent);
         }
-        .sg-look__rowswatch {
-          width: 40px; height: 20px; border-radius: var(--radius-sm);
-          border: 1px solid var(--border-strong); flex: none;
+        .sg-toolbar__btn--primary:hover {
+          border-color: var(--accent); color: var(--accent-hover);
         }
-        .sg-look__divider {
-          font-family: var(--font-mono); font-size: 10px;
-          letter-spacing: 0.1em; text-transform: uppercase;
-          color: var(--text-faint);
-          padding: var(--space-3) 8px var(--space-2);
-          border-top: 1px solid var(--border);
-          margin-top: var(--space-2);
+        .sg-toolbar__btn[data-copied="true"] {
+          border-color: var(--accent); color: var(--accent);
         }
-        .sg-textstyle-popover {
-          left: auto; right: 0; width: 260px;
+        /* ---- popovers / look picker shell (Aa typography popover) ---- */
+        .sg-look { position: relative; }
+        .sg-look__popover {
+          position: absolute; bottom: calc(100% + 10px); left: 0;
+          z-index: 20;
+          width: 260px; max-height: 380px; overflow-y: auto;
+          padding: var(--space-4);
+          border-radius: var(--radius-lg);
         }
+        .sg-textstyle-popover { left: 0; right: auto; }
         .sg-textstyle { display: flex; flex-direction: column; gap: var(--space-4); }
+
+        /* ---- swatch grid (always-visible look palette) ---- */
+        .sg-swatches {
+          display: flex; flex-direction: column; gap: var(--space-2);
+          padding: var(--space-3) var(--space-4);
+          border-radius: var(--radius-lg);
+        }
+        .sg-swatches__eyebrow {
+          font-family: var(--font-mono); font-size: 10px;
+          letter-spacing: 0.12em; text-transform: uppercase;
+          color: var(--text-muted);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+        }
+        .sg-swatches__strip {
+          display: flex; align-items: stretch; gap: var(--space-3);
+          overflow-x: auto; overflow-y: hidden;
+          padding-bottom: 6px;
+          scrollbar-width: thin;
+          scrollbar-color: var(--glass-border) transparent;
+        }
+        .sg-swatches__strip::-webkit-scrollbar { height: 7px; }
+        .sg-swatches__strip::-webkit-scrollbar-thumb {
+          background: var(--glass-border); border-radius: var(--radius-pill);
+        }
+        .sg-swatches__divider {
+          flex: none; align-self: center;
+          writing-mode: vertical-rl; transform: rotate(180deg);
+          font-family: var(--font-mono); font-size: 9px;
+          letter-spacing: 0.18em; text-transform: uppercase;
+          color: var(--text-faint);
+          padding: 0 var(--space-2);
+          border-left: 1px solid var(--glass-border);
+        }
+        .sg-swatch {
+          flex: none; width: 96px;
+          display: flex; flex-direction: column; gap: 6px;
+          padding: 5px; border-radius: var(--radius-md);
+          border: 1px solid transparent; background: transparent;
+          cursor: pointer; transition: all var(--t-fast) var(--ease);
+        }
+        .sg-swatch:hover { transform: translateY(-2px); }
+        .sg-swatch__img {
+          display: block; width: 100%; height: 54px;
+          border-radius: var(--radius-sm); overflow: hidden;
+          border: 1px solid var(--border-strong);
+          background-size: cover; position: relative;
+          transition: border-color var(--t-fast) var(--ease),
+            box-shadow var(--t-fast) var(--ease);
+        }
+        .sg-swatch__img img {
+          width: 100%; height: 100%; object-fit: cover; display: block;
+        }
+        .sg-swatch:hover .sg-swatch__img {
+          border-color: var(--text);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+        .sg-swatch__name {
+          font-family: var(--font-mono); font-size: 10px;
+          letter-spacing: 0.02em;
+          color: var(--text-muted);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+          text-align: center;
+          overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+          transition: color var(--t-fast) var(--ease);
+        }
+        .sg-swatch:hover .sg-swatch__name { color: var(--text); }
+        .sg-swatch[data-active="true"] .sg-swatch__img {
+          border-color: var(--accent);
+          box-shadow: 0 0 0 2px var(--accent), 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+        .sg-swatch[data-active="true"] .sg-swatch__name {
+          color: var(--accent);
+        }
 
         /* ---- dials modal (glass, OVER the live gradient) ---- */
         .sg-modal-backdrop {
@@ -347,45 +388,45 @@ export function ShaderGradientLab() {
           width: min(420px, 100%);
           display: flex; flex-direction: column;
           border-radius: var(--radius-lg);
-          background: var(--glass-bg);
-          border: 1px solid var(--glass-border);
-          box-shadow: var(--glass-shadow);
-          backdrop-filter: blur(var(--glass-blur));
-          -webkit-backdrop-filter: blur(var(--glass-blur));
           overflow: hidden;
         }
         .sg-modal__head {
           display: flex; align-items: center; justify-content: space-between;
           padding: var(--space-4) var(--space-5);
-          border-bottom: 1px solid var(--border);
+          border-bottom: 1px solid var(--glass-border);
         }
         .sg-modal__title {
           font-family: var(--font-mono); font-size: 10px;
-          letter-spacing: 0.1em; text-transform: uppercase;
-          color: var(--text-faint);
+          letter-spacing: 0.12em; text-transform: uppercase;
+          color: var(--text);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
         }
         .sg-modal__close {
           font-family: var(--font-mono); font-size: var(--text-sm);
-          background: none; border: none; color: var(--text-muted);
+          background: none; border: none; color: var(--text);
           cursor: pointer; padding: 4px 8px; border-radius: var(--radius-sm);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
         }
-        .sg-modal__close:hover { color: var(--text); background: var(--surface-muted); }
-        .sg-modal__body {
-          padding: var(--space-5);
-          overflow-y: auto;
-        }
+        .sg-modal__close:hover { color: var(--accent); }
+        .sg-modal__body { padding: var(--space-5); overflow-y: auto; }
 
         /* ---- dial controls (reused inside the modal) ---- */
         .sg-controls { display: flex; flex-direction: column; gap: var(--space-5); }
         .sg-group { display: flex; flex-direction: column; gap: var(--space-4); }
         .sg-group__title {
           font-family: var(--font-mono); font-size: 10px;
-          letter-spacing: 0.1em; text-transform: uppercase;
-          color: var(--text-faint);
-          border-bottom: 1px solid var(--border);
+          letter-spacing: 0.12em; text-transform: uppercase;
+          color: var(--text);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+          border-bottom: 1px solid var(--glass-border);
           padding-bottom: var(--space-2);
         }
-        .sg-field[data-disabled="true"] { opacity: 0.38; pointer-events: none; }
+        .sg-controls .field__label {
+          color: var(--text);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .sg-controls .field__value { color: var(--accent); }
+        .sg-field[data-disabled="true"] { opacity: 0.4; pointer-events: none; }
         .sg-field input[type="range"]:disabled,
         .sg-field button:disabled,
         .sg-field input[type="color"]:disabled { cursor: not-allowed; }
@@ -401,7 +442,7 @@ export function ShaderGradientLab() {
           letter-spacing: 0.06em; text-transform: uppercase;
           padding: 3px 8px; border-radius: var(--radius-sm);
           border: 1px solid var(--border-strong);
-          background: var(--surface); color: var(--text-muted); cursor: pointer;
+          background: rgba(0, 0, 0, 0.3); color: var(--text); cursor: pointer;
         }
         .sg-toggle { padding: 6px 14px; font-size: 11px; align-self: flex-start; }
         .sg-stop__toggle[data-on="true"], .sg-toggle[data-on="true"] {
@@ -414,21 +455,35 @@ export function ShaderGradientLab() {
         }
         .sg-text-grid__cell {
           aspect-ratio: 1; border: 1px solid var(--border-strong);
-          border-radius: var(--radius-sm); background: var(--surface);
+          border-radius: var(--radius-sm); background: rgba(0, 0, 0, 0.3);
           cursor: pointer; padding: 0;
         }
         .sg-text-grid__cell[data-on="true"] {
           background: var(--accent); border-color: var(--accent);
         }
 
+        /* Fixed-width box sized for "1440 fps" so the toolbar never shifts as
+           the digit count changes (1 → 3 → 4 digits). */
         .sg-fps {
+          display: inline-flex; align-items: baseline;
+          justify-content: flex-end; gap: 5px;
+          box-sizing: border-box;
+          min-width: 92px;
+          padding: 7px 12px;
+          border: 1px solid var(--border-strong);
+          border-radius: var(--radius-md);
+          background: rgba(0, 0, 0, 0.28);
           font-family: var(--font-mono); font-size: var(--text-xs);
-          color: var(--text-faint); letter-spacing: 0.03em;
+          color: var(--text-muted); letter-spacing: 0.03em;
           font-variant-numeric: tabular-nums; white-space: nowrap;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
         }
-        .sg-fps strong { color: var(--text); font-weight: 500; }
-        .sg-fps__mm { color: var(--text-faint); }
+        .sg-fps strong { color: var(--text); font-weight: 600; }
 
+        @media (max-width: 860px) {
+          .sg-toolbar { justify-content: center; }
+          .sg-toolbar__group--center { order: 3; flex-basis: 100%; }
+        }
         @media (max-width: 720px) {
           .sg-modal-backdrop { justify-content: stretch; }
           .sg-modal { width: 100%; }
@@ -450,7 +505,7 @@ export function ShaderGradientLab() {
           </>
         )}
 
-        {!uiHidden && dialsOpen && !glError && (
+        {dialsOpen && !glError && (
           <DialsModal onClose={() => setDialsOpen(false)}>
             <ShaderControls
               program={program}
@@ -459,40 +514,25 @@ export function ShaderGradientLab() {
             />
           </DialsModal>
         )}
-
-        {uiHidden && (
-          <button
-            type="button"
-            className="sg-show-ui"
-            data-testid="sg-show-ui"
-            onClick={() => setUiHidden(false)}
-          >
-            ⤢ show UI
-          </button>
-        )}
       </div>
 
-      {!uiHidden && (
-        <BottomToolbar
-          shaderId={shaderId}
-          activePresetId={activePresetId}
-          textOverlay={config.textOverlay}
-          fps={fps}
-          fpsMin={fpsMin}
-          fpsMax={fpsMax}
-          onPickPreset={handlePreset}
-          onPickShader={handlePickShader}
-          onTextChange={handleTextChange}
-          onTextStyleChange={handleTextStyleChange}
-          onEditDials={() => setDialsOpen(true)}
-          onHideUI={() => setUiHidden(true)}
-          onDownload={handleDownload}
-          onExportHtml={handleExportHtml}
-          onCopySnippet={handleCopySnippet}
-          onExportJson={handleExportJson}
-          onImportJson={handleImportJson}
-        />
-      )}
+      <BottomToolbar
+        textOverlay={config.textOverlay}
+        fps={fps}
+        onTextChange={handleTextChange}
+        onTextStyleChange={handleTextStyleChange}
+        onEditDials={() => setDialsOpen(true)}
+        onDownload={handleDownload}
+        onExportHtml={handleExportHtml}
+        onCopySnippet={handleCopySnippet}
+        onExportJson={handleExportJson}
+      />
+      <SwatchGrid
+        shaderId={shaderId}
+        activePresetId={activePresetId}
+        onPickPreset={handlePreset}
+        onPickShader={handlePickShader}
+      />
     </div>
   );
 }

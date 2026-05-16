@@ -2,17 +2,18 @@
 
 interface Props {
   fps: number;
-  min: number | null;
-  max: number | null;
 }
 
-export function FpsCounter({ fps, min, max }: Props) {
+// Read-only live frame-rate readout. No min/max tracking, no controls — just
+// the current rate, kept legible over the shader behind the glass toolbar.
+export function FpsCounter({ fps }: Props) {
   return (
-    <span className="sg-fps" data-testid="sg-fps" title="frames per second — current · min · max">
+    <span
+      className="sg-fps"
+      data-testid="sg-fps"
+      title="frames per second (live)"
+    >
       <strong>{fps}</strong> fps
-      <span className="sg-fps__mm">
-        {' '}· ▼{min ?? '–'} ▲{max ?? '–'}
-      </span>
     </span>
   );
 }
