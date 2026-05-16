@@ -1,15 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { grantClipboard } from './helpers/clipboard';
+import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
 
 test.describe('Text Animation Library tool', () => {
   test('renders without console errors', async ({ page }) => {
-    const errors: string[] = [];
-    page.on('console', (msg) => { if (msg.type() === 'error') errors.push(msg.text()); });
-    page.on('pageerror', (err) => errors.push(err.message));
+    const { errors } = watchConsoleErrors(page);
 
     await page.goto('/tools/text-animations');
     await page.waitForLoadState('networkidle');
 
-    expect(errors).toEqual([]);
+    expect(realConsoleErrors(errors)).toEqual([]);
   });
 
   test('renders header with title and category', async ({ page }) => {
@@ -140,7 +140,7 @@ test.describe('Text Animation Library tool', () => {
   });
 
   test('copy bundle confirms after click', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await grantClipboard(context);
     await page.goto('/tools/text-animations');
     await page.getByTestId('ta-card-ta-fade-in').click();
     const copyBtn = page.getByTestId('picker-copy');
@@ -208,7 +208,7 @@ test.describe('Text Animation Library tool', () => {
   });
 
   test('bundle copy includes stagger HTML comment when stagger animation picked', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await grantClipboard(context);
     await page.goto('/tools/text-animations');
     await page.getByTestId('ta-card-ta-stagger-fade-up').click();
     await page.getByTestId('picker-copy').click();
@@ -218,7 +218,7 @@ test.describe('Text Animation Library tool', () => {
   });
 
   test('bundle copy includes JS helper when stagger animation picked', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await grantClipboard(context);
     await page.goto('/tools/text-animations');
     await page.getByTestId('ta-card-ta-stagger-fade-up').click();
     await page.getByTestId('picker-copy').click();
@@ -228,7 +228,7 @@ test.describe('Text Animation Library tool', () => {
   });
 
   test('bundle copy does NOT include stagger sections when no stagger picked', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await grantClipboard(context);
     await page.goto('/tools/text-animations');
     await page.getByTestId('ta-card-ta-fade-in').click();
     await page.getByTestId('picker-copy').click();
@@ -238,7 +238,7 @@ test.describe('Text Animation Library tool', () => {
   });
 
   test('bundle copy includes 3D perspective note when 3D animation picked', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await grantClipboard(context);
     await page.goto('/tools/text-animations');
     await page.getByTestId('ta-card-ta-3d-rotate-y').click();
     await page.getByTestId('picker-copy').click();

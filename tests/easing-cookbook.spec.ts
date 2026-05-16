@@ -1,17 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { grantClipboard } from './helpers/clipboard';
+import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
 
 test.describe('Easing Cookbook tool', () => {
   test('renders without console errors', async ({ page }) => {
-    const errors: string[] = [];
-    page.on('console', (msg) => {
-      if (msg.type() === 'error') errors.push(msg.text());
-    });
-    page.on('pageerror', (err) => errors.push(err.message));
+    const { errors } = watchConsoleErrors(page);
 
     await page.goto('/tools/easing-cookbook');
     await page.waitForLoadState('networkidle');
 
-    expect(errors).toEqual([]);
+    expect(realConsoleErrors(errors)).toEqual([]);
   });
 
   test('renders header with title and category', async ({ page }) => {
@@ -60,7 +58,7 @@ test.describe('Easing Cookbook tool', () => {
   });
 
   test('clicking a card flips its copied state', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await grantClipboard(context);
     await page.goto('/tools/easing-cookbook');
     const card = page.getByTestId('easing-card-ease-out-quart');
     const hint = card.locator('.easing-card__copy-hint');
@@ -71,7 +69,7 @@ test.describe('Easing Cookbook tool', () => {
   });
 
   test('copied state reverts after timeout', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await grantClipboard(context);
     await page.goto('/tools/easing-cookbook');
     const card = page.getByTestId('easing-card-linear');
     const hint = card.locator('.easing-card__copy-hint');

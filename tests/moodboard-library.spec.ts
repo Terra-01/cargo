@@ -1,17 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { grantClipboard } from './helpers/clipboard';
+import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
 
 test.describe('Moodboard Library tool', () => {
   test('renders without console errors', async ({ page }) => {
-    const errors: string[] = [];
-    page.on('console', (msg) => {
-      if (msg.type() === 'error') errors.push(msg.text());
-    });
-    page.on('pageerror', (err) => errors.push(err.message));
+    const { errors } = watchConsoleErrors(page);
 
     await page.goto('/tools/moodboard-library');
     await page.waitForLoadState('networkidle');
 
-    expect(errors).toEqual([]);
+    expect(realConsoleErrors(errors)).toEqual([]);
   });
 
   test('renders header with title and category', async ({ page }) => {
@@ -89,7 +87,7 @@ test.describe('Moodboard Library tool', () => {
   });
 
   test('clicking a card flips its copied state', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await grantClipboard(context);
     await page.goto('/tools/moodboard-library');
     const card = page.getByTestId('mb-card-tokyo-at-3am');
     const hint = card.locator('.mb-card__copy-hint');
@@ -100,7 +98,7 @@ test.describe('Moodboard Library tool', () => {
   });
 
   test('copied state reverts after timeout', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await grantClipboard(context);
     await page.goto('/tools/moodboard-library');
     const card = page.getByTestId('mb-card-soft-lab');
     const hint = card.locator('.mb-card__copy-hint');

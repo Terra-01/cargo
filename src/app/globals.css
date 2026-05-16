@@ -1,5 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap');
-@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap');
+
+/* General Sans — self-hosted (Fontshare, ITF Free Font License). Replaces the
+   former api.fontshare.com @import: removes a render-blocking third-party
+   request and the Firefox cross-site-cookie console error it caused. Weights
+   400/500/600 are the ones the project uses (see --font-sans below). */
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/general-sans/general-sans-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/general-sans/general-sans-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/general-sans/general-sans-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* Type stacks */
@@ -58,6 +83,14 @@
   --t-slow: 400ms;
   --ease:   cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Glass tokens — consumed by the Shader Gradient Lab only in Phase 11D-1.
+     A global Apple-inspired refresh is a later dedicated phase. */
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-blur: 16px;
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -73,6 +106,12 @@
     --accent:        #FB923C;
     --accent-hover:  #FDBA74;
     --accent-soft:   rgba(251, 146, 60, 0.14);
+
+    --glass-bg: rgba(20, 20, 24, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-blur: 16px;
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --glass-highlight: rgba(255, 255, 255, 0.15);
   }
 }
 
@@ -88,6 +127,12 @@
   --accent:        #FB923C;
   --accent-hover:  #FDBA74;
   --accent-soft:   rgba(251, 146, 60, 0.14);
+
+  --glass-bg: rgba(20, 20, 24, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-blur: 16px;
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --glass-highlight: rgba(255, 255, 255, 0.15);
 }
 
 /* Reset & base */

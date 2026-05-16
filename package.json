@@ -7,7 +7,8 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "test": "playwright test"
+    "test": "playwright test",
+    "thumbnails": "npx tsx scripts/generate-look-thumbnails.ts"
   },
   "dependencies": {
     "next": "16.2.6",

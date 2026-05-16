@@ -1,17 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { grantClipboard } from './helpers/clipboard';
+import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
 
 test.describe('Component Prompt Builder tool', () => {
   test('renders without console errors', async ({ page }) => {
-    const errors: string[] = [];
-    page.on('console', (msg) => {
-      if (msg.type() === 'error') errors.push(msg.text());
-    });
-    page.on('pageerror', (err) => errors.push(err.message));
+    const { errors } = watchConsoleErrors(page);
 
     await page.goto('/tools/prompt-builder');
     await page.waitForLoadState('networkidle');
 
-    expect(errors).toEqual([]);
+    expect(realConsoleErrors(errors)).toEqual([]);
   });
 
   test('renders header with title and category', async ({ page }) => {
@@ -83,7 +81,7 @@ test.describe('Component Prompt Builder tool', () => {
   });
 
   test('copy button shows confirmation after click', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await grantClipboard(context);
     await page.goto('/tools/prompt-builder');
     const btn = page.getByTestId('copy-btn');
     await expect(btn).toHaveText('copy prompt');

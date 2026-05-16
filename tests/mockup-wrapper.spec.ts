@@ -1,13 +1,12 @@
 import { test, expect } from '@playwright/test';
+import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
 
 test.describe('Mockup Wrapper tool', () => {
   test('renders without console errors', async ({ page }) => {
-    const errors: string[] = [];
-    page.on('console', (msg) => { if (msg.type() === 'error') errors.push(msg.text()); });
-    page.on('pageerror', (err) => errors.push(err.message));
+    const { errors } = watchConsoleErrors(page);
     await page.goto('/tools/mockup-wrapper');
     await page.waitForLoadState('networkidle');
-    expect(errors).toEqual([]);
+    expect(realConsoleErrors(errors)).toEqual([]);
   });
 
   test('renders header with title and category', async ({ page }) => {

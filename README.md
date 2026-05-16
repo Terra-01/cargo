@@ -42,6 +42,20 @@ Runs the full suite across light and dark color schemes, with full-page screensh
 
 Workshop + editorial flourish. Workshop = monospace labels, sharp geometry, the shipping-manifest aesthetic. Editorial flourish = one italic-serif moment per page (the `make things` in the hero, taglines on moodboard cards). Auto light/dark via `prefers-color-scheme`.
 
+## Dev scripts
+
+`npm run thumbnails` regenerates the Shader Gradient Lab look-picker thumbnails
+(`public/look-thumbnails/*.webp`) by capturing real shader output for all 25
+looks. It drives the running tool, so start the dev server first:
+
+```bash
+npm run dev          # terminal 1
+npm run thumbnails   # terminal 2  (BASE_URL=… to override the target)
+```
+
+Re-runnable and resumable — it skips already-generated files; set `FORCE=1` to
+rebuild all. Re-run it whenever a preset's values change.
+
 ## License
 
 Free, forever. No warranty.
