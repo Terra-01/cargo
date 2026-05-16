@@ -100,12 +100,13 @@ test.describe('Hub page foundation', () => {
     await expect(card).toHaveAttribute('href', '/tools/prompt-builder');
   });
 
-  test('shipped tool card (type-scale) is a navigable link', async ({ page }) => {
+  test('shipped tool card (type-field-guide) is a navigable link', async ({ page }) => {
     await page.goto('/');
-    const card = page.locator('.tool-card[data-tool-id="type-scale"]');
+    const card = page.locator('.tool-card[data-tool-id="type-field-guide"]');
     const tagName = await card.evaluate((el) => el.tagName.toLowerCase());
     expect(tagName).toBe('a');
-    await expect(card).toHaveAttribute('href', '/tools/type-scale');
+    await expect(card).toHaveAttribute('href', '/tools/type-field-guide');
+    await expect(card).toContainText('The Type Field Guide');
   });
 
   test('shipped tool card (moodboard-library) is a navigable link', async ({ page }) => {
