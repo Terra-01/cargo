@@ -5,7 +5,7 @@ import { tools } from '@/lib/tools';
 
 export const metadata: Metadata = {
   title: 'Loading States Gallery — Cargo',
-  description: 'Eight curated CSS loading states. Click any card to copy HTML + CSS.',
+  description: 'Twenty-one curated CSS loading states across seven categories. Click any card to copy HTML + CSS.',
 };
 
 export default function LoadingStatesPage() {
@@ -21,7 +21,7 @@ export default function LoadingStatesPage() {
           </p>
           <h1 className="tool-page__title">{tool.title}</h1>
           <p className="tool-page__desc">
-            Eight curated CSS loading states across skeletons, spinners, dots, and bars. Click any card to copy the HTML and CSS as one snippet.
+            Twenty-one curated CSS loading states across skeletons, spinners, dots, bars, progress, overlays, and inline loaders. Click any card to copy the HTML and CSS as one snippet.
           </p>
         </header>
         <LoadingStates />

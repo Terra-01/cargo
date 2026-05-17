@@ -1,11 +1,95 @@
 'use client';
-import { moodboards } from '@/lib/moodboards';
+import { useState, useMemo } from 'react';
+import { moodboards, type MoodboardCategory } from '@/lib/moodboards';
 import { MoodboardCard } from './MoodboardCard';
 
+// The six MoodboardCategory families, plus 'all' (the default — no filter).
+// Order is fixed for the control; per-category counts are derived at runtime.
+const CATEGORY_FILTERS: Array<MoodboardCategory | 'all'> = [
+  'all',
+  'editorial',
+  'brutalist',
+  'minimal',
+  'maximal',
+  'retro',
+  'organic',
+];
+
 export function MoodboardLibrary() {
+  const [category, setCategory] = useState<MoodboardCategory | 'all'>('all');
+
+  const filtered = useMemo(() => {
+    if (category === 'all') return moodboards;
+    return moodboards.filter((mb) => mb.category === category);
+  }, [category]);
+
+  // Per-category counts for the filter labels — derived from the data, not
+  // hard-coded, so the control reflects whatever the catalogue actually is.
+  // editorial is intentionally 0 until milestone B; the chip still renders.
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: moodboards.length };
+    for (const mb of moodboards) {
+      counts[mb.category] = (counts[mb.category] ?? 0) + 1;
+    }
+    return counts;
+  }, []);
+
   return (
     <>
       <style>{`
+        .mb-toolbar {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          gap: var(--space-3);
+          margin-bottom: var(--space-5);
+        }
+        .mb-categories {
+          display: flex;
+          flex-wrap: wrap;
+          gap: var(--space-2);
+        }
+        .mb-cat {
+          display: inline-flex;
+          align-items: baseline;
+          gap: 6px;
+          padding: 5px 10px;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-pill);
+          font-family: var(--font-mono);
+          font-size: var(--text-xs);
+          letter-spacing: 0.02em;
+          color: var(--text-muted);
+          cursor: pointer;
+          transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+        }
+        .mb-cat:hover {
+          border-color: var(--border-strong);
+          color: var(--text);
+        }
+        .mb-cat:focus-visible {
+          outline: none;
+          border-color: var(--accent);
+          box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+        .mb-cat[data-active="true"] {
+          border-color: var(--accent);
+          background: var(--accent-soft);
+          color: var(--accent);
+        }
+        .mb-cat__count {
+          font-size: 10px;
+          opacity: 0.7;
+          letter-spacing: 0;
+        }
+        .mb-empty {
+          font-family: var(--font-mono);
+          font-size: var(--text-sm);
+          color: var(--text-faint);
+          letter-spacing: 0.01em;
+          padding: var(--space-6) 0;
+        }
         .mb-catalog {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -134,11 +218,35 @@ export function MoodboardLibrary() {
         .mb-card:hover .mb-card__copy-hint { color: var(--text-muted); }
         .mb-card[data-copied="true"] .mb-card__copy-hint { color: var(--accent); }
       `}</style>
-      <div className="mb-catalog" data-testid="mb-catalog">
-        {moodboards.map((mb) => (
-          <MoodboardCard key={mb.id} moodboard={mb} />
-        ))}
+      <div className="mb-toolbar">
+        <div className="mb-categories" role="group" aria-label="Filter by family" data-testid="mb-categories">
+          {CATEGORY_FILTERS.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              className="mb-cat"
+              data-active={category === cat || undefined}
+              data-testid={`mb-cat-${cat}`}
+              aria-pressed={category === cat}
+              onClick={() => setCategory(cat)}
+            >
+              {cat}
+              <span className="mb-cat__count">{categoryCounts[cat] ?? 0}</span>
+            </button>
+          ))}
+        </div>
       </div>
+      {filtered.length === 0 ? (
+        <p className="mb-empty" data-testid="mb-empty">
+          No boards in this family yet.
+        </p>
+      ) : (
+        <div className="mb-catalog" data-testid="mb-catalog">
+          {filtered.map((mb) => (
+            <MoodboardCard key={mb.id} moodboard={mb} />
+          ))}
+        </div>
+      )}
     </>
   );
 }

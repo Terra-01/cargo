@@ -25,10 +25,10 @@ test.describe('Moodboard Library tool', () => {
     await expect(toolsLink).toHaveClass(/is-active/);
   });
 
-  test('renders all 6 moodboard cards', async ({ page }) => {
+  test('renders all 18 moodboard cards', async ({ page }) => {
     await page.goto('/tools/moodboard-library');
     const cards = page.locator('.mb-card');
-    await expect(cards).toHaveCount(6);
+    await expect(cards).toHaveCount(18);
   });
 
   test('each card has exactly 4 swatches', async ({ page }) => {
@@ -43,7 +43,7 @@ test.describe('Moodboard Library tool', () => {
   test('each card embeds an SVG specimen with the heading font name', async ({ page }) => {
     await page.goto('/tools/moodboard-library');
     const specimens = page.locator('.mb-card__specimen');
-    await expect(specimens).toHaveCount(6);
+    await expect(specimens).toHaveCount(18);
     // Each specimen is a real <svg>, not an <img>, and has the per-moodboard data attribute
     const tagNames = await specimens.evaluateAll((nodes) =>
       nodes.map((n) => n.tagName.toLowerCase())
@@ -58,7 +58,7 @@ test.describe('Moodboard Library tool', () => {
   test('each specimen renders the "Aa" sample glyph', async ({ page }) => {
     await page.goto('/tools/moodboard-library');
     const samples = page.locator('.mb-card__specimen [data-testid="specimen-sample"]');
-    await expect(samples).toHaveCount(6);
+    await expect(samples).toHaveCount(18);
     const texts = await samples.allTextContents();
     texts.forEach((t) => expect(t.trim()).toBe('Aa'));
   });
@@ -66,7 +66,7 @@ test.describe('Moodboard Library tool', () => {
   test('each card shows an italic-serif tagline', async ({ page }) => {
     await page.goto('/tools/moodboard-library');
     const taglines = page.locator('.mb-card__tagline');
-    await expect(taglines).toHaveCount(6);
+    await expect(taglines).toHaveCount(18);
     const firstTagline = taglines.first();
     const fontStyle = await firstTagline.evaluate((el) => getComputedStyle(el).fontStyle);
     expect(fontStyle).toBe('italic');
@@ -79,11 +79,89 @@ test.describe('Moodboard Library tool', () => {
     await expect(firstCard).toContainText('matte clay, raw linen');
   });
 
-  test('all four categories appear across the grid', async ({ page }) => {
+  test('all six families appear across the grid', async ({ page }) => {
     await page.goto('/tools/moodboard-library');
     const categories = await page.locator('.mb-card__category').allTextContents();
     const unique = Array.from(new Set(categories.map((s) => s.trim().toLowerCase())));
-    expect(unique.sort()).toEqual(['cool', 'high-contrast', 'soft', 'warm']);
+
+    // After B2 every family has boards, including editorial.
+    expect(unique.sort()).toEqual([
+      'brutalist',
+      'editorial',
+      'maximal',
+      'minimal',
+      'organic',
+      'retro',
+    ]);
+  });
+
+  test('category filter renders all family chips with data-derived counts', async ({ page }) => {
+    await page.goto('/tools/moodboard-library');
+    const chips = page.locator('[data-testid="mb-categories"] .mb-cat');
+    await expect(chips).toHaveCount(7);
+    await expect(page.getByTestId('mb-cat-all')).toContainText('18');
+    await expect(page.getByTestId('mb-cat-editorial')).toContainText('3');
+    await expect(page.getByTestId('mb-cat-brutalist')).toContainText('3');
+    await expect(page.getByTestId('mb-cat-minimal')).toContainText('3');
+    await expect(page.getByTestId('mb-cat-maximal')).toContainText('3');
+    await expect(page.getByTestId('mb-cat-retro')).toContainText('3');
+    await expect(page.getByTestId('mb-cat-organic')).toContainText('3');
+  });
+
+  test('selecting any family chip narrows the grid to that family (3 each)', async ({ page }) => {
+    await page.goto('/tools/moodboard-library');
+    await expect(page.locator('.mb-card')).toHaveCount(18);
+
+    const families = ['editorial', 'brutalist', 'minimal', 'maximal', 'retro', 'organic'];
+    for (const fam of families) {
+      await page.getByTestId(`mb-cat-${fam}`).click();
+      await expect(page.getByTestId(`mb-cat-${fam}`)).toHaveAttribute('data-active', 'true');
+      await expect(page.locator('.mb-card')).toHaveCount(3);
+      const cats = await page.locator('.mb-card__category').allTextContents();
+      cats.forEach((c) => expect(c.trim().toLowerCase()).toBe(fam));
+    }
+
+    await page.getByTestId('mb-cat-all').click();
+    await expect(page.locator('.mb-card')).toHaveCount(18);
+  });
+
+  test('each specimen accent is keyed to the board family', async ({ page }) => {
+    await page.goto('/tools/moodboard-library');
+
+    // Per-board family -> expected accent shape. The family-keyed specimen
+    // (milestone B1) must drive the right shape with no per-board code, so the
+    // B2 boards below are included to prove a new board only declares a family.
+    const expected: Record<string, { family: string; shape: string }> = {
+      'mediterranean-dusk': { family: 'organic', shape: 'sun-arc' },
+      'scandinavian-quiet': { family: 'minimal', shape: 'soft-circle' },
+      'soft-lab': { family: 'minimal', shape: 'soft-circle' },
+      'tokyo-at-3am': { family: 'maximal', shape: 'glow-bars' },
+      'brutalist-office': { family: 'brutalist', shape: 'checker' },
+      // 90s Memphis moved high-contrast -> retro, so it adopts the new shape.
+      '90s-memphis': { family: 'retro', shape: 'dot-grid' },
+      // B2 boards — one per family, all auto-keyed, no per-board shape code.
+      'reading-room': { family: 'editorial', shape: 'column-rule' },
+      'default-styles': { family: 'brutalist', shape: 'checker' },
+      'gallery-white': { family: 'minimal', shape: 'soft-circle' },
+      'carnival': { family: 'maximal', shape: 'glow-bars' },
+      'arcade-sunset': { family: 'retro', shape: 'dot-grid' },
+      'forest-floor': { family: 'organic', shape: 'sun-arc' },
+    };
+
+    for (const [id, { family, shape }] of Object.entries(expected)) {
+      const card = page.getByTestId(`mb-card-${id}`);
+      const label = (await card.locator('.mb-card__category').textContent())?.trim();
+      expect(label).toBe(family);
+      const accent = card.locator(`.mb-card__specimen [data-accent-family="${family}"]`);
+      await expect(accent).toHaveCount(1);
+      await expect(accent).toHaveAttribute('data-accent-shape', shape);
+    }
+
+    // No card should still be using the old id-keyed checker on 90s Memphis.
+    const memphis = page.getByTestId('mb-card-90s-memphis');
+    await expect(
+      memphis.locator('.mb-card__specimen [data-accent-shape="checker"]')
+    ).toHaveCount(0);
   });
 
   test('clicking a card flips its copied state', async ({ page, context }) => {

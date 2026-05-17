@@ -25,16 +25,16 @@ test.describe('Loading States Gallery tool', () => {
     await expect(toolsLink).toHaveClass(/is-active/);
   });
 
-  test('renders all 8 loader cards', async ({ page }) => {
+  test('renders all 21 loader cards', async ({ page }) => {
     await page.goto('/tools/loading-states');
     const cards = page.locator('.loader-card');
-    await expect(cards).toHaveCount(8);
+    await expect(cards).toHaveCount(21);
   });
 
   test('each card shows html + css as the value text', async ({ page }) => {
     await page.goto('/tools/loading-states');
     const valueTexts = await page.locator('.loader-card .easing-card__value-text').allTextContents();
-    expect(valueTexts.length).toBe(8);
+    expect(valueTexts.length).toBe(21);
     valueTexts.forEach((text) => {
       expect(text).toBe('html + css');
     });
@@ -43,7 +43,7 @@ test.describe('Loading States Gallery tool', () => {
   test('every card renders a non-empty preview', async ({ page }) => {
     await page.goto('/tools/loading-states');
     const previews = page.locator('.loader-card__preview');
-    await expect(previews).toHaveCount(8);
+    await expect(previews).toHaveCount(21);
     // sanity: each preview has at least one child element
     const previewChildCounts = await previews.evaluateAll((nodes) =>
       nodes.map((n) => n.children.length)
@@ -73,11 +73,47 @@ test.describe('Loading States Gallery tool', () => {
     await expect(hint).toHaveText('copy');
   });
 
-  test('all four categories appear in the grid', async ({ page }) => {
+  test('all seven categories appear in the grid', async ({ page }) => {
     await page.goto('/tools/loading-states');
     const categoryTexts = await page.locator('.loader-card .easing-card__category').allTextContents();
     const unique = Array.from(new Set(categoryTexts.map((s) => s.trim().toLowerCase())));
-    expect(unique.sort()).toEqual(['bar', 'dots', 'skeleton', 'spinner']);
+    expect(unique.sort()).toEqual([
+      'bar',
+      'dots',
+      'inline',
+      'overlay',
+      'progress',
+      'skeleton',
+      'spinner',
+    ]);
+  });
+
+  test('category filter renders all chips with data-derived counts', async ({ page }) => {
+    await page.goto('/tools/loading-states');
+    const chips = page.locator('[data-testid="ls-categories"] .ls-cat');
+    await expect(chips).toHaveCount(8);
+    await expect(page.getByTestId('ls-cat-all')).toContainText('21');
+    await expect(page.getByTestId('ls-cat-skeleton')).toContainText('3');
+    await expect(page.getByTestId('ls-cat-spinner')).toContainText('3');
+    await expect(page.getByTestId('ls-cat-dots')).toContainText('3');
+    await expect(page.getByTestId('ls-cat-bar')).toContainText('3');
+    await expect(page.getByTestId('ls-cat-progress')).toContainText('3');
+    await expect(page.getByTestId('ls-cat-overlay')).toContainText('3');
+    await expect(page.getByTestId('ls-cat-inline')).toContainText('3');
+  });
+
+  test('selecting a category chip narrows the grid', async ({ page }) => {
+    await page.goto('/tools/loading-states');
+    await expect(page.locator('.loader-card')).toHaveCount(21);
+
+    await page.getByTestId('ls-cat-progress').click();
+    await expect(page.getByTestId('ls-cat-progress')).toHaveAttribute('data-active', 'true');
+    await expect(page.locator('.loader-card')).toHaveCount(3);
+    const cats = await page.locator('.loader-card .easing-card__category').allTextContents();
+    cats.forEach((c) => expect(c.trim().toLowerCase()).toBe('progress'));
+
+    await page.getByTestId('ls-cat-all').click();
+    await expect(page.locator('.loader-card')).toHaveCount(21);
   });
 
   test('back link returns to the hub', async ({ page }) => {
