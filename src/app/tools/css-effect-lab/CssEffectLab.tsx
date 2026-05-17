@@ -1,188 +1,169 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { effects, defaults, type Effect, type KnobValues } from './effects';
+import { ExportPanel } from './ExportPanel';
 
-type Tint = 'light' | 'dark';
+type Backdrop = 'dark' | 'light';
+
+// The realistic preview target. `card` for effects where the surrounding
+// context is the effect (a real heading + line of text); `shape` for
+// effects whose point is shape-following (a non-rectangular silhouette
+// box-shadow could not trace); `panel` for effects whose recipe paints its
+// own background (grain over gradient) — same content, but no forced
+// surface, so the recipe's gradient shows and the preview stays honest.
+function PreviewTarget({ effect }: { effect: Effect }) {
+  if (effect.target === 'shape') {
+    return (
+      <div className={`fx-shape ${effect.selector}`} data-testid="fx-target">
+        <span className="fx-shape__label">clip-path silhouette</span>
+      </div>
+    );
+  }
+  if (effect.target === 'panel') {
+    return (
+      <article className={`fx-panel ${effect.selector}`} data-testid="fx-target">
+        <p className="fx-panel__eyebrow">// release</p>
+        <h3 className="fx-panel__title">Ship Saturday</h3>
+        <p className="fx-panel__text">
+          A grainy gradient kills the flat banding that makes CSS gradients
+          look cheap.
+        </p>
+      </article>
+    );
+  }
+  return (
+    <article className={`fx-card ${effect.selector}`} data-testid="fx-target">
+      <p className="fx-card__eyebrow">// pricing</p>
+      <h3 className="fx-card__title">Pro plan</h3>
+      <p className="fx-card__text">
+        Everything in Starter, plus unlimited projects, custom domains, and
+        priority support.
+      </p>
+    </article>
+  );
+}
 
 export function CssEffectLab() {
-  const [blur, setBlur] = useState(14);
-  const [tint, setTint] = useState<Tint>('light');
-  const [bgOpacity, setBgOpacity] = useState(12);       // 0–50
-  const [borderOpacity, setBorderOpacity] = useState(20); // 0–50
-  const [radius, setRadius] = useState(16);
-  const [saturate, setSaturate] = useState(true);
-  const [copied, setCopied] = useState(false);
-
-  const baseRgb = tint === 'light' ? '255, 255, 255' : '0, 0, 0';
-  const bgAlpha = (bgOpacity / 100).toFixed(2);
-  const borderAlpha = (borderOpacity / 100).toFixed(2);
-  const filter = `blur(${blur}px)${saturate ? ' saturate(180%)' : ''}`;
-
-  const glassStyle = useMemo<React.CSSProperties>(
-    () => ({
-      backdropFilter: filter,
-      WebkitBackdropFilter: filter,
-      background: `rgba(${baseRgb}, ${bgAlpha})`,
-      border: `1px solid rgba(${baseRgb}, ${borderAlpha})`,
-      borderRadius: `${radius}px`,
-      color: tint === 'light' ? '#FFFFFF' : '#0F0F0E',
-    }),
-    [filter, baseRgb, bgAlpha, borderAlpha, radius, tint]
+  const [effectId, setEffectId] = useState(effects[0].id);
+  const [values, setValues] = useState<KnobValues>(() => defaults(effects[0]));
+  const [backdrop, setBackdrop] = useState<Backdrop>(
+    effects[0].arrivalBackdrop ?? 'dark'
   );
 
-  const css = `.glass {
-  backdrop-filter: ${filter};
-  -webkit-backdrop-filter: ${filter};
-  background: rgba(${baseRgb}, ${bgAlpha});
-  border: 1px solid rgba(${baseRgb}, ${borderAlpha});
-  border-radius: ${radius}px;
-}`;
+  const effect = useMemo(
+    () => effects.find((e) => e.id === effectId) ?? effects[0],
+    [effectId]
+  );
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(css);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    } catch {
-      // Clipboard may be unavailable in some test environments; fail silently
-    }
+  const pickEffect = (e: Effect) => {
+    setEffectId(e.id);
+    setValues(defaults(e)); // each effect arrives as a working recipe
+    setBackdrop(e.arrivalBackdrop ?? 'dark'); // on a surface where it reads
   };
 
+  const setKnob = (id: string, value: number | string) =>
+    setValues((v) => ({ ...v, [id]: value }));
+
+  const recipe = useMemo(() => effect.build(values), [effect, values]);
+
   return (
-    <div className="lab">
-      <div className="lab__panel panel" data-testid="lab-panel">
-        <p className="panel__title"><span>controls</span></p>
-
-        <div className="field">
-          <label className="field__label" htmlFor="blur">
-            <span>blur</span>
-            <span className="field__value" data-testid="blur-value">{blur}px</span>
-          </label>
-          <input
-            id="blur"
-            type="range"
-            className="slider"
-            min={0}
-            max={40}
-            step={1}
-            value={blur}
-            onChange={(e) => setBlur(Number(e.target.value))}
-            data-testid="blur-slider"
-          />
-        </div>
-
-        <div className="field">
-          <label className="field__label"><span>tint</span></label>
-          <div className="tint-toggle" role="group" aria-label="Glass tint base">
-            <button
-              type="button"
-              className={`tint-toggle__option ${tint === 'light' ? 'tint-toggle__option--active' : ''}`}
-              onClick={() => setTint('light')}
-              data-testid="tint-light"
-            >
-              light
-            </button>
-            <button
-              type="button"
-              className={`tint-toggle__option ${tint === 'dark' ? 'tint-toggle__option--active' : ''}`}
-              onClick={() => setTint('dark')}
-              data-testid="tint-dark"
-            >
-              dark
-            </button>
-          </div>
-        </div>
-
-        <div className="field">
-          <label className="field__label" htmlFor="bg-opacity">
-            <span>bg opacity</span>
-            <span className="field__value">{bgOpacity}%</span>
-          </label>
-          <input
-            id="bg-opacity"
-            type="range"
-            className="slider"
-            min={0}
-            max={50}
-            step={1}
-            value={bgOpacity}
-            onChange={(e) => setBgOpacity(Number(e.target.value))}
-          />
-        </div>
-
-        <div className="field">
-          <label className="field__label" htmlFor="border-opacity">
-            <span>border opacity</span>
-            <span className="field__value">{borderOpacity}%</span>
-          </label>
-          <input
-            id="border-opacity"
-            type="range"
-            className="slider"
-            min={0}
-            max={50}
-            step={1}
-            value={borderOpacity}
-            onChange={(e) => setBorderOpacity(Number(e.target.value))}
-          />
-        </div>
-
-        <div className="field">
-          <label className="field__label" htmlFor="radius">
-            <span>radius</span>
-            <span className="field__value">{radius}px</span>
-          </label>
-          <input
-            id="radius"
-            type="range"
-            className="slider"
-            min={0}
-            max={32}
-            step={1}
-            value={radius}
-            onChange={(e) => setRadius(Number(e.target.value))}
-          />
-        </div>
-
-        <div className="field">
-          <div className="bool-toggle">
-            <label className="field__label" style={{ margin: 0 }}>
-              <span>saturate 180%</span>
-            </label>
-            <button
-              type="button"
-              className={`bool-toggle__btn ${saturate ? 'bool-toggle__btn--on' : ''}`}
-              onClick={() => setSaturate((s) => !s)}
-              aria-pressed={saturate}
-              data-testid="saturate-toggle"
-            >
-              {saturate ? 'on' : 'off'}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="lab__preview-wrap">
-        <div className="lab__preview" data-testid="lab-preview">
-          <div className="lab__backdrop" aria-hidden="true"></div>
-          <div className="lab__glass" style={glassStyle} data-testid="lab-glass">
-            <p className="lab__glass-label" style={{ color: glassStyle.color }}>TUESDAY</p>
-            <p className="lab__glass-value" style={{ color: glassStyle.color }}>$12,438</p>
-            <p className="lab__glass-meta" style={{ color: glassStyle.color }}>+4.2% this week</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="lab__code-wrap">
-        <div className="code" data-testid="lab-code">
-{css}
+    <div className="fx">
+      {/* Effect picker — adding the remaining four effects is just adding
+          them to the `effects` array. */}
+      <div className="fx-picker" role="tablist" aria-label="Effect" data-testid="fx-picker">
+        {effects.map((e) => (
           <button
+            key={e.id}
             type="button"
-            className="code__copy"
-            onClick={handleCopy}
-            data-testid="copy-btn"
+            role="tab"
+            aria-selected={e.id === effectId}
+            className={`fx-picker__tab ${e.id === effectId ? 'fx-picker__tab--active' : ''}`}
+            onClick={() => pickEffect(e)}
+            data-testid={`fx-tab-${e.id}`}
           >
-            {copied ? 'copied' : 'copy'}
+            {e.name}
           </button>
+        ))}
+      </div>
+
+      <p className="fx-blurb">{effect.blurb}</p>
+
+      <div className="lab">
+        <div className="lab__panel panel" data-testid="lab-panel">
+          <p className="panel__title"><span>controls</span></p>
+
+          <div className="field">
+            <label className="field__label"><span>backdrop</span></label>
+            <div className="fx-seg" role="group" aria-label="Preview backdrop">
+              {(['dark', 'light'] as const).map((b) => (
+                <button
+                  key={b}
+                  type="button"
+                  className={`fx-seg__opt ${backdrop === b ? 'fx-seg__opt--active' : ''}`}
+                  onClick={() => setBackdrop(b)}
+                  data-testid={`backdrop-${b}`}
+                >
+                  {b}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {effect.knobs.map((k) =>
+            k.kind === 'color' ? (
+              <div className="field" key={k.id}>
+                <label className="field__label" htmlFor={`knob-${k.id}`}>
+                  <span>{k.label}</span>
+                  <span className="field__value">{String(values[k.id])}</span>
+                </label>
+                <div className="fx-color">
+                  <input
+                    id={`knob-${k.id}`}
+                    type="color"
+                    value={String(values[k.id])}
+                    onChange={(e) => setKnob(k.id, e.target.value)}
+                    data-testid={`knob-${k.id}`}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="field" key={k.id}>
+                <label className="field__label" htmlFor={`knob-${k.id}`}>
+                  <span>{k.label}</span>
+                  <span className="field__value">
+                    {Number(values[k.id])}{k.unit}
+                  </span>
+                </label>
+                <input
+                  id={`knob-${k.id}`}
+                  type="range"
+                  className="slider"
+                  min={k.min}
+                  max={k.max}
+                  step={k.step}
+                  value={Number(values[k.id])}
+                  onChange={(e) => setKnob(k.id, Number(e.target.value))}
+                  data-testid={`knob-${k.id}`}
+                />
+              </div>
+            )
+          )}
+        </div>
+
+        <div className="lab__preview-wrap">
+          <div className="fx-stage" data-backdrop={backdrop} data-testid="fx-stage">
+            {/* The single source of truth: the preview renders the exact
+                CSS string the export shows and the user copies. No char in
+                a generated recipe needs HTML-escaping inside <style>. */}
+            <style data-testid="fx-style">{recipe.css}</style>
+            <PreviewTarget effect={effect} />
+          </div>
+        </div>
+
+        <div className="lab__code-wrap">
+          {/* Remount per effect so a section's "copied" confirmation never
+              bleeds onto a different effect's export. */}
+          <ExportPanel key={effect.id} sections={recipe.sections} />
         </div>
       </div>
     </div>

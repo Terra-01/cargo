@@ -892,6 +892,207 @@ a { color: inherit; text-decoration: none; }
   .lab__preview { min-height: 320px; }
 }
 
+/* — CSS Effect Lab v2 (effect recipes: picker, stage, sectioned export) — */
+.fx-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--space-1);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+}
+.fx-picker__tab {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.03em;
+  padding: 7px 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.fx-picker__tab:not(.fx-picker__tab--active):hover { color: var(--text); }
+.fx-picker__tab--active {
+  background: var(--text);
+  color: var(--bg);
+}
+.fx-blurb {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+  color: var(--text-faint);
+  margin-bottom: var(--space-6);
+}
+
+/* Backdrop toggle (light/dark preview surface) */
+.fx-seg {
+  display: flex;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  width: 100%;
+}
+.fx-seg__opt {
+  flex: 1;
+  padding: 7px 12px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+  letter-spacing: 0.04em;
+}
+.fx-seg__opt:not(.fx-seg__opt--active):hover { color: var(--text); }
+.fx-seg__opt--active {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* Color knob */
+.fx-color { display: flex; align-items: center; gap: var(--space-3); }
+.fx-color input[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 30px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.fx-color input[type="color"]::-webkit-color-swatch-wrapper { padding: 3px; }
+.fx-color input[type="color"]::-webkit-color-swatch { border: none; border-radius: 3px; }
+.fx-color input[type="color"]::-moz-color-swatch { border: none; border-radius: 3px; }
+
+/* Preview stage — backdrop is independent of site theme so glows and
+   shadows can be judged honestly against true light and true dark. */
+.fx-stage {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  min-height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16);
+  overflow: hidden;
+  /* Own stacking context so a recipe's behind-the-element pseudo-element
+     (z-index: -1, used by layered glow / gradient border) is contained by
+     the stage instead of escaping behind its opaque backdrop. The recipes
+     stay the clean standard; this only makes the preview honest. Inert for
+     the filter / non-negative-z M1 effects. */
+  isolation: isolate;
+  transition: background var(--t-base) var(--ease);
+}
+.fx-stage[data-backdrop="dark"]  { background: #0E0E12; }
+.fx-stage[data-backdrop="light"] { background: #F4F4F2; }
+
+/* Realistic card target (effects where context is the effect) */
+.fx-card {
+  position: relative;
+  width: 300px;
+  max-width: 100%;
+  padding: var(--space-8);
+  border-radius: 16px;
+  font-family: var(--font-sans);
+}
+.fx-stage[data-backdrop="dark"]  .fx-card { background: #16161C; color: #F4F4F0; }
+.fx-stage[data-backdrop="light"] .fx-card { background: #FFFFFF; color: #18181B; }
+.fx-card__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: var(--space-3);
+}
+.fx-card__title {
+  font-size: var(--text-xl);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-2);
+}
+.fx-card__text { font-size: var(--text-sm); line-height: 1.6; opacity: 0.65; }
+
+/* Panel target — same content as the card but NO forced background, so an
+   effect whose recipe paints its own background (grain over gradient)
+   renders faithfully. Content is light, to read over a colored gradient. */
+.fx-panel {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+  padding: var(--space-8);
+  border-radius: 16px;
+  font-family: var(--font-sans);
+  color: #F8FAFC;
+}
+.fx-panel__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: var(--space-3);
+}
+.fx-panel__title {
+  font-size: var(--text-2xl);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-2);
+}
+.fx-panel__text { font-size: var(--text-sm); line-height: 1.6; opacity: 0.8; }
+
+/* Shaped target (effects whose point is shape-following) */
+.fx-shape {
+  width: 210px;
+  height: 210px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(140deg, var(--accent), #6C5CE7);
+  clip-path: polygon(25% 4%, 75% 4%, 100% 50%, 75% 96%, 25% 96%, 0% 50%);
+}
+.fx-shape__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  opacity: 0.85;
+}
+
+/* Sectioned export */
+.fx-export { display: flex; flex-direction: column; gap: var(--space-5); }
+.fx-section { display: flex; flex-direction: column; gap: var(--space-2); }
+.fx-section__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+.fx-note {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+@media (max-width: 860px) {
+  .fx-stage { min-height: 340px; padding: var(--space-10); }
+}
+
 /* — Catalog layout (reusable across catalog-pattern tools) — */
 .catalog {
   display: grid;

@@ -5,7 +5,7 @@ import { tools } from '@/lib/tools';
 
 export const metadata: Metadata = {
   title: 'CSS Effect Lab — Cargo',
-  description: 'A live playground for glassmorphism. Tweak parameters, copy the CSS.',
+  description: 'A lab for hard CSS effects: glow borders, layered glows, grain, and more. Tweak a recipe, copy the complete code.',
 };
 
 export default function CssEffectLabPage() {
@@ -21,7 +21,7 @@ export default function CssEffectLabPage() {
           </p>
           <h1 className="tool-page__title">{tool.title}</h1>
           <p className="tool-page__desc">
-            A live glassmorphism playground. Tweak the parameters, watch the frost react, copy the CSS.
+            Hard CSS effects, built right. Pick one, tweak it, copy code that actually works.
           </p>
         </header>
         <CssEffectLab />
