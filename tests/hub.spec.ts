@@ -37,16 +37,17 @@ test.describe('Hub page foundation', () => {
     await expect(page.locator('.hero__title em')).toContainText('make things');
   });
 
-  test('renders all 9 tool cards', async ({ page }) => {
+  test('renders all 10 tool cards', async ({ page }) => {
     await page.goto('/');
     const cards = page.locator('.tool-card');
-    await expect(cards).toHaveCount(9);
+    await expect(cards).toHaveCount(10);
   });
 
-  // The Component Prompt Builder (cargo/06) was cut. Surviving tools keep
-  // their original catalogue numbers as stable identities, so 06 is absent
-  // by design rather than the list being renumbered.
-  test('tool cards show the catalogue numbers, 06 cut', async ({ page }) => {
+  // The Component Prompt Builder (the original cargo/06) was cut. The 06 slot
+  // is now filled by The Spec Pressure-Test, so the catalogue reads 01..10
+  // with no gap. Surviving tools keep their original numbers as stable
+  // identities; 06 is reused by a new tool, not renumbered.
+  test('tool cards show the catalogue numbers 01..10, no gap', async ({ page }) => {
     await page.goto('/');
     const manifests = await page.locator('.tool-card__manifest').allTextContents();
     expect(manifests).toEqual([
@@ -55,6 +56,7 @@ test.describe('Hub page foundation', () => {
       'CARGO/03',
       'CARGO/04',
       'CARGO/05',
+      'CARGO/06',
       'CARGO/07',
       'CARGO/08',
       'CARGO/09',
@@ -62,11 +64,11 @@ test.describe('Hub page foundation', () => {
     ]);
   });
 
-  test('hub shows 9 shipped + 0 coming-soon tool cards', async ({ page }) => {
+  test('hub shows 10 shipped + 0 coming-soon tool cards', async ({ page }) => {
     await page.goto('/');
     const shippedCards = page.locator('.tool-card[data-status="shipped"]');
     const soonCards = page.locator('.tool-card[data-status="coming_soon"]');
-    await expect(shippedCards).toHaveCount(9);
+    await expect(shippedCards).toHaveCount(10);
     await expect(soonCards).toHaveCount(0);
   });
 
@@ -142,12 +144,27 @@ test.describe('Hub page foundation', () => {
     await expect(card).toHaveAttribute('href', '/tools/shader-gradient-lab');
   });
 
-  test('all tool cards are navigable links (every tool shipped)', async ({ page }) => {
+  test('all 10 shipped tool cards are navigable links', async ({ page }) => {
     await page.goto('/');
     const shippedCards = page.locator('.tool-card[data-status="shipped"]');
     const tagNames = await shippedCards.evaluateAll((nodes) => nodes.map((n) => n.tagName.toLowerCase()));
-    expect(tagNames.length).toBe(9);
+    expect(tagNames.length).toBe(10);
     tagNames.forEach((t) => expect(t).toBe('a'));
+  });
+
+  // The Spec Pressure-Test was a coming_soon card through M1-M3 (architecture
+  // and the four worked examples). M4 completes it (the self-check mode) and
+  // flips it to shipped, so it is now a navigable link, not a soon card.
+  test('the spec-pressure-test card is now shipped and navigable', async ({ page }) => {
+    await page.goto('/');
+    const card = page.locator('.tool-card[data-tool-id="spec-pressure-test"]');
+    await expect(card).toHaveCount(1);
+    await expect(card).toHaveAttribute('data-status', 'shipped');
+    await expect(card).toContainText('The Spec Pressure-Test');
+    await expect(card.locator('.tag--soon')).toHaveCount(0);
+    const tagName = await card.evaluate((el) => el.tagName.toLowerCase());
+    expect(tagName).toBe('a');
+    await expect(card).toHaveAttribute('href', '/tools/spec-pressure-test');
   });
 
   test('no coming-soon cards remain on the hub', async ({ page }) => {
@@ -175,7 +192,7 @@ test.describe('Hub page foundation', () => {
   test('manifest derives counts from the tool array', async ({ page }) => {
     await page.goto('/');
     const toolsShipped = page.locator('.manifest__item').nth(1).locator('.manifest__value');
-    await expect(toolsShipped).toContainText('9 / 9 planned');
+    await expect(toolsShipped).toContainText('10 / 10 planned');
   });
 
   test('cargo principle pull quote renders', async ({ page }) => {

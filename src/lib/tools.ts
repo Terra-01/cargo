@@ -8,6 +8,7 @@ import { MoodboardPreview } from '@/components/previews/MoodboardPreview';
 import { TextAnimationsPreview } from '@/components/previews/TextAnimationsPreview';
 import { ShaderGradientLabPreview } from '@/components/previews/ShaderGradientLabPreview';
 import { UiPatternDictionaryPreview } from '@/components/previews/UiPatternDictionaryPreview';
+import { SpecPressureTestPreview } from '@/components/previews/SpecPressureTestPreview';
 
 export type ToolStatus = 'shipped' | 'coming_soon';
 
@@ -78,6 +79,17 @@ export const tools: Tool[] = [
     href: '/tools/type-field-guide',
     status: 'shipped',
     Preview: TypeScalePreview,
+  },
+  {
+    id: 'spec-pressure-test',
+    number: '06',
+    category: 'learning_tools',
+    title: 'The Spec Pressure-Test',
+    description: 'Learn to spot the gaps in a feature spec before an AI coding agent fills them in wrongly.',
+    tags: ['learning', 'specs', 'ai'],
+    href: '/tools/spec-pressure-test',
+    status: 'shipped',
+    Preview: SpecPressureTestPreview,
   },
   {
     id: 'moodboard-library',
