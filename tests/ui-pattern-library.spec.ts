@@ -850,22 +850,28 @@ test.describe('UI Pattern Library — D1 card shell (no page scroll)', () => {
     expect(r.shellOverflow).toBeLessThanOrEqual(1);
   });
 
-  test('a wide demo is contained in its own scroll box, not the page', async ({ page }) => {
+  test('the page does not scroll and every demo has its scroll-containment box', async ({ page }) => {
     await page.goto('/tools/ui-pattern-library');
     const r = await page.evaluate(() => {
       const de = document.documentElement;
       const scrollers = [
         ...document.querySelectorAll('.upl-card__example-scroll'),
       ];
-      const anyContains = scrollers.some(
-        (s) => s.scrollWidth > s.clientWidth + 1
+      // The D1 guarantee is the containment mechanism, not that a demo
+      // is currently wide. D2a contained the six hard demos, so none may
+      // overflow now; the box must still be present and able to contain.
+      const allHaveScrollBox = scrollers.every(
+        (s) => getComputedStyle(s).overflowX === 'auto'
       );
-      return { pageOverflow: de.scrollWidth - de.clientWidth, anyContains };
+      return {
+        pageOverflow: de.scrollWidth - de.clientWidth,
+        count: scrollers.length,
+        allHaveScrollBox,
+      };
     });
-    // The page must not scroll even though some demos are still wide
-    // internally (those are D2's scope, contained here by the shell).
     expect(r.pageOverflow).toBeLessThanOrEqual(1);
-    expect(r.anyContains).toBe(true);
+    expect(r.count).toBeGreaterThan(0);
+    expect(r.allHaveScrollBox).toBe(true);
   });
 });
 
@@ -948,5 +954,84 @@ test.describe('UI Pattern Library — D2a-1 (popover, modal, tooltip + chips)', 
     const box = await icon.boundingBox();
     expect(box!.width).toBeGreaterThanOrEqual(44);
     expect(box!.height).toBeGreaterThanOrEqual(44);
+  });
+});
+
+test.describe('UI Pattern Library — D2a-2 (toast, tabs, dropdown)', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  // Clip-signature scan: an element that hides overflow while its content
+  // is wider than its box is clipping (the D2a-1 lesson, made deterministic).
+  const clipScan = (testId: string) =>
+    `(() => { const card = document.querySelector('[data-testid="upl-card-${testId}"]'); if (!card) return -1; let n = 0; card.querySelectorAll('*').forEach((el) => { const cs = getComputedStyle(el); if (/hidden|clip/.test(cs.overflowX) && el.scrollWidth > el.clientWidth + 1) n++; }); const sc = card.querySelector('.upl-card__example-scroll'); return n + (sc && sc.scrollWidth > sc.clientWidth + 1 ? 100 : 0); })()`;
+
+  test('toast, tabs and dropdown have no clipped or overflowing content at rest', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+    for (const id of ['toast-notification', 'tabs', 'dropdown-menu']) {
+      const score = await page.evaluate(clipScan(id));
+      expect(score, `${id} clip/overflow score`).toBe(0);
+    }
+    const over = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(over).toBeLessThanOrEqual(1);
+  });
+
+  test('the tabs mode toggle stacks on mobile with its labels not clipped', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+    const r = await page.evaluate(() => {
+      const seg = document.querySelector('[data-testid="upl-card-tabs"] .upl-ex-tb__seg');
+      if (!seg) return null;
+      const dir = getComputedStyle(seg).flexDirection;
+      const btns = [...seg.querySelectorAll('button')];
+      const anyClipped = btns.some((b) => b.scrollWidth > b.clientWidth + 1);
+      const minH = Math.min(...btns.map((b) => b.getBoundingClientRect().height));
+      return { dir, anyClipped, minH };
+    });
+    expect(r!.dir).toBe('column');
+    expect(r!.anyClipped).toBe(false);
+    expect(r!.minH).toBeGreaterThanOrEqual(44);
+  });
+
+  test('the country dropdown opens within the viewport with 44px options', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+    await page.getByTestId('ex-dd-many-trigger').click();
+    await expect(page.getByTestId('ex-dd-many-list')).toBeVisible();
+    const r = await page.evaluate(() => {
+      const de = document.documentElement;
+      const list = document.querySelector('[data-testid="ex-dd-many-list"]');
+      const lr = list!.getBoundingClientRect();
+      const opt = list!.querySelector('button')!.getBoundingClientRect();
+      return {
+        within: lr.left >= 0 && lr.right <= de.clientWidth + 1,
+        pageOver: de.scrollWidth - de.clientWidth,
+        optH: opt.height,
+      };
+    });
+    expect(r.within).toBe(true);
+    expect(r.pageOver).toBeLessThanOrEqual(1);
+    expect(r.optH).toBeGreaterThanOrEqual(44);
+  });
+
+  test('the undo toast slides in within the stage, not the page', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+    await page.getByTestId('ex-toast-mode-toast').click();
+    await page.getByTestId('ex-toast-delete').click();
+    await expect(page.getByTestId('ex-toast-undo-toast')).toHaveAttribute('data-up', 'true');
+    const r = await page.evaluate(() => {
+      const de = document.documentElement;
+      const toast = document.querySelector('[data-testid="ex-toast-undo-toast"]')!.getBoundingClientRect();
+      const stage = document.querySelector(
+        '[data-testid="upl-card-toast-notification"] .upl-ex-tn__stage'
+      )!.getBoundingClientRect();
+      return {
+        within: toast.left >= stage.left - 1 && toast.right <= stage.right + 1,
+        pageOver: de.scrollWidth - de.clientWidth,
+      };
+    });
+    expect(r.within).toBe(true);
+    expect(r.pageOver).toBeLessThanOrEqual(1);
+    const undoH = (await page.getByTestId('ex-toast-undo-toast-btn').boundingBox())!.height;
+    expect(undoH).toBeGreaterThanOrEqual(44);
   });
 });

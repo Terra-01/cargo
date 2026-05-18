@@ -59,7 +59,8 @@ export function DropdownMenuExample() {
         .upl-ex-dm__title { font-size: var(--text-sm); font-weight: 600; color: var(--text); }
         .upl-ex-dm__seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; }
         .upl-ex-dm__seg button {
-          font-family: var(--font-mono); font-size: 11px; padding: 6px 11px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; padding: 6px 14px;
           border: none; background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
         .upl-ex-dm__seg button[data-on="true"] { background: var(--accent-soft); color: var(--accent); }
@@ -70,36 +71,43 @@ export function DropdownMenuExample() {
         }
         .upl-ex-dm__anchor { position: relative; display: inline-flex; }
         .upl-ex-dm__trigger {
-          font-family: var(--font-mono); font-size: var(--text-xs); padding: 8px 13px;
+          font-family: var(--font-mono); font-size: var(--text-xs); padding: 8px 14px;
           border-radius: var(--radius-md); border: 1px solid var(--border-strong);
-          background: var(--surface); color: var(--text); cursor: pointer; min-width: 150px;
-          display: flex; justify-content: space-between; gap: 10px;
+          background: var(--surface); color: var(--text); cursor: pointer;
+          min-width: 150px; max-width: 100%; min-height: 44px;
+          display: flex; align-items: center; justify-content: space-between; gap: 10px;
         }
         .upl-ex-dm__trigger:hover { border-color: var(--accent); }
         .upl-ex-dm__list {
-          position: absolute; top: calc(100% + 6px); left: 0; min-width: 100%;
+          position: absolute; top: calc(100% + 6px); left: 0;
+          min-width: 100%; max-width: min(280px, 78vw);
           background: var(--surface); border: 1px solid var(--border-strong);
           border-radius: var(--radius-md); box-shadow: 0 12px 30px color-mix(in srgb, #000 22%, transparent);
           z-index: 6; padding: 5px; max-height: 168px; overflow-y: auto;
         }
         .upl-ex-dm__opt {
           display: block; width: 100%; text-align: left;
-          font-family: var(--font-mono); font-size: 12px; padding: 7px 10px;
+          font-family: var(--font-mono); font-size: 12px;
+          min-height: 44px; padding: 7px 12px;
           border: none; background: none; color: var(--text-muted); cursor: pointer;
-          border-radius: var(--radius-sm);
+          border-radius: var(--radius-sm); overflow-wrap: anywhere;
         }
         .upl-ex-dm__opt:hover { background: var(--surface-muted); color: var(--text); }
         .upl-ex-dm__opt[data-on="true"] { color: var(--accent); }
         .upl-ex-dm__segpick { display: flex; gap: 6px; flex-wrap: wrap; }
         .upl-ex-dm__segpick button {
-          font-family: var(--font-mono); font-size: 12px; padding: 8px 14px;
+          font-family: var(--font-mono); font-size: 12px;
+          min-height: 44px; padding: 8px 14px;
+          display: inline-flex; align-items: center;
           border: 1px solid var(--border-strong); border-radius: var(--radius-md);
           background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
         .upl-ex-dm__segpick button[data-on="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
         .upl-ex-dm__wall { display: flex; flex-wrap: wrap; gap: 5px; max-height: 150px; overflow-y: auto; }
         .upl-ex-dm__wall button {
-          font-family: var(--font-mono); font-size: 11px; padding: 5px 9px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; padding: 5px 12px;
+          display: inline-flex; align-items: center;
           border: 1px solid var(--border); border-radius: var(--radius-sm);
           background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
@@ -112,6 +120,14 @@ export function DropdownMenuExample() {
         }
         .upl-ex-dm__note[data-kind="bad"] { border-left-color: #dc2626; }
         .upl-ex-dm__note[data-kind="good"] { border-left-color: #16a34a; }
+        .upl-ex-dm__title,
+        .upl-ex-dm__note { overflow-wrap: anywhere; }
+        /* Mobile: the head's mode segment spans the row and its buttons
+           share the width so neither label is clipped by overflow:hidden. */
+        @media (max-width: 599px) {
+          .upl-ex-dm__seg { display: flex; width: 100%; }
+          .upl-ex-dm__seg button { flex: 1 1 auto; padding: 6px 10px; }
+        }
       `}</style>
 
       {/* Row A — small primary choice */}

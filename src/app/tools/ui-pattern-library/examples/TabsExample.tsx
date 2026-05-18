@@ -40,7 +40,8 @@ export function TabsExample() {
       <style>{`
         .upl-ex-tb__seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; margin-bottom: var(--space-3); }
         .upl-ex-tb__seg button {
-          font-family: var(--font-mono); font-size: 11px; padding: 6px 11px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; padding: 6px 14px;
           border: none; background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
         .upl-ex-tb__seg button[data-on="true"] { background: var(--accent-soft); color: var(--accent); }
@@ -50,9 +51,11 @@ export function TabsExample() {
           border: 1px solid var(--border); border-radius: var(--radius-md);
           background: var(--surface-muted); padding: var(--space-3); min-height: 168px;
         }
-        .upl-ex-tb__tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+        .upl-ex-tb__tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
         .upl-ex-tb__tab {
-          font-family: var(--font-mono); font-size: 11px; padding: 7px 13px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; padding: 7px 14px;
+          display: inline-flex; align-items: center;
           border: 1px solid var(--border); border-radius: var(--radius-sm);
           background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
@@ -70,7 +73,9 @@ export function TabsExample() {
         .upl-ex-tb__col h5 { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
         .upl-ex-tb__showboth {
           margin-top: 8px; font-family: var(--font-mono); font-size: 11px;
-          padding: 6px 12px; border-radius: var(--radius-sm);
+          min-height: 44px; padding: 6px 14px;
+          display: inline-flex; align-items: center;
+          border-radius: var(--radius-sm);
           border: 1px solid var(--accent); background: var(--accent-soft);
           color: var(--accent); cursor: pointer;
         }
@@ -82,6 +87,23 @@ export function TabsExample() {
         }
         .upl-ex-tb__note[data-kind="bad"] { border-left-color: #dc2626; }
         .upl-ex-tb__note b { color: var(--text); }
+        .upl-ex-tb__q,
+        .upl-ex-tb__note,
+        .upl-ex-tb__panel { overflow-wrap: anywhere; }
+        .upl-ex-tb__col { min-width: 0; }
+        /* Mobile: the long-labelled mode toggle stacks full width so its
+           text is never clipped by the segment's overflow:hidden. */
+        @media (max-width: 599px) {
+          .upl-ex-tb__seg {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+          }
+          .upl-ex-tb__seg button + button {
+            border-left: none;
+            border-top: 1px solid var(--border-strong);
+          }
+        }
       `}</style>
 
       <div className="upl-ex-tb__seg" role="group" aria-label="Tab usage">

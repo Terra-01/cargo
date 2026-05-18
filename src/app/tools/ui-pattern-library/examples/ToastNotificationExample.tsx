@@ -105,7 +105,11 @@ export function ToastNotificationExample() {
         .upl-ex-tn__btn {
           font-family: var(--font-mono);
           font-size: var(--text-xs);
-          padding: 7px 13px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 44px;
+          padding: 7px 14px;
           border-radius: var(--radius-md);
           border: 1px solid var(--border-strong);
           background: var(--surface);
@@ -126,7 +130,8 @@ export function ToastNotificationExample() {
         .upl-ex-tn__seg button {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 6px 11px;
+          min-height: 44px;
+          padding: 6px 14px;
           border: none;
           background: var(--surface);
           color: var(--text-muted);
@@ -173,7 +178,11 @@ export function ToastNotificationExample() {
         .upl-ex-tn__toast button {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 3px 9px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 44px;
+          padding: 3px 14px;
           border-radius: var(--radius-sm);
           border: 1px solid color-mix(in srgb, var(--surface) 45%, transparent);
           background: transparent;
@@ -184,6 +193,29 @@ export function ToastNotificationExample() {
         .upl-ex-tn__toast--plain::before {
           content: '';
           width: 7px; height: 7px; border-radius: 50%; background: #22c55e;
+        }
+        .upl-ex-tn__controls {
+          display: flex;
+          gap: var(--space-2);
+          align-items: center;
+        }
+        .upl-ex-tn__label { min-width: 0; }
+        .upl-ex-tn__label b,
+        .upl-ex-tn__label span,
+        .upl-ex-tn__banner span,
+        .upl-ex-tn__outcome { overflow-wrap: anywhere; }
+        /* Mobile: each settings row stacks and the seg+delete group wraps,
+           so the long "inline banner" label is never clipped by the
+           segment's overflow:hidden. */
+        @media (max-width: 599px) {
+          .upl-ex-tn__row {
+            flex-direction: column;
+            align-items: stretch;
+            gap: var(--space-3);
+          }
+          .upl-ex-tn__controls { flex-wrap: wrap; }
+          .upl-ex-tn__seg { flex: 1 1 auto; }
+          .upl-ex-tn__seg button { flex: 1 1 auto; padding: 6px 10px; }
         }
       `}</style>
 
@@ -208,7 +240,7 @@ export function ToastNotificationExample() {
             <b>Delete item</b>
             <span>action-required · undo matters</span>
           </div>
-          <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
+          <div className="upl-ex-tn__controls">
             <div className="upl-ex-tn__seg" role="group" aria-label="Undo affordance">
               <button
                 type="button"
