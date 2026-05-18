@@ -79,8 +79,8 @@ export function TooltipExample() {
         }
         .upl-ex-tp__icon {
           position: relative;
-          width: 34px;
-          height: 34px;
+          width: 44px;
+          height: 44px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -118,7 +118,8 @@ export function TooltipExample() {
         .upl-ex-tp__seg button {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 6px 11px;
+          min-height: 44px;
+          padding: 6px 14px;
           border: none;
           background: var(--surface);
           color: var(--text-muted);
@@ -133,7 +134,10 @@ export function TooltipExample() {
         .upl-ex-tp__trigger {
           font-family: var(--font-mono);
           font-size: var(--text-xs);
-          padding: 7px 13px;
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          padding: 7px 14px;
           border-radius: var(--radius-md);
           border: 1px solid var(--border-strong);
           background: var(--surface);
@@ -170,7 +174,10 @@ export function TooltipExample() {
           align-self: flex-start;
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 5px 10px;
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          padding: 5px 14px;
           border-radius: var(--radius-sm);
           border: 1px solid var(--accent);
           background: var(--accent-soft);
@@ -183,6 +190,13 @@ export function TooltipExample() {
         }
         .upl-ex-tp__msg[data-kind="bad"] { color: #dc2626; }
         .upl-ex-tp__msg[data-kind="good"] { color: #16a34a; }
+        .upl-ex-tp__cap,
+        .upl-ex-tp__msg,
+        .upl-ex-tp__float p { overflow-wrap: anywhere; }
+        /* Mobile: the floating tooltip/popover stays inside the demo box. */
+        @media (max-width: 599px) {
+          .upl-ex-tp__float { min-width: 0; width: 200px; }
+        }
       `}</style>
 
       <div className="upl-ex-tp__stage">
@@ -194,11 +208,13 @@ export function TooltipExample() {
               tabIndex={0}
               role="button"
               aria-label="Settings"
+              aria-expanded={hintShown}
               data-testid="ex-tip-icon"
               onMouseEnter={() => setHintShown(true)}
               onMouseLeave={() => setHintShown(false)}
               onFocus={() => setHintShown(true)}
               onBlur={() => setHintShown(false)}
+              onClick={() => setHintShown(true)}
             >
               ⚙
               <span
@@ -210,7 +226,7 @@ export function TooltipExample() {
                 Settings
               </span>
             </span>
-            <span className="upl-ex-tp__cap">hover or focus the icon</span>
+            <span className="upl-ex-tp__cap">hover, focus, or tap the icon</span>
           </div>
         </div>
 

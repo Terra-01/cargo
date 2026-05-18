@@ -97,7 +97,11 @@ export function ModalDialogExample() {
         .upl-ex-btn {
           font-family: var(--font-mono);
           font-size: var(--text-xs);
-          padding: 7px 13px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 44px;
+          padding: 7px 14px;
           border-radius: var(--radius-md);
           border: 1px solid var(--border-strong);
           background: var(--surface);
@@ -130,7 +134,8 @@ export function ModalDialogExample() {
         .upl-ex-seg button {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 6px 11px;
+          min-height: 44px;
+          padding: 6px 14px;
           border: none;
           background: var(--surface);
           color: var(--text-muted);
@@ -216,6 +221,29 @@ export function ModalDialogExample() {
           from { opacity: 0; transform: translateY(6px) scale(0.98); }
           to   { opacity: 1; transform: none; }
         }
+        .upl-ex-modal__label { min-width: 0; }
+        .upl-ex-modal__label b,
+        .upl-ex-modal__dialog p { overflow-wrap: anywhere; }
+        .upl-ex-modal__controls {
+          display: flex;
+          gap: var(--space-2);
+          align-items: center;
+        }
+        /* Mobile: the settings rows stack so the label and its controls
+           fit a phone, the seg+save group wraps instead of clipping the
+           "toast" label, and the modal scrim hugs the small stage so the
+           dialog is not crushed by padding. */
+        @media (max-width: 599px) {
+          .upl-ex-modal__row {
+            flex-direction: column;
+            align-items: stretch;
+            gap: var(--space-3);
+          }
+          .upl-ex-modal__controls { flex-wrap: wrap; }
+          .upl-ex-seg { flex: 1 1 auto; }
+          .upl-ex-seg button { flex: 1 1 auto; padding: 6px 10px; }
+          .upl-ex-modal__scrim { padding: var(--space-3); }
+        }
       `}</style>
 
       <div className="upl-ex-modal__stage">
@@ -250,7 +278,7 @@ export function ModalDialogExample() {
               <b>Save settings</b>
               <span>transient confirmation</span>
             </div>
-            <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
+            <div className="upl-ex-modal__controls">
               <div className="upl-ex-seg" role="group" aria-label="Feedback style">
                 <button
                   type="button"

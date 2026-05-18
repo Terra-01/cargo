@@ -50,7 +50,8 @@ export function PopoverExample() {
         .upl-ex-po__seg button {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 6px 11px;
+          min-height: 44px;
+          padding: 6px 14px;
           border: none;
           background: var(--surface);
           color: var(--text-muted);
@@ -76,7 +77,10 @@ export function PopoverExample() {
         .upl-ex-po__trigger {
           font-family: var(--font-mono);
           font-size: var(--text-xs);
-          padding: 7px 13px;
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          padding: 7px 14px;
           border-radius: var(--radius-md);
           border: 1px solid var(--border-strong);
           background: var(--surface);
@@ -107,10 +111,12 @@ export function PopoverExample() {
           display: flex;
           align-items: center;
           gap: 8px;
+          min-height: 44px;
           font-size: 12px;
           color: var(--text-muted);
           padding: 5px 0;
         }
+        .upl-ex-po__check input { width: 18px; height: 18px; }
         .upl-ex-po__row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 9px; }
         .upl-ex-po__row label { font-family: var(--font-mono); font-size: 10px; color: var(--text-faint); }
         .upl-ex-po__row input, .upl-ex-po__row textarea {
@@ -126,7 +132,8 @@ export function PopoverExample() {
           margin-top: 8px;
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 5px 11px;
+          min-height: 44px;
+          padding: 5px 14px;
           border-radius: var(--radius-sm);
           border: 1px solid var(--accent);
           background: var(--accent-soft);
@@ -142,7 +149,10 @@ export function PopoverExample() {
         .upl-ex-po__open-panel {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 5px 11px;
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          padding: 5px 14px;
           border-radius: var(--radius-sm);
           border: 1px solid var(--border-strong);
           background: var(--surface);
@@ -168,7 +178,9 @@ export function PopoverExample() {
         .upl-ex-po__panel[data-open="true"] { transform: none; }
         .upl-ex-po__panel h4 { font-size: var(--text-md); font-weight: 600; color: var(--text); margin-bottom: var(--space-3); }
         .upl-ex-po__panel-close {
-          position: absolute; top: 12px; right: 14px;
+          position: absolute; top: 8px; right: 8px;
+          display: inline-flex; align-items: center; justify-content: center;
+          min-width: 44px; min-height: 44px;
           background: none; border: none; color: var(--text-muted);
           font-size: 16px; cursor: pointer;
         }
@@ -181,6 +193,19 @@ export function PopoverExample() {
           border-left: 2px solid var(--accent);
           background: var(--accent-soft);
           border-radius: var(--radius-sm);
+          overflow-wrap: anywhere;
+        }
+        .upl-ex-po__overflow { overflow-wrap: anywhere; }
+        .upl-ex-po__toolbar { flex-wrap: wrap; }
+        .upl-ex-po__row input,
+        .upl-ex-po__row textarea { min-width: 0; max-width: 100%; }
+        /* Mobile: keep the popover and slide-in panel inside the demo box
+           so the demo fits a phone without internal horizontal scroll. */
+        @media (max-width: 599px) {
+          .upl-ex-po__stage { padding: var(--space-4); }
+          .upl-ex-po__pop { width: 190px; }
+          .upl-ex-po__open-panel { margin-left: 0; }
+          .upl-ex-po__panel { width: 88%; }
         }
       `}</style>
 

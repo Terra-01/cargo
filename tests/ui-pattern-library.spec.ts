@@ -868,3 +868,85 @@ test.describe('UI Pattern Library — D1 card shell (no page scroll)', () => {
     expect(r.anyContains).toBe(true);
   });
 });
+
+test.describe('UI Pattern Library — D2a-1 (popover, modal, tooltip + chips)', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('the .upl-cat filter chips meet the 44px touch floor', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+    const chips = page.locator('.upl-cat');
+    const n = await chips.count();
+    expect(n).toBeGreaterThan(0);
+    for (let i = 0; i < n; i++) {
+      const b = await chips.nth(i).boundingBox();
+      expect(b!.height).toBeGreaterThanOrEqual(44);
+    }
+  });
+
+  test('the three demos have no internal overflow at rest on mobile', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+    const over = await page.evaluate(() =>
+      ['popover', 'modal-dialog', 'tooltip'].map((id) => {
+        const sc = document.querySelector(
+          `[data-testid="upl-card-${id}"] .upl-card__example-scroll`
+        );
+        return sc ? sc.scrollWidth - sc.clientWidth : -1;
+      })
+    );
+    expect(over).toEqual([0, 0, 0]);
+  });
+
+  test('popover, modal and tooltip-popover open without scrolling the page', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+
+    await page.getByTestId('ex-pop-trigger').click();
+    await expect(page.getByTestId('ex-pop-popover')).toBeVisible();
+    let over = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(over).toBeLessThanOrEqual(1);
+
+    await page.getByTestId('ex-modal-delete-trigger').click();
+    await expect(page.getByTestId('ex-modal-confirm-dialog')).toBeVisible();
+    over = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(over).toBeLessThanOrEqual(1);
+    await page.getByTestId('ex-modal-confirm-cancel').click();
+
+    await page.getByTestId('ex-tip-mode-popover').click();
+    await page.getByTestId('ex-tip-share').click();
+    await expect(page.getByTestId('ex-tip-popover')).toBeVisible();
+    over = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(over).toBeLessThanOrEqual(1);
+  });
+
+  test('tooltip hint is reachable by tap, and hover still works', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+    const tip = page.getByTestId('ex-tip-tooltip');
+    const icon = page.getByTestId('ex-tip-icon');
+    await expect(tip).toHaveAttribute('data-on', 'false');
+
+    // Touch path: a tap (click) shows the hint and exposes it via aria.
+    await icon.click();
+    await expect(tip).toHaveAttribute('data-on', 'true');
+    await expect(icon).toHaveAttribute('aria-expanded', 'true');
+
+    // Tapping away (blur) dismisses it, the honest tooltip model.
+    await page.getByTestId('ex-tip-share').focus();
+    await expect(tip).toHaveAttribute('data-on', 'false');
+
+    // Desktop path unchanged: hover still shows it. Move the pointer away
+    // first so hovering the icon fires a fresh mouseenter.
+    await page.mouse.move(0, 0);
+    await icon.hover();
+    await expect(tip).toHaveAttribute('data-on', 'true');
+
+    // The icon itself is a 44px target.
+    const box = await icon.boundingBox();
+    expect(box!.width).toBeGreaterThanOrEqual(44);
+    expect(box!.height).toBeGreaterThanOrEqual(44);
+  });
+});

@@ -79,9 +79,10 @@ export function UiPatternLibrary() {
         .upl-categories { display: flex; flex-wrap: wrap; gap: var(--space-2); }
         .upl-cat {
           display: inline-flex;
-          align-items: baseline;
+          align-items: center;
           gap: 6px;
-          padding: 5px 10px;
+          min-height: 44px;
+          padding: 5px 14px;
           background: var(--surface);
           border: 1px solid var(--border);
           border-radius: var(--radius-pill);
