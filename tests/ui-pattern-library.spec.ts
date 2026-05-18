@@ -823,3 +823,48 @@ test.describe('UI Pattern Library tool', () => {
     }
   });
 });
+
+test.describe('UI Pattern Library — D1 card shell (no page scroll)', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('the card shell does not scroll the page sideways at mobile', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+    await page.waitForLoadState('networkidle');
+    const r = await page.evaluate(() => {
+      const de = document.documentElement;
+      // No card-shell element (card, body, anatomy, catalog, page) overflows.
+      let shellOverflow = 0;
+      document
+        .querySelectorAll(
+          '.upl-card, .upl-card__body, .upl-card__anatomy, .upl-catalog, .tool-page'
+        )
+        .forEach((el) => {
+          shellOverflow = Math.max(shellOverflow, el.scrollWidth - el.clientWidth);
+        });
+      return {
+        pageOverflow: de.scrollWidth - de.clientWidth,
+        shellOverflow,
+      };
+    });
+    expect(r.pageOverflow).toBeLessThanOrEqual(1);
+    expect(r.shellOverflow).toBeLessThanOrEqual(1);
+  });
+
+  test('a wide demo is contained in its own scroll box, not the page', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+    const r = await page.evaluate(() => {
+      const de = document.documentElement;
+      const scrollers = [
+        ...document.querySelectorAll('.upl-card__example-scroll'),
+      ];
+      const anyContains = scrollers.some(
+        (s) => s.scrollWidth > s.clientWidth + 1
+      );
+      return { pageOverflow: de.scrollWidth - de.clientWidth, anyContains };
+    });
+    // The page must not scroll even though some demos are still wide
+    // internally (those are D2's scope, contained here by the shell).
+    expect(r.pageOverflow).toBeLessThanOrEqual(1);
+    expect(r.anyContains).toBe(true);
+  });
+});

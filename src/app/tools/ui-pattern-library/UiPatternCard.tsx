@@ -44,13 +44,19 @@ export function UiPatternCard({ pattern }: Props) {
 
         <div className="upl-card__example" data-testid={`upl-example-${pattern.id}`}>
           <span className="upl-card__example-tag">live example</span>
-          {Example ? (
-            <Example />
-          ) : (
-            <p className="upl-card__example-missing">
-              No example wired for “{pattern.id}”.
-            </p>
-          )}
+          {/* Containment for D1: a wide demo scrolls inside its own box
+              instead of widening the card and the page. The tag sits
+              outside this wrapper so it is never clipped. D2 fixes each
+              demo's internals so this scroll is rarely needed. */}
+          <div className="upl-card__example-scroll">
+            {Example ? (
+              <Example />
+            ) : (
+              <p className="upl-card__example-missing">
+                No example wired for “{pattern.id}”.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </article>

@@ -135,11 +135,13 @@ export function UiPatternLibrary() {
           color: var(--text);
           margin-bottom: var(--space-3);
         }
+        .upl-card__name { overflow-wrap: anywhere; }
         .upl-card__what {
           font-size: var(--text-md);
           color: var(--text-muted);
           line-height: 1.6;
           max-width: 62ch;
+          overflow-wrap: anywhere;
         }
         .upl-card__body {
           display: grid;
@@ -147,7 +149,12 @@ export function UiPatternLibrary() {
           gap: var(--space-6);
           align-items: start;
         }
-        @media (max-width: 900px) {
+        /* Grid children must be allowed to shrink below their content
+           min-size, otherwise a wide demo forces the body (and the page)
+           sideways. The example column then contains its own overflow. */
+        .upl-card__anatomy,
+        .upl-card__example { min-width: 0; }
+        @media (max-width: 1023px) { /* migrated from max-width: 900px (tablet-and-below) */
           .upl-card__body { grid-template-columns: 1fr; gap: var(--space-5); }
         }
         .upl-card__anatomy {
@@ -198,6 +205,11 @@ export function UiPatternLibrary() {
           letter-spacing: 0.08em;
           text-transform: uppercase;
           border-radius: var(--radius-sm);
+        }
+        .upl-card__example-scroll {
+          min-width: 0;
+          overflow-x: auto;
+          overscroll-behavior-x: contain;
         }
         .upl-card__example-missing {
           font-family: var(--font-mono);
