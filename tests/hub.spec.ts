@@ -37,13 +37,16 @@ test.describe('Hub page foundation', () => {
     await expect(page.locator('.hero__title em')).toContainText('make things');
   });
 
-  test('renders all 10 tool cards', async ({ page }) => {
+  test('renders all 9 tool cards', async ({ page }) => {
     await page.goto('/');
     const cards = page.locator('.tool-card');
-    await expect(cards).toHaveCount(10);
+    await expect(cards).toHaveCount(9);
   });
 
-  test('tool cards show manifest numbers 01 through 10', async ({ page }) => {
+  // The Component Prompt Builder (cargo/06) was cut. Surviving tools keep
+  // their original catalogue numbers as stable identities, so 06 is absent
+  // by design rather than the list being renumbered.
+  test('tool cards show the catalogue numbers, 06 cut', async ({ page }) => {
     await page.goto('/');
     const manifests = await page.locator('.tool-card__manifest').allTextContents();
     expect(manifests).toEqual([
@@ -52,7 +55,6 @@ test.describe('Hub page foundation', () => {
       'CARGO/03',
       'CARGO/04',
       'CARGO/05',
-      'CARGO/06',
       'CARGO/07',
       'CARGO/08',
       'CARGO/09',
@@ -60,12 +62,12 @@ test.describe('Hub page foundation', () => {
     ]);
   });
 
-  test('hub shows 9 shipped + 1 coming-soon tool cards', async ({ page }) => {
+  test('hub shows 9 shipped + 0 coming-soon tool cards', async ({ page }) => {
     await page.goto('/');
     const shippedCards = page.locator('.tool-card[data-status="shipped"]');
     const soonCards = page.locator('.tool-card[data-status="coming_soon"]');
     await expect(shippedCards).toHaveCount(9);
-    await expect(soonCards).toHaveCount(1);
+    await expect(soonCards).toHaveCount(0);
   });
 
   test('shipped tool card (css-effect-lab) is a navigable link', async ({ page }) => {
@@ -92,12 +94,11 @@ test.describe('Hub page foundation', () => {
     await expect(card).toHaveAttribute('href', '/tools/loading-states');
   });
 
-  test('shipped tool card (prompt-builder) is a navigable link', async ({ page }) => {
+  test('Component Prompt Builder was cut: no card, no route', async ({ page }) => {
     await page.goto('/');
-    const card = page.locator('.tool-card[data-tool-id="prompt-builder"]');
-    const tagName = await card.evaluate((el) => el.tagName.toLowerCase());
-    expect(tagName).toBe('a');
-    await expect(card).toHaveAttribute('href', '/tools/prompt-builder');
+    await expect(page.locator('.tool-card[data-tool-id="prompt-builder"]')).toHaveCount(0);
+    const res = await page.goto('/tools/prompt-builder');
+    expect(res?.status()).toBe(404);
   });
 
   test('shipped tool card (type-field-guide) is a navigable link', async ({ page }) => {
@@ -141,7 +142,7 @@ test.describe('Hub page foundation', () => {
     await expect(card).toHaveAttribute('href', '/tools/shader-gradient-lab');
   });
 
-  test('shipped tool cards are navigable links', async ({ page }) => {
+  test('all tool cards are navigable links (every tool shipped)', async ({ page }) => {
     await page.goto('/');
     const shippedCards = page.locator('.tool-card[data-status="shipped"]');
     const tagNames = await shippedCards.evaluateAll((nodes) => nodes.map((n) => n.tagName.toLowerCase()));
@@ -149,24 +150,32 @@ test.describe('Hub page foundation', () => {
     tagNames.forEach((t) => expect(t).toBe('a'));
   });
 
-  test('coming-soon tool cards are NOT navigable', async ({ page }) => {
+  test('no coming-soon cards remain on the hub', async ({ page }) => {
     await page.goto('/');
-    const soonCards = page.locator('.tool-card[data-status="coming_soon"]');
-    const tagNames = await soonCards.evaluateAll((nodes) => nodes.map((n) => n.tagName.toLowerCase()));
-    expect(tagNames.length).toBe(1);
-    tagNames.forEach((t) => expect(t).not.toBe('a'));
+    await expect(page.locator('.tool-card[data-status="coming_soon"]')).toHaveCount(0);
   });
 
-  test('exactly 1 "soon" tag appears on the hub', async ({ page }) => {
+  test('UI Pattern Library is now a shipped, navigable card', async ({ page }) => {
     await page.goto('/');
-    const soonTags = page.locator('.tool-card .tag--soon');
-    await expect(soonTags).toHaveCount(1);
+    const card = page.locator('.tool-card[data-tool-id="ui-pattern-library"]');
+    await expect(card).toHaveCount(1);
+    await expect(card).toHaveAttribute('data-status', 'shipped');
+    await expect(card).toContainText('UI Pattern Library');
+    await expect(card).not.toContainText('Dictionary');
+    const tagName = await card.evaluate((el) => el.tagName.toLowerCase());
+    expect(tagName).toBe('a');
+    await expect(card).toHaveAttribute('href', '/tools/ui-pattern-library');
+  });
+
+  test('no "soon" tag appears on the hub', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('.tool-card .tag--soon')).toHaveCount(0);
   });
 
   test('manifest derives counts from the tool array', async ({ page }) => {
     await page.goto('/');
     const toolsShipped = page.locator('.manifest__item').nth(1).locator('.manifest__value');
-    await expect(toolsShipped).toContainText('09 / 10 planned');
+    await expect(toolsShipped).toContainText('9 / 9 planned');
   });
 
   test('cargo principle pull quote renders', async ({ page }) => {

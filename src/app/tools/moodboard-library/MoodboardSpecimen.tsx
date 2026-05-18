@@ -23,7 +23,7 @@ interface MoodboardSpecimenProps {
 export function MoodboardSpecimen({ moodboard: mb }: MoodboardSpecimenProps) {
   const { specimen, fonts, category, id } = mb;
   const fontStack = `"${fonts.heading}", ${specimen.headingFallback}`;
-  const isItalic = /serif|migra|editorial|instrument/i.test(fonts.heading);
+  const isItalic = specimen.headingIsItalic;
 
   return (
     <svg

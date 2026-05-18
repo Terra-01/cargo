@@ -639,6 +639,15 @@ a { color: inherit; text-decoration: none; }
 .hero > *:nth-child(3) { animation-delay: 160ms; }
 .hero > *:nth-child(4) { animation-delay: 240ms; }
 
+/* The hero entrance is decorative polish: it slides and fades the masthead
+   in on load and carries no information. Under reduced-motion it is shown
+   immediately in its final state. Tool demonstration motion (loaders, text
+   animations, the easing dot, live CSS effects) is deliberately not touched
+   here, that motion is the point of those tools. */
+@media (prefers-reduced-motion: reduce) {
+  .hero > * { animation: none; }
+}
+
 /* Responsive */
 @media (max-width: 720px) {
   :root { --text-4xl: 40px; --text-3xl: 32px; }

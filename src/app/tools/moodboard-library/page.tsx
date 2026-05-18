@@ -17,7 +17,7 @@ export default function MoodboardLibraryPage() {
         <Link href="/" className="tool-page__back">back to the workshop</Link>
         <header className="tool-page__header">
           <p className="eyebrow tool-page__eyebrow">
-            // {tool.category} · cargo/{tool.number}
+            {'// '}{tool.category} · cargo/{tool.number}
           </p>
           <h1 className="tool-page__title">{tool.title}</h1>
           <p className="tool-page__desc">

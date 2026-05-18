@@ -8,7 +8,7 @@ Read sections 1–3 before touching any phase. Sections 4–6 are the phases the
 
 ## 1. What Cargo is
 
-Cargo is a workshop of small, single-purpose web tools for designers and "vibe coders" — free, no accounts, no tracking. It is a side project, built incrementally. Nine tools are shipped; a tenth is planned.
+Cargo is a workshop of small, single-purpose web tools for designers and "vibe coders", free, no accounts, no tracking. It is a side project, built incrementally. The reset is complete: nine tools are shipped, none are planned or coming-soon, and the project is in its finished, cleaned-up state.
 
 **Stack:** Next.js 16 (App Router, webpack — not Turbopack), TypeScript, plain CSS with design tokens (no Tailwind, no CSS-in-JS), Playwright for tests.
 
@@ -58,31 +58,41 @@ Each milestone prompt is a markdown document with this shape, and any new one sh
 
 ### Tools shipped (9)
 
-`css-effect-lab`, `easing-cookbook`, `loading-states`, `mockup-wrapper`, `type-scale`, `prompt-builder`, `moodboard-library`, `text-animations`, `shader-gradient-lab`.
+`css-effect-lab`, `easing-cookbook`, `loading-states`, `mockup-wrapper`, `type-field-guide`, `moodboard-library`, `text-animations`, `shader-gradient-lab`, `ui-pattern-library`.
+
+Two changes from the original list: `type-scale` was reframed and shipped as `type-field-guide`, and the Component Prompt Builder (`prompt-builder`, formerly catalogue number 06) was cut permanently. Surviving tools keep their original catalogue numbers as stable identities, so number 06 is intentionally absent rather than the list being renumbered.
 
 ### The tool registry
 
 `src/lib/tools.ts` is the single source of truth for the tool list — id, number, category, title, description, tags, route, status (`shipped` | `coming_soon`), and a preview component. The home page renders from it. **When a tool ships or changes, update its registry entry.**
 
-Note: `ui-pattern-dictionary` **already has a registry entry** — number `10`, status `coming_soon`, with a `UiPatternDictionaryPreview` component already imported. The tenth tool is already scaffolded in the registry; it is not shipped.
+Note: the tool that was scaffolded as `ui-pattern-dictionary` (number `10`, once `coming_soon`) shipped as the **UI Pattern Library** (`ui-pattern-library`, number `10`, status `shipped`). There is no longer any `coming_soon` entry in the registry.
 
-### Recently completed
+### Recently completed (the reset)
 
-- **Shader Gradient Lab** — rebuilt from scratch around the open-source Neat gradient library; procedural textures, presets, standalone + snippet export.
-- **Text Animation Library refinement** — catalogue rebuilt to 146 animations, a JS-driven animation path added, category filter, picker redesign. Complete.
-- **`/notes` and `/about` pages** — being built now (fixes two 404s in the topbar nav). Treat as in-progress; not part of this roadmap.
+- **Shader Gradient Lab**, rebuilt from scratch around the open-source Neat gradient library; procedural textures, presets, standalone and snippet export.
+- **Text Animation Library refinement**, catalogue rebuilt to 146 animations, a JS-driven animation path added, category filter, picker redesign. Complete.
+- **`/notes` and `/about` pages**, built (the two topbar-nav 404s are gone).
+- **The Type Field Guide**, shipped (the `type-scale` slot reframed into a hands-on typography guide).
+- **CSS Effect Lab v2**, shipped (single glassmorphism panel turned into a multi-effect playground).
+- **Loading States scale-up** and **Moodboard scale-up**, both shipped.
+- **UI Pattern Library**, shipped (the tool once scaffolded as the UI Pattern Dictionary).
+- **Component Prompt Builder**, cut permanently. A planned type-pairing tool was dropped before it ever existed in the codebase.
+- **Closing tech-debt cleanup**, done: the repo-wide ESLint fix, `noUnusedLocals` and `noUnusedParameters` enabled, the moodboard italic decision made declarative, a reduced-motion pass, and the remaining lint findings resolved.
 
-### What this roadmap covers — three phases
+### What this roadmap originally covered, three phases
 
-1. **CSS Effect Lab v2** — expand a shipped tool (section 4).
-2. **Mockup Wrapper v2** — expand a shipped tool (section 5).
-3. **UI Pattern Dictionary** — build the tenth, planned tool (section 6).
+1. **CSS Effect Lab v2**, expand a shipped tool (section 4). **Done.**
+2. **Mockup Wrapper v2**, expand a shipped tool (section 5). **Still open, the one piece of roadmap work not yet done.**
+3. **UI Pattern Dictionary**, build the tenth tool (section 6). **Done**, shipped as the UI Pattern Library.
 
-These three are independent of each other and can be done in any order. Suggested order is as listed (it matches tool numbering and goes expand-expand-build). Each phase below should begin with a short scoping pass — the phases were first sketched a long time ago and the scoping here should be confirmed against the live tool before milestone prompts are written.
+Sections 4 and 6 are kept below as historical scoping context for work that is now complete. Section 5 (Mockup Wrapper v2) is the only phase still genuinely open.
 
 ---
 
 ## 4. Phase — CSS Effect Lab v2
+
+> **Status: done.** CSS Effect Lab v2 shipped. The section below is kept as historical scoping context; it describes the v1 starting point, not the current tool.
 
 ### Current state of v1
 
@@ -153,6 +163,8 @@ The tool works and is genuinely useful, but it is thin: two frames. The original
 
 ## 6. Phase — UI Pattern Dictionary
 
+> **Status: done.** Shipped as the **UI Pattern Library** (`ui-pattern-library`, number 10, status `shipped`). The section below is kept as historical scoping context; the tool described as "planned, not built" now exists.
+
 ### Current state
 
 This is the **tenth tool — planned, not built.** It already has a registry entry in `src/lib/tools.ts`:
@@ -196,7 +208,7 @@ This is closest in spirit to a content tool — like a well-written reference pa
 
 ## 7. Suggested sequence and closing notes
 
-**Suggested order:** CSS Effect Lab v2 → Mockup Wrapper v2 → UI Pattern Dictionary. This matches tool numbering, does the two tool-expansions first (lower risk, working tools to build on), and ends with the from-scratch content tool (highest effort, needs a content plan).
+**Original suggested order:** CSS Effect Lab v2, then Mockup Wrapper v2, then UI Pattern Dictionary. Two of the three are done. The only phase still open is **Mockup Wrapper v2** (more frames, a cleaner export); it can be picked up whenever it is wanted, on its own scoping pass.
 
 **Each phase starts with a scoping pass, not a prompt.** The three phases were sketched well before the recent work. Before writing milestone prompts for any of them, confirm the scope against the live tool / current state and resolve the open decisions listed. For CSS Effect Lab and Mockup Wrapper this is short (the tools exist, the gaps are clear). For the UI Pattern Dictionary it is a real planning step (the content has to be designed).
 
@@ -205,7 +217,7 @@ This is closest in spirit to a content tool — like a well-written reference pa
 - Mockup Wrapper v2 — ~1–2 milestones (frames, possibly export separately).
 - UI Pattern Dictionary — ~2–3 milestones (a content plan, then tool + initial content, then full content) plus the scoping/content-design step.
 
-**When all three ship,** Cargo has ten tools, all shipped, and the registry's `coming_soon` is gone. That is a natural completion point for the current roadmap. Anything beyond is a fresh planning conversation.
+**Current completion point reached.** The reset is complete: Cargo has nine tools, all shipped, the registry's `coming_soon` is gone, and the closing tech-debt cleanup is done. The Component Prompt Builder was cut along the way, so the count is nine rather than ten. The one optional piece of future work still on the table is Mockup Wrapper v2. Anything beyond that is a fresh planning conversation.
 
 **A reminder carried from section 2:** every milestone prompt is self-contained, opens with the standing rules, and is written for a builder starting cold. Embedded data gets verified before it goes in. The house style is matched, never reinvented. And the project moves one Saturday at a time — milestones should be sized so one is a satisfying, shippable unit of work, not a sprawling one.
 
@@ -244,8 +256,8 @@ These are settled. A new agent should follow them, not relitigate them.
 A new agent should be aware of these. None is urgent; none should be "fixed" silently as a side effect of unrelated work — but they are real.
 
 - **The working tree is uncommitted.** Multiple completed milestones were never committed (commits were never requested, and destructive git is off-limits). `git diff HEAD` currently conflates several milestones' worth of changes. **A clean commit pass is worth doing** — ideally before the next phase starts, so future diffs are legible. This is the single most worthwhile piece of debt to clear.
-- **No `noUnusedLocals` in `tsconfig`.** `tsconfig.json` has `strict: true` but not `noUnusedLocals`. This means dead code (unused constants, unused imports) does not fail `tsc` or `build`. A prior milestone left, then later removed, four genuinely-dead easing constants — they were invisible to the build the whole time. Consequence for a new agent: do not rely on the compiler to catch dead code; check for it deliberately. (Enabling `noUnusedLocals` is itself a defensible small cleanup, but it would surface existing unused symbols that must be cleared first — treat as its own small task if attempted.)
-- **ESLint is not enforced by the build, and is currently failing repo-wide.** `npm run build` does not run ESLint, and `npm run lint` reports `react/jsx-no-comment-textnodes` errors — the bare `// ` eyebrow text (e.g. `// production_tools`) used across the site triggers it. `src/app/page.tsx` alone trips it three times; the `/about` and `/notes` pages match the same pattern deliberately (consistency over diverging two pages). Nothing is broken — but `npm run lint` is noisy, which means a *real* lint error could hide in the noise. Worth a deliberate cleanup: one shared eyebrow component, or escaping the strings, applied repo-wide in its own small task. Do not bundle it into unrelated work, and do not have a milestone "fix" it as a side effect.
+- **`noUnusedLocals` is now enabled (resolved).** `tsconfig.json` has `strict: true`, and the closing cleanup added `noUnusedLocals: true` and `noUnusedParameters: true`. Both were clean with zero dead symbols (the codebase was already strict), so nothing had to be removed. Dead code now fails `tsc` and `build`; the compiler can be relied on to catch it.
+- **ESLint is now clean repo-wide (resolved).** `npm run build` still does not run ESLint, but `npm run lint` is green. The repo-wide `react/jsx-no-comment-textnodes` issue (the bare `// ` eyebrow text) was fixed by wrapping each intentional `// ` label as an explicit string expression, and the four follow-up findings (`react/no-unescaped-entities`, `react-hooks/immutability`, `react-hooks/set-state-in-effect`, `@next/next/no-img-element`) were resolved in the closing cleanup. A real lint error can no longer hide in noise.
 - **`next.config.ts` is empty.** It is the default scaffold (no custom config). This is fine today, but note it: if a future need arises (e.g. a webpack rule for raw-file imports), it would go here. A prior milestone deliberately avoided adding a webpack rule because it was out of scope — flagged rather than done.
 - **Screenshot filenames carry old milestone tags.** Test screenshot filenames sometimes keep a prior milestone's tag (e.g. an `m1` suffix on a screenshot regenerated in a later milestone). Cosmetic, not worth a dedicated fix, but do not be confused by a filename that names an old milestone.
 - **One pre-existing flaky test.** A `search filters by category` test and occasionally a couple of others have flaked on a `.fill()` timing race, then passed on retry — the suite's `retries: 1` absorbs it and the suite exits green. It is a test-harness timing sensitivity, not a product bug. If it becomes more frequent, the proper fix is an explicit wait in that test; until then it is tolerated and known.

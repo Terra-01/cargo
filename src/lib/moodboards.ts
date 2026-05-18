@@ -20,6 +20,12 @@ export interface MoodboardSpecimen {
   // Fallback CSS font-family stack when the real heading face isn't installed.
   // Picks a system family that captures the vibe (display, serif, mono, etc.).
   headingFallback: string;
+  // Whether the big "Aa" specimen renders italic. Declared per board rather
+  // than sniffed from the font name: the heading face's italic suitability is
+  // a design decision, not something derivable from the string. Editorial and
+  // text-serif faces are italic; sans, display, mono, pixel, and the
+  // intentionally-unstyled "browser default" board are upright.
+  headingIsItalic: boolean;
 }
 
 export interface Moodboard {
@@ -54,6 +60,7 @@ export const moodboards: Moodboard[] = [
       fg: '#FCD34D',
       accent: '#4D7C0F',
       headingFallback: 'Georgia, "Times New Roman", serif',
+      headingIsItalic: true,
     },
   },
   {
@@ -75,6 +82,7 @@ export const moodboards: Moodboard[] = [
       fg: '#FACC15',
       accent: '#EC4899',
       headingFallback: '"Helvetica Neue", "Arial Black", sans-serif',
+      headingIsItalic: false,
     },
   },
   {
@@ -96,6 +104,7 @@ export const moodboards: Moodboard[] = [
       fg: '#44403C',
       accent: '#84A98C',
       headingFallback: '"Helvetica Neue", Helvetica, system-ui, sans-serif',
+      headingIsItalic: false,
     },
   },
   {
@@ -117,6 +126,7 @@ export const moodboards: Moodboard[] = [
       fg: '#67E8F9',
       accent: '#FB7185',
       headingFallback: 'Georgia, "Playfair Display", serif',
+      headingIsItalic: true,
     },
   },
   {
@@ -138,6 +148,7 @@ export const moodboards: Moodboard[] = [
       fg: '#18181B',
       accent: '#F59E0B',
       headingFallback: '"Arial Black", "Helvetica Neue", Impact, sans-serif',
+      headingIsItalic: false,
     },
   },
   {
@@ -159,6 +170,7 @@ export const moodboards: Moodboard[] = [
       fg: '#3F2E78',
       accent: '#FBD3D4',
       headingFallback: '"Playfair Display", Georgia, "Times New Roman", serif',
+      headingIsItalic: true,
     },
   },
   {
@@ -180,6 +192,7 @@ export const moodboards: Moodboard[] = [
       fg: '#26211C',
       accent: '#7B341E',
       headingFallback: 'Georgia, "Times New Roman", serif',
+      headingIsItalic: true,
     },
   },
   {
@@ -201,6 +214,7 @@ export const moodboards: Moodboard[] = [
       fg: '#111111',
       accent: '#C8102E',
       headingFallback: 'Georgia, "Times New Roman", serif',
+      headingIsItalic: true,
     },
   },
   {
@@ -222,6 +236,7 @@ export const moodboards: Moodboard[] = [
       fg: '#3B362F',
       accent: '#6B7F66',
       headingFallback: '"Playfair Display", Georgia, serif',
+      headingIsItalic: true,
     },
   },
   {
@@ -243,6 +258,7 @@ export const moodboards: Moodboard[] = [
       fg: '#0D0D0D',
       accent: '#FFD400',
       headingFallback: '"Arial Black", "Helvetica Neue", Impact, sans-serif',
+      headingIsItalic: false,
     },
   },
   {
@@ -264,6 +280,7 @@ export const moodboards: Moodboard[] = [
       fg: '#000000',
       accent: '#0000EE',
       headingFallback: 'Times, "Times New Roman", serif',
+      headingIsItalic: false,
     },
   },
   {
@@ -285,6 +302,7 @@ export const moodboards: Moodboard[] = [
       fg: '#2E2E2B',
       accent: '#DAD9D3',
       headingFallback: '"Helvetica Neue", Helvetica, system-ui, sans-serif',
+      headingIsItalic: false,
     },
   },
   {
@@ -306,6 +324,7 @@ export const moodboards: Moodboard[] = [
       fg: '#FBBF24',
       accent: '#E11D2A',
       headingFallback: '"Arial Black", Impact, "Helvetica Neue", sans-serif',
+      headingIsItalic: false,
     },
   },
   {
@@ -327,6 +346,7 @@ export const moodboards: Moodboard[] = [
       fg: '#CCFF00',
       accent: '#FF00A8',
       headingFallback: '"Arial Black", Impact, sans-serif',
+      headingIsItalic: false,
     },
   },
   {
@@ -348,6 +368,7 @@ export const moodboards: Moodboard[] = [
       fg: '#FF6B35',
       accent: '#FF3C9E',
       headingFallback: 'ui-monospace, "Courier New", monospace',
+      headingIsItalic: false,
     },
   },
   {
@@ -369,6 +390,7 @@ export const moodboards: Moodboard[] = [
       fg: '#EFE4CF',
       accent: '#D99A2B',
       headingFallback: 'Georgia, "Palatino Linotype", serif',
+      headingIsItalic: false,
     },
   },
   {
@@ -390,6 +412,7 @@ export const moodboards: Moodboard[] = [
       fg: '#C7D1B0',
       accent: '#5C7A4A',
       headingFallback: 'Georgia, "Times New Roman", serif',
+      headingIsItalic: true,
     },
   },
   {
@@ -411,6 +434,7 @@ export const moodboards: Moodboard[] = [
       fg: '#3A4A63',
       accent: '#B07A57',
       headingFallback: 'Georgia, "Times New Roman", serif',
+      headingIsItalic: true,
     },
   },
 ];

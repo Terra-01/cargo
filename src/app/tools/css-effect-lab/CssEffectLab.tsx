@@ -22,7 +22,7 @@ function PreviewTarget({ effect }: { effect: Effect }) {
   if (effect.target === 'panel') {
     return (
       <article className={`fx-panel ${effect.selector}`} data-testid="fx-target">
-        <p className="fx-panel__eyebrow">// release</p>
+        <p className="fx-panel__eyebrow">{'// release'}</p>
         <h3 className="fx-panel__title">Ship Saturday</h3>
         <p className="fx-panel__text">
           A grainy gradient kills the flat banding that makes CSS gradients
@@ -33,7 +33,7 @@ function PreviewTarget({ effect }: { effect: Effect }) {
   }
   return (
     <article className={`fx-card ${effect.selector}`} data-testid="fx-target">
-      <p className="fx-card__eyebrow">// pricing</p>
+      <p className="fx-card__eyebrow">{'// pricing'}</p>
       <h3 className="fx-card__title">Pro plan</h3>
       <p className="fx-card__text">
         Everything in Starter, plus unlimited projects, custom domains, and

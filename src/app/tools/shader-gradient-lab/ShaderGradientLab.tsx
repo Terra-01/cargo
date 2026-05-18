@@ -43,6 +43,11 @@ export function ShaderGradientLab() {
       runtimeRef.current = rt;
       rt.start_();
     } catch (err) {
+      // Recording the external-system (WebGL2) init status. Keeping an Effect
+      // to synchronize with an external system, and setting state for its
+      // failure, is the correct React shape; react-hooks/set-state-in-effect
+      // is a false positive for external-system synchronization here.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setGlError(err instanceof Error ? err.message : 'WebGL2 unavailable.');
     }
     const fpsTimer = window.setInterval(() => {
@@ -63,6 +68,10 @@ export function ShaderGradientLab() {
     if (!runtimeRef.current) return;
     try {
       runtimeRef.current.setProgram(program);
+      // Clearing the WebGL compile status as the runtime is synchronized to
+      // `program` — the correct effect use; the rule is a false positive for
+      // external-system synchronization here.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setGlError(null);
     } catch (err) {
       setGlError(err instanceof Error ? err.message : 'Shader compile failed.');

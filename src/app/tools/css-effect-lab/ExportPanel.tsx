@@ -32,7 +32,7 @@ export function ExportPanel({ sections }: { sections: ExportSection[] }) {
     <div className="fx-export" data-testid="fx-export">
       {sections.map((s) => (
         <section className="fx-section" key={s.slug}>
-          <p className="fx-section__label">// {s.label.toLowerCase()}</p>
+          <p className="fx-section__label">{'// '}{s.label.toLowerCase()}</p>
           {s.kind === 'code' ? (
             <div className="code" data-testid={`export-${s.slug}`}>
               {s.code}

@@ -23,7 +23,7 @@ export default function AboutPage() {
     <main className="container">
       <div className="tool-page">
         <header className="tool-page__header">
-          <p className="eyebrow tool-page__eyebrow">// about</p>
+          <p className="eyebrow tool-page__eyebrow">{'// about'}</p>
           <h1 className="tool-page__title">A workshop, not a product.</h1>
           <p className="tool-page__desc">
             Cargo is a small set of tools for people who make things on the web. It is free, it has no accounts, and it is built slowly.
@@ -49,7 +49,7 @@ export default function AboutPage() {
       </div>
 
       <section className="principle">
-        <p className="eyebrow principle__eyebrow">// the cargo principle</p>
+        <p className="eyebrow principle__eyebrow">{'// the cargo principle'}</p>
         <p className="principle__quote">
           &ldquo;Build the tool you wish existed, then ship it on a Saturday.&rdquo;
         </p>

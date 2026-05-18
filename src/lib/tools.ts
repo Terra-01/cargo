@@ -4,7 +4,6 @@ import { EasingCookbookPreview } from '@/components/previews/EasingCookbookPrevi
 import { LoadingStatesPreview } from '@/components/previews/LoadingStatesPreview';
 import { MockupWrapperPreview } from '@/components/previews/MockupWrapperPreview';
 import { TypeScalePreview } from '@/components/previews/TypeScalePreview';
-import { PromptBuilderPreview } from '@/components/previews/PromptBuilderPreview';
 import { MoodboardPreview } from '@/components/previews/MoodboardPreview';
 import { TextAnimationsPreview } from '@/components/previews/TextAnimationsPreview';
 import { ShaderGradientLabPreview } from '@/components/previews/ShaderGradientLabPreview';
@@ -81,17 +80,6 @@ export const tools: Tool[] = [
     Preview: TypeScalePreview,
   },
   {
-    id: 'prompt-builder',
-    number: '06',
-    category: 'generator',
-    title: 'Component Prompt Builder',
-    description: 'Pick a component, style, and framework. Get a sharp prompt you paste into Claude, v0, or Lovable.',
-    tags: ['ai', 'prompts', 'vibe-coding'],
-    href: '/tools/prompt-builder',
-    status: 'shipped',
-    Preview: PromptBuilderPreview,
-  },
-  {
     id: 'moodboard-library',
     number: '07',
     category: 'reference',
@@ -125,14 +113,14 @@ export const tools: Tool[] = [
     Preview: ShaderGradientLabPreview,
   },
   {
-    id: 'ui-pattern-dictionary',
+    id: 'ui-pattern-library',
     number: '10',
     category: 'reference',
-    title: 'UI Pattern Dictionary',
-    description: 'A searchable reference of UI patterns — what each one means, when to use it, when not to.',
+    title: 'UI Pattern Library',
+    description: 'A searchable reference of UI patterns, what each one means, when to use it, when not to.',
     tags: ['reference', 'patterns', 'ui'],
-    href: '/tools/ui-pattern-dictionary',
-    status: 'coming_soon',
+    href: '/tools/ui-pattern-library',
+    status: 'shipped',
     Preview: UiPatternDictionaryPreview,
   },
 ];

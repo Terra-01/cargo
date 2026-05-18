@@ -34,7 +34,7 @@ export function DialsModal({ onClose, children }: Props) {
         aria-label="Shader dials"
       >
         <div className="sg-modal__head">
-          <p className="sg-modal__title">// dials</p>
+          <p className="sg-modal__title">{'// dials'}</p>
           <button
             type="button"
             className="sg-modal__close"

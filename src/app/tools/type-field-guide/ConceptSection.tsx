@@ -28,7 +28,7 @@ export function ConceptSection({
 }) {
   return (
     <section className="tfg-concept">
-      <p className="eyebrow tfg-concept__eyebrow">// {eyebrow}</p>
+      <p className="eyebrow tfg-concept__eyebrow">{'// '}{eyebrow}</p>
       <h2 className="heading heading--lg tfg-concept__heading">{heading}</h2>
       {children}
     </section>

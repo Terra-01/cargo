@@ -38,7 +38,7 @@ export default function NotesPage() {
     <main className="container">
       <div className="tool-page">
         <header className="tool-page__header">
-          <p className="eyebrow tool-page__eyebrow">// the devlog</p>
+          <p className="eyebrow tool-page__eyebrow">{'// the devlog'}</p>
           <h1 className="tool-page__title">Notes from the workshop.</h1>
           <p className="tool-page__desc">
             A log of what gets built here, and what gets learned building it. It starts today, so there is not much of it yet. One Saturday, in parts.
@@ -50,7 +50,7 @@ export default function NotesPage() {
         </h2>
 
         <section style={part}>
-          <p className="eyebrow">// part one</p>
+          <p className="eyebrow">{'// part one'}</p>
           <h3 className="heading heading--md" style={partTitle}>
             Tearing down the gradient tool
           </h3>
@@ -64,7 +64,7 @@ export default function NotesPage() {
         </section>
 
         <section style={part}>
-          <p className="eyebrow">// part two</p>
+          <p className="eyebrow">{'// part two'}</p>
           <h3 className="heading heading--md" style={partTitle}>
             Halving the animation library, then doubling it
           </h3>
@@ -77,7 +77,7 @@ export default function NotesPage() {
         </section>
 
         <section style={part}>
-          <p className="eyebrow">// part three</p>
+          <p className="eyebrow">{'// part three'}</p>
           <h3 className="heading heading--md" style={partTitle}>
             A bug that had been wrong for a long time
           </h3>
@@ -90,7 +90,7 @@ export default function NotesPage() {
         </section>
 
         <section style={part}>
-          <p className="eyebrow">// part four</p>
+          <p className="eyebrow">{'// part four'}</p>
           <h3 className="heading heading--md" style={partTitle}>
             Being wrong, on the record
           </h3>
@@ -103,7 +103,7 @@ export default function NotesPage() {
         </section>
 
         <section style={part}>
-          <p className="eyebrow">// part five</p>
+          <p className="eyebrow">{'// part five'}</p>
           <h3 className="heading heading--md" style={partTitle}>
             On doing this one Saturday at a time
           </h3>
@@ -116,7 +116,7 @@ export default function NotesPage() {
         </section>
 
         <section style={roadmap}>
-          <p className="eyebrow">// the roadmap</p>
+          <p className="eyebrow">{'// the roadmap'}</p>
           <h2 className="heading heading--md" style={partTitle}>
             The roadmap, loosely
           </h2>
@@ -124,16 +124,19 @@ export default function NotesPage() {
             A roadmap for a side project is a wishlist. Read it as one. No order, no dates.
           </p>
           <p style={prose}>
-            The CSS Effect Lab is due for the same teardown the gradient tool got. It works, but it could be much more than it is.
+            The CSS Effect Lab got the same teardown the gradient tool got. It went from a single effect to a small playground of them, and it is better for it.
           </p>
           <p style={prose}>
-            The Mockup Wrapper could use more frames and a cleaner way to export.
+            The dictionary of interface patterns that was circling got built. It shipped as the UI Pattern Library, a searchable reference of the small reusable pieces every web project rebuilds, with a position on when not to use each one.
           </p>
           <p style={prose}>
-            And there is a new one circling: a dictionary of interface patterns, the small reusable pieces every web project ends up rebuilding. Still just an idea for now.
+            The Component Prompt Builder was retired. It was a thin idea that did not earn its place next to the rest, so it came out rather than linger half believed in.
           </p>
           <p style={prose}>
-            If you are reading this and one of those would help you, that is a good reason for it to jump the queue.
+            The Mockup Wrapper is the one still waiting. It could use more frames and a cleaner way to export, and that is the next obvious Saturday.
+          </p>
+          <p style={prose}>
+            If you are reading this and that would help you, that is a good reason for it to jump the queue.
           </p>
         </section>
       </div>
