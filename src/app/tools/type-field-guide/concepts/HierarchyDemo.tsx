@@ -154,7 +154,7 @@ export function HierarchyDemo() {
           grid-template-columns: 1fr 1fr;
           gap: var(--space-5);
         }
-        @media (max-width: 560px) {
+        @media (max-width: 599px) { /* migrated from max-width: 560px (canonical mobile band) */
           .tfg-hi__sliders { grid-template-columns: 1fr; }
         }
         .tfg-hi__slider-row {

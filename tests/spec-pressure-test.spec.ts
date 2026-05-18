@@ -78,7 +78,7 @@ test.describe('The Spec Pressure-Test', () => {
     await page.goto(ROUTE);
     await expect(page.locator('.tool-page__title')).toHaveText('The Spec Pressure-Test');
     await expect(page.locator('.tool-page__eyebrow')).toContainText('learning_tools');
-    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/06');
+    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/05');
   });
 
   test('topbar Tools link is active on this tool route', async ({ page }) => {
@@ -468,5 +468,32 @@ test.describe('The Spec Pressure-Test', () => {
     await inv.screenshot({
       path: `./screenshots/spt-selfcheck-invariants-open-m4-${testInfo.project.name}.png`,
     });
+  });
+});
+
+test.describe('The Spec Pressure-Test — mobile (no horizontal scroll)', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('does not scroll sideways at a phone width', async ({ page }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState('networkidle');
+    const { sw, cw } = await page.evaluate(() => ({
+      sw: document.documentElement.scrollWidth,
+      cw: document.documentElement.clientWidth,
+    }));
+    expect(sw).toBeLessThanOrEqual(cw + 1);
+  });
+
+  test('the long JSON token in a consequence wraps instead of overflowing', async ({ page }) => {
+    await page.goto(ROUTE);
+    const widest = await page.evaluate(() =>
+      Math.max(
+        0,
+        ...[...document.querySelectorAll('.spt-stage__text')].map(
+          (el) => el.scrollWidth - el.clientWidth
+        )
+      )
+    );
+    expect(widest).toBeLessThanOrEqual(1);
   });
 });

@@ -21,7 +21,7 @@ export default function TextAnimationsPage() {
           </p>
           <h1 className="tool-page__title">{tool.title}</h1>
           <p className="tool-page__desc">
-            A catalog of 146 text animations — CSS and JS-driven. Hover a card to watch it play. Click to copy. Pick several at once and grab them as a bundle.
+            A catalog of 146 text animations, CSS and JS-driven. Most loop on their own; hover or tap a hover card to play it. Tap cards to pick several, then copy them as one bundle.
           </p>
         </header>
         <TextAnimationLibrary />

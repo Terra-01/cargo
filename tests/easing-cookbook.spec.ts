@@ -16,7 +16,7 @@ test.describe('Easing Cookbook tool', () => {
     await page.goto('/tools/easing-cookbook');
     await expect(page.locator('.tool-page__title')).toContainText('Easing Cookbook');
     await expect(page.locator('.tool-page__eyebrow')).toContainText('learning_tools');
-    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/02');
+    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/09');
   });
 
   test('topbar Tools link is active on this tool route', async ({ page }) => {

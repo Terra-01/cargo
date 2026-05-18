@@ -15,7 +15,7 @@ test.describe('UI Pattern Library tool', () => {
     await page.goto(ROUTE);
     await expect(page.locator('.tool-page__title')).toContainText('UI Pattern Library');
     await expect(page.locator('.tool-page__eyebrow')).toContainText('reference');
-    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/10');
+    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/06');
   });
 
   test('topbar Tools link is active on this tool route', async ({ page }) => {

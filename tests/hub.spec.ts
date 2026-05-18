@@ -212,4 +212,82 @@ test.describe('Hub page foundation', () => {
       fullPage: true,
     });
   });
+
+  // Regression guard for the breakpoint switch: at desktop width the inline
+  // nav is unchanged and the mobile menu control is absent.
+  test('desktop: inline nav visible, mobile menu button hidden', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('.topbar__nav a').first()).toBeVisible();
+    await expect(page.getByTestId('topbar-menu-button')).toBeHidden();
+  });
+});
+
+test.describe('Topbar mobile navigation', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('below the breakpoint: menu button shows, inline nav hidden', async ({ page }) => {
+    await page.goto('/');
+    const btn = page.getByTestId('topbar-menu-button');
+    await expect(btn).toBeVisible();
+    await expect(page.locator('.topbar__nav')).toBeHidden();
+    await expect(btn).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('menu button is a 44px+ tap target', async ({ page }) => {
+    await page.goto('/');
+    const box = await page.getByTestId('topbar-menu-button').boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.width).toBeGreaterThanOrEqual(44);
+    expect(box!.height).toBeGreaterThanOrEqual(44);
+  });
+
+  test('opens the menu with the three links, each a 44px+ tap target', async ({ page }) => {
+    await page.goto('/');
+    const btn = page.getByTestId('topbar-menu-button');
+    await btn.click();
+    await expect(btn).toHaveAttribute('aria-expanded', 'true');
+    const menu = page.getByTestId('topbar-menu');
+    await expect(menu).toBeVisible();
+    const links = menu.locator('a');
+    await expect(links).toHaveCount(3);
+    await expect(links.filter({ hasText: 'Tools' })).toBeVisible();
+    await expect(links.filter({ hasText: 'Notes' })).toBeVisible();
+    await expect(links.filter({ hasText: 'About' })).toBeVisible();
+    const first = await links.first().boundingBox();
+    expect(first!.height).toBeGreaterThanOrEqual(44);
+  });
+
+  test('a menu link navigates and closes the menu', async ({ page }) => {
+    await page.goto('/');
+    await page.getByTestId('topbar-menu-button').click();
+    await page.getByTestId('topbar-menu').locator('a', { hasText: 'About' }).click();
+    await expect(page).toHaveURL(/\/about$/);
+    await expect(page.getByTestId('topbar-menu')).toBeHidden();
+    await expect(page.getByTestId('topbar-menu-button')).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('the menu closes without navigating (Escape and toggle)', async ({ page }) => {
+    await page.goto('/');
+    const btn = page.getByTestId('topbar-menu-button');
+    await btn.click();
+    await expect(page.getByTestId('topbar-menu')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.getByTestId('topbar-menu')).toBeHidden();
+    await expect(btn).toHaveAttribute('aria-expanded', 'false');
+    await expect(page).toHaveURL(/\/$/);
+
+    await btn.click();
+    await expect(page.getByTestId('topbar-menu')).toBeVisible();
+    await btn.click();
+    await expect(page.getByTestId('topbar-menu')).toBeHidden();
+  });
+
+  test('brand and theme toggle are 44px+ tap targets', async ({ page }) => {
+    await page.goto('/');
+    const brand = await page.locator('.topbar__brand').boundingBox();
+    const toggle = await page.getByTestId('theme-toggle').boundingBox();
+    expect(brand!.height).toBeGreaterThanOrEqual(44);
+    expect(toggle!.height).toBeGreaterThanOrEqual(44);
+    expect(toggle!.width).toBeGreaterThanOrEqual(44);
+  });
 });

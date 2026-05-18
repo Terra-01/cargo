@@ -446,7 +446,7 @@ export function buildMoodboardSnippet(mb: Moodboard): string {
     .map((c) => `  --${pad(c.label)}: ${c.hex};`)
     .join('\n');
 
-  return `/* CARGO/07 · Moodboard: ${mb.name} */
+  return `/* Cargo · Moodboard: ${mb.name} */
 /* ${mb.tagline} */
 :root {
   /* Palette */

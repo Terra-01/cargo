@@ -13,7 +13,7 @@ test.describe('Mockup Wrapper tool', () => {
     await page.goto('/tools/mockup-wrapper');
     await expect(page.locator('.tool-page__title')).toContainText('Mockup Wrapper');
     await expect(page.locator('.tool-page__eyebrow')).toContainText('visual_creator');
-    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/04');
+    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/08');
   });
 
   test('topbar Tools link is active on this tool route', async ({ page }) => {
@@ -109,5 +109,32 @@ test.describe('Mockup Wrapper tool', () => {
       path: `./screenshots/tool-mockup-wrapper-phase9-${testInfo.project.name}.png`,
       fullPage: true,
     });
+  });
+});
+
+test.describe('Mockup Wrapper — touch-target sizing', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('sliders and toggles meet the 44px touch floor', async ({ page }) => {
+    await page.goto('/tools/mockup-wrapper');
+    await page.waitForLoadState('networkidle');
+
+    const tint = page.locator('.tint-toggle__option');
+    const tn = await tint.count();
+    for (let i = 0; i < tn; i++) {
+      const b = await tint.nth(i).boundingBox();
+      expect(b!.height).toBeGreaterThanOrEqual(44);
+    }
+
+    const bool = await page.locator('.bool-toggle__btn').first().boundingBox();
+    expect(bool!.height).toBeGreaterThanOrEqual(44);
+
+    const sliders = page.locator('.slider');
+    const sn = await sliders.count();
+    expect(sn).toBeGreaterThan(0);
+    for (let i = 0; i < sn; i++) {
+      const b = await sliders.nth(i).boundingBox();
+      expect(b!.height).toBeGreaterThanOrEqual(44);
+    }
   });
 });

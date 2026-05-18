@@ -36,7 +36,7 @@ export function LetterSpacingDemo() {
           display: grid;
           grid-template-columns: 1fr 1fr;
         }
-        @media (max-width: 620px) {
+        @media (max-width: 599px) { /* migrated from max-width: 620px (canonical mobile band) */
           .tfg-ls__stage { grid-template-columns: 1fr; }
           .tfg-ls__col + .tfg-ls__col {
             border-left: none;

@@ -41,8 +41,10 @@ function renderSplit(text: string, split: AnimationSplit): ReactNode {
 export function TextAnimationCard({ animation, picked, onTogglePick }: TextAnimationCardProps) {
   const cardRef = useRef<HTMLButtonElement>(null);
   const previewRef = useRef<HTMLSpanElement>(null);
+  const playTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [visible, setVisible] = useState(false);
   const [replayKey, setReplayKey] = useState(0);
+  const [playing, setPlaying] = useState(false);
   const trigger = animation.trigger ?? 'auto';
   const isHoverTrigger = trigger === 'hover';
   const isJs = animation.engine === 'js';
@@ -85,7 +87,28 @@ export function TextAnimationCard({ animation, picked, onTogglePick }: TextAnima
     return cleanup;
   }, [isJs, visible, replayKey, animation.jsDriver, animation.sampleText, animation.name]);
 
-  const handleClick = () => onTogglePick(animation.id);
+  // Clean up a pending one-shot play timer on unmount.
+  useEffect(() => {
+    return () => {
+      if (playTimer.current) clearTimeout(playTimer.current);
+    };
+  }, []);
+
+  // Picking is the universal card action (all cards toggle into the bundle).
+  // Hover-trigger animations have no auto-loop and are otherwise unreachable
+  // on touch, so the same tap also plays a one-shot: data-playing applies the
+  // hovered end-state (a parallel rule injected alongside the original :hover,
+  // which is left intact so desktop hover-to-play is unchanged), then reverts.
+  const handleClick = () => {
+    onTogglePick(animation.id);
+    if (!isHoverTrigger) return;
+    setPlaying(true);
+    if (playTimer.current) clearTimeout(playTimer.current);
+    playTimer.current = setTimeout(
+      () => setPlaying(false),
+      animation.durationMs ?? 2800
+    );
+  };
 
   // The card demonstrates itself: it animates its own name. For JS animations
   // the driver fills the (initially empty) span, so no static content here.
@@ -105,6 +128,7 @@ export function TextAnimationCard({ animation, picked, onTogglePick }: TextAnima
       data-picked={picked || undefined}
       data-animation-id={animation.id}
       data-trigger={trigger}
+      data-playing={isHoverTrigger && playing ? 'true' : undefined}
       data-testid={`ta-card-${animation.id}`}
       aria-pressed={picked}
       aria-label={`${picked ? 'Unpick' : 'Pick'} ${animation.name} animation`}
@@ -117,7 +141,7 @@ export function TextAnimationCard({ animation, picked, onTogglePick }: TextAnima
           </span>
         ) : isHoverTrigger ? (
           <span className="ta-card__badges">
-            <span className="ta-card__badge" data-testid={`ta-badge-hover-${animation.id}`}>hover</span>
+            <span className="ta-card__badge" data-testid={`ta-badge-hover-${animation.id}`}>hover / tap</span>
           </span>
         ) : null}
       </div>

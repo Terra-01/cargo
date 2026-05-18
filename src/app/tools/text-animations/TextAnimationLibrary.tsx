@@ -68,6 +68,24 @@ export function TextAnimationLibrary() {
       .join('\n\n');
   }, []);
 
+  // Touch path for the hover-trigger subset only. Their effect lives in a
+  // `.ta-{id}:hover` rule (CSS transitions), unreachable without a pointer.
+  // For each such rule we emit a parallel `.ta-card[data-playing="true"]`
+  // rule with the same declarations. The original :hover rule is left
+  // untouched, so desktop hover-to-play is unchanged; a tap on the card sets
+  // data-playing for the animation's duration, playing the same end-state.
+  const touchPlayCss = useMemo(() => {
+    const rules: string[] = [];
+    for (const a of textAnimations) {
+      if ((a.trigger ?? 'auto') !== 'hover' || !a.customCss) continue;
+      for (const m of a.customCss.matchAll(/([^{}]+:hover[^{}]*)\{([^}]*)\}/g)) {
+        const sel = m[1].replace(/:hover/g, '').trim();
+        rules.push(`.ta-card[data-playing="true"] ${sel} {${m[2]}}`);
+      }
+    }
+    return rules.join('\n');
+  }, []);
+
   return (
     <>
       <style>{`
@@ -90,9 +108,10 @@ export function TextAnimationLibrary() {
         }
         .ta-cat {
           display: inline-flex;
-          align-items: baseline;
+          align-items: center;
           gap: 6px;
-          padding: 5px 10px;
+          min-height: 44px;
+          padding: 5px 14px;
           background: var(--surface);
           border: 1px solid var(--border);
           border-radius: var(--radius-pill);
@@ -151,10 +170,10 @@ export function TextAnimationLibrary() {
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: var(--space-5);
         }
-        @media (max-width: 1100px) {
+        @media (max-width: 1023px) { /* migrated from max-width: 1100px (tablet-and-below) */
           .ta-catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
-        @media (max-width: 620px) {
+        @media (max-width: 599px) { /* migrated from max-width: 620px (canonical mobile band) */
           .ta-catalog { grid-template-columns: 1fr; }
         }
         .ta-card {
@@ -300,6 +319,8 @@ export function TextAnimationLibrary() {
         }
         /* Inject every animation's @keyframes + .ta-{id} class */
         ${allAnimationsCss}
+        /* Touch-reachable play for the hover-trigger subset */
+        ${touchPlayCss}
       `}</style>
       <div className="ta-toolbar">
         <div className="ta-toolbar__row">

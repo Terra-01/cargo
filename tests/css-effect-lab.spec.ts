@@ -24,7 +24,7 @@ test.describe('CSS Effect Lab tool', () => {
     await page.goto('/tools/css-effect-lab');
     await expect(page.locator('.tool-page__title')).toContainText('CSS Effect Lab');
     await expect(page.locator('.tool-page__eyebrow')).toContainText('production_tools');
-    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/01');
+    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/10');
     await expect(page.locator('.tool-page__back')).toBeVisible();
   });
 
@@ -532,5 +532,35 @@ test.describe('CSS Effect Lab tool', () => {
       path: `./screenshots/tool-css-effect-lab-m3-grain-gradient-${testInfo.project.name}.png`,
       fullPage: true,
     });
+  });
+});
+
+test.describe('CSS Effect Lab — mobile (no horizontal scroll)', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('the stacked lab does not scroll the page sideways', async ({ page }) => {
+    await page.goto('/tools/css-effect-lab');
+    await page.waitForLoadState('networkidle');
+    const { sw, cw } = await page.evaluate(() => ({
+      sw: document.documentElement.scrollWidth,
+      cw: document.documentElement.clientWidth,
+    }));
+    expect(sw).toBeLessThanOrEqual(cw + 1);
+  });
+
+  test('the code export still scrolls internally, not the page', async ({ page }) => {
+    await page.goto('/tools/css-effect-lab');
+    await page.getByTestId('fx-tab-layered-glow').click();
+    await page.waitForTimeout(300);
+    const r = await page.evaluate(() => {
+      const de = document.documentElement;
+      const code = document.querySelector('.lab__code-wrap [data-testid="export-css"], .lab__code-wrap .code, .lab__code-wrap pre');
+      return {
+        pageOverflow: de.scrollWidth - de.clientWidth,
+        codeScrollsInternally: code ? code.scrollWidth > code.clientWidth : false,
+      };
+    });
+    expect(r.pageOverflow).toBeLessThanOrEqual(1);
+    expect(r.codeScrollsInternally).toBe(true);
   });
 });

@@ -33,7 +33,7 @@ test.describe('Shader Gradient Lab tool', () => {
     await page.goto(URL);
     await expect(page.locator('.tool-page__title')).toContainText('Shader Gradient Lab');
     await expect(page.locator('.tool-page__eyebrow')).toContainText('visual_creator');
-    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/09');
+    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/01');
   });
 
   test('topbar Tools link is active on this tool route', async ({ page }) => {
@@ -564,4 +564,54 @@ test.describe('Shader Gradient Lab tool', () => {
       });
     });
   }
+});
+
+test.describe('Shader Gradient Lab — touch-target sizing', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('toolbar buttons, text input and back link meet the 44px floor', async ({ page }) => {
+    await page.goto('/tools/shader-gradient-lab');
+    // The back link keeps its visual size but expands its tap area with an
+    // invisible ::after (a min-height would grow very tall pages past
+    // Firefox's screenshot limit). Assert the effective tappable area =
+    // the visible box plus the ::after's negative top/bottom insets.
+    const backTap = await page.evaluate(() => {
+      const el = document.querySelector('.tool-page__back');
+      if (!el) return 0;
+      const r = el.getBoundingClientRect();
+      const a = getComputedStyle(el, '::after');
+      const top = Math.abs(parseFloat(a.top) || 0);
+      const bottom = Math.abs(parseFloat(a.bottom) || 0);
+      return r.height + top + bottom;
+    });
+    expect(backTap).toBeGreaterThanOrEqual(44);
+    const text = await page.getByTestId('sg-text-input').boundingBox();
+    expect(text!.height).toBeGreaterThanOrEqual(44);
+    const btns = page.locator('.sg-toolbar__btn');
+    const n = await btns.count();
+    for (let i = 0; i < n; i++) {
+      const b = await btns.nth(i).boundingBox();
+      expect(b!.height).toBeGreaterThanOrEqual(44);
+    }
+  });
+
+  test('dials-modal controls meet the 44px floor', async ({ page }) => {
+    await page.goto('/tools/shader-gradient-lab');
+    await page.getByTestId('sg-edit-dials').click();
+    await expect(page.getByTestId('sg-dials-modal')).toBeVisible();
+    const close = await page.getByTestId('sg-dials-close').boundingBox();
+    expect(close!.height).toBeGreaterThanOrEqual(44);
+    expect(close!.width).toBeGreaterThanOrEqual(44);
+    const sub = await page.evaluate(() => {
+      const modal = document.querySelector('.sg-modal');
+      if (!modal) return -1;
+      let min = 999;
+      modal.querySelectorAll('button, input, select').forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.width > 0 && r.height > 0) min = Math.min(min, r.height);
+      });
+      return min;
+    });
+    expect(sub).toBeGreaterThanOrEqual(44);
+  });
 });

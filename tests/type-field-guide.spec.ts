@@ -35,7 +35,7 @@ test.describe('The Type Field Guide', () => {
     await page.goto(ROUTE);
     await expect(page.locator('.tool-page__title')).toHaveText('The Type Field Guide');
     await expect(page.locator('.tool-page__eyebrow')).toContainText('learning_tools');
-    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/05');
+    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/07');
     await expect(page.locator('.tool-page__desc')).toContainText(
       'Six things worth knowing about type on the web'
     );
@@ -423,5 +423,43 @@ test.describe('The Type Field Guide', () => {
         path: `./screenshots/tfg-${id}-m3-${testInfo.project.name}.png`,
       });
     }
+  });
+});
+
+test.describe('The Type Field Guide — mobile (no horizontal scroll)', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('the type-scale demo headline does not scroll the page sideways', async ({ page }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState('networkidle');
+    const r = await page.evaluate(() => {
+      const de = document.documentElement;
+      const h = document.querySelector('.tfg-ts__headline');
+      return {
+        pageOverflow: de.scrollWidth - de.clientWidth,
+        headlineOverflow: h ? h.scrollWidth - h.clientWidth : 0,
+      };
+    });
+    expect(r.pageOverflow).toBeLessThanOrEqual(1);
+    expect(r.headlineOverflow).toBeLessThanOrEqual(1);
+  });
+
+  test('tight vs wide still visibly changes the headline at phone width', async ({ page }) => {
+    await page.goto(ROUTE);
+    const sizeOf = () =>
+      page.evaluate(() => {
+        const el = document.querySelector('.tfg-ts__headline');
+        return el
+          ? Math.round(parseFloat(getComputedStyle(el).fontSize))
+          : 0;
+      });
+    await page.getByTestId('ts-state-tight').click();
+    const tight = await sizeOf();
+    await page.getByTestId('ts-state-wide').click();
+    const wide = await sizeOf();
+    // Body stays 16px; the headline must remain clearly larger and the
+    // tight/wide personality change must still be perceptible on a phone.
+    expect(tight).toBeGreaterThan(16);
+    expect(wide).toBeGreaterThan(tight + 4);
   });
 });

@@ -17,7 +17,7 @@ test.describe('Text Animation Library tool', () => {
     await page.goto('/tools/text-animations');
     await expect(page.locator('.tool-page__title')).toContainText('Text Animation Library');
     await expect(page.locator('.tool-page__eyebrow')).toContainText('learning_tools');
-    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/08');
+    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/02');
   });
 
   test('topbar Tools link is active on this tool route', async ({ page }) => {
@@ -166,10 +166,12 @@ test.describe('Text Animation Library tool', () => {
     await expect(page.locator('.hero__title')).toBeVisible();
   });
 
-  test('hover-trigger cards show "hover" badge', async ({ page }) => {
+  test('hover-trigger cards show the "hover / tap" badge', async ({ page }) => {
     await page.goto('/tools/text-animations');
     const badges = page.locator('.ta-card__badge', { hasText: 'hover' });
     await expect(badges).toHaveCount(13);
+    // The copy must be honest on touch too, not hover-only.
+    await expect(badges.first()).toHaveText('hover / tap');
   });
 
   test('3D animation cards show "3D" badge', async ({ page }) => {
@@ -655,5 +657,51 @@ ${scriptBlock}
     await page.getByTestId('picker-tray').screenshot({
       path: `./screenshots/tool-text-animations-m3-picker-expanded-${testInfo.project.name}.png`,
     });
+  });
+});
+
+test.describe('Text Animation Library — touch and control polish', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('hover-trigger cards are playable by tap, and hover CSS is preserved', async ({ page }) => {
+    await page.goto('/tools/text-animations');
+    const card = page.locator('.ta-card[data-trigger="hover"]').first();
+    await card.scrollIntoViewIfNeeded();
+    await card.click();
+    // Tap sets the one-shot play state...
+    await expect(card).toHaveAttribute('data-playing', 'true');
+    // ...which clears itself after the animation duration.
+    await expect(card).not.toHaveAttribute('data-playing', 'true', { timeout: 6000 });
+
+    const css = await page.evaluate(() => {
+      let hoverRule = false;
+      let playRule = false;
+      for (const s of Array.from(document.styleSheets)) {
+        let rules: CSSRuleList;
+        try {
+          rules = s.cssRules;
+        } catch {
+          continue;
+        }
+        for (const r of Array.from(rules)) {
+          const sel = (r as CSSStyleRule).selectorText;
+          if (!sel) continue;
+          if (sel.includes('.ta-underline-grow:hover')) hoverRule = true;
+          if (sel.includes('[data-playing="true"]') && sel.includes('ta-underline-grow'))
+            playRule = true;
+        }
+      }
+      return { hoverRule, playRule };
+    });
+    expect(css.hoverRule).toBe(true); // desktop hover-to-play unchanged
+    expect(css.playRule).toBe(true); // touch path wired in parallel
+  });
+
+  test('filter chips meet the 44px touch floor', async ({ page }) => {
+    await page.goto('/tools/text-animations');
+    for (const cat of ['all', 'hover', 'specialty']) {
+      const box = await page.getByTestId(`ta-cat-${cat}`).boundingBox();
+      expect(box!.height).toBeGreaterThanOrEqual(44);
+    }
   });
 });

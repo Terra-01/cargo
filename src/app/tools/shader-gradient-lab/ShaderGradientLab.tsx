@@ -269,7 +269,7 @@ export function ShaderGradientLab() {
         }
         .sg-toolbar__text {
           font-family: var(--font-mono); font-size: var(--text-xs);
-          padding: 8px 12px; min-width: 170px;
+          padding: 8px 12px; min-width: 170px; min-height: 44px;
           background: rgba(0, 0, 0, 0.34); color: var(--text);
           border: 1px solid var(--border-strong);
           border-radius: var(--radius-md);
@@ -282,6 +282,8 @@ export function ShaderGradientLab() {
         .sg-toolbar__btn {
           font-family: var(--font-mono); font-size: var(--text-xs);
           letter-spacing: 0.02em; white-space: nowrap;
+          display: inline-flex; align-items: center; justify-content: center;
+          min-height: 44px;
           padding: 8px 14px; border-radius: var(--radius-md);
           border: 1px solid var(--border-strong);
           background: rgba(0, 0, 0, 0.28); color: var(--text);
@@ -414,6 +416,8 @@ export function ShaderGradientLab() {
           font-family: var(--font-mono); font-size: var(--text-sm);
           background: none; border: none; color: var(--text);
           cursor: pointer; padding: 4px 8px; border-radius: var(--radius-sm);
+          display: inline-flex; align-items: center; justify-content: center;
+          min-width: 44px; min-height: 44px;
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
         }
         .sg-modal__close:hover { color: var(--accent); }
@@ -442,13 +446,15 @@ export function ShaderGradientLab() {
         .sg-stops { display: flex; flex-wrap: wrap; gap: var(--space-2); }
         .sg-stop { display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .sg-stop__color {
-          width: 34px; height: 28px; padding: 0;
+          width: 44px; height: 44px; padding: 0;
           border: 1px solid var(--border-strong);
           border-radius: var(--radius-sm); background: none; cursor: pointer;
         }
         .sg-stop__toggle, .sg-toggle {
           font-family: var(--font-mono); font-size: 9px;
           letter-spacing: 0.06em; text-transform: uppercase;
+          display: inline-flex; align-items: center; justify-content: center;
+          min-width: 44px; min-height: 44px;
           padding: 3px 8px; border-radius: var(--radius-sm);
           border: 1px solid var(--border-strong);
           background: rgba(0, 0, 0, 0.3); color: var(--text); cursor: pointer;
@@ -489,11 +495,11 @@ export function ShaderGradientLab() {
         }
         .sg-fps strong { color: var(--text); font-weight: 600; }
 
-        @media (max-width: 860px) {
+        @media (max-width: 1023px) { /* migrated from max-width: 860px (tablet-and-below) */
           .sg-toolbar { justify-content: center; }
           .sg-toolbar__group--center { order: 3; flex-basis: 100%; }
         }
-        @media (max-width: 720px) {
+        @media (max-width: 599px) { /* migrated from max-width: 720px (canonical mobile band) */
           .sg-modal-backdrop { justify-content: stretch; }
           .sg-modal { width: 100%; }
         }

@@ -16,7 +16,7 @@ test.describe('Moodboard Library tool', () => {
     await page.goto('/tools/moodboard-library');
     await expect(page.locator('.tool-page__title')).toContainText('Moodboard Library');
     await expect(page.locator('.tool-page__eyebrow')).toContainText('reference');
-    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/07');
+    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/03');
   });
 
   test('topbar Tools link is active on this tool route', async ({ page }) => {

@@ -61,7 +61,7 @@ export function WebFontsDemo() {
           display: grid;
           grid-template-columns: 1fr 1fr;
         }
-        @media (max-width: 620px) {
+        @media (max-width: 599px) { /* migrated from max-width: 620px (canonical mobile band) */
           .tfg-wf__stage { grid-template-columns: 1fr; }
           .tfg-wf__panel + .tfg-wf__panel {
             border-left: none;

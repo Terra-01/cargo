@@ -112,6 +112,10 @@ export function TypeScaleDemo() {
           color: var(--text);
           margin: 0 0 var(--space-4);
           max-width: 16ch;
+          /* The size is the lesson, so it is not capped on small screens.
+             Instead let a long word wrap, so the enlarged headline never
+             scrolls a phone sideways while the scale stays exact. */
+          overflow-wrap: anywhere;
         }
         .tfg-ts__subhead {
           font-family: var(--font-sans);
@@ -120,6 +124,7 @@ export function TypeScaleDemo() {
           color: var(--text-muted);
           margin: 0 0 var(--space-5);
           max-width: 30ch;
+          overflow-wrap: anywhere;
         }
         .tfg-ts__body {
           font-family: var(--font-sans);
@@ -233,7 +238,11 @@ export function TypeScaleDemo() {
         </p>
         <h3
           className="tfg-ts__headline"
-          style={{ fontSize: headline }}
+          // The scale value is the lesson, so desktop renders it exactly.
+          // On a narrow phone the same value (up to ~81px at a wide ratio)
+          // is wider than the screen; cap it to the viewport so it stays
+          // phone-appropriate while tight-vs-wide still visibly differs.
+          style={{ fontSize: `min(${headline}px, 13.5vw)` }}
           data-testid="ts-headline"
         >
           Build the thing you wish existed.

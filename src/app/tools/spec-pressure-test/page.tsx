@@ -252,6 +252,23 @@ export default function SpecPressureTestPage() {
             color: var(--text-muted);
             max-width: 66ch;
           }
+
+          /* The spec content is arbitrary text: feature specs, JSON
+             fragments, identifiers. A long unbreakable token (e.g. a
+             one-line JSON example) was forcing the page wider than a
+             phone viewport. Break such tokens instead of scrolling, and
+             keep the flex-column children from being pushed wide. */
+          .spt-prose,
+          .spt-brief__text,
+          .spt-chain__blurb,
+          .spt-stage__caption,
+          .spt-stage__text,
+          .spt-example__lead,
+          .spt-mode__lead,
+          .spt-check__question,
+          .spt-check__closer { overflow-wrap: anywhere; }
+          .spt-chain,
+          .spt-linked { min-width: 0; }
         `}</style>
 
         <Link href="/" className="tool-page__back">back to the workshop</Link>

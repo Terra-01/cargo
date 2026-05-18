@@ -16,7 +16,7 @@ test.describe('Loading States Gallery tool', () => {
     await page.goto('/tools/loading-states');
     await expect(page.locator('.tool-page__title')).toContainText('Loading States Gallery');
     await expect(page.locator('.tool-page__eyebrow')).toContainText('inspiration');
-    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/03');
+    await expect(page.locator('.tool-page__eyebrow')).toContainText('cargo/04');
   });
 
   test('topbar Tools link is active on this tool route', async ({ page }) => {
