@@ -5,7 +5,7 @@ import { tools } from '@/lib/tools';
 
 export const metadata: Metadata = {
   title: 'Moodboard Library — Cargo',
-  description: 'Six hand-curated moodboards. Palettes, fonts, and texture direction. Copy as CSS.',
+  description: 'Eighteen hand-curated moodboards. Palettes, fonts, and texture direction. Copy as CSS.',
 };
 
 export default function MoodboardLibraryPage() {
@@ -21,7 +21,7 @@ export default function MoodboardLibraryPage() {
           </p>
           <h1 className="tool-page__title">{tool.title}</h1>
           <p className="tool-page__desc">
-            Six hand-curated moodboards — palette, fonts, and texture direction. Click any card to copy the whole moodboard as a CSS snippet.
+            Eighteen hand-curated moodboards. Palette, fonts, and texture direction. Click any card to copy the whole moodboard as a CSS snippet.
           </p>
         </header>
         <MoodboardLibrary />
