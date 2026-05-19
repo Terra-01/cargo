@@ -5,7 +5,7 @@ import { tools } from '@/lib/tools';
 
 export const metadata: Metadata = {
   title: 'Mockup Wrapper — Cargo',
-  description: 'Drop in a screenshot, get it framed in a browser chrome, phone, or card. Export as PNG.',
+  description: 'Drop in a screenshot, get it framed in browser chrome or a clean card. Export as PNG.',
 };
 
 export default function MockupWrapperPage() {

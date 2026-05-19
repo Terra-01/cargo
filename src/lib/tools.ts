@@ -30,7 +30,7 @@ export const tools: Tool[] = [
     number: '01',
     category: 'visual_creator',
     title: 'Shader Gradient Lab',
-    description: 'Custom WebGL2 gradient generator — a faithful Neat port plus curated Shadertoy shaders. Tweak waves, colors, flow, and grain in real-time. Export as PNG.',
+    description: 'Custom WebGL2 gradient generator, a faithful Neat port plus curated Shadertoy shaders. Tweak waves, colors, flow, and grain in real-time. Export as PNG.',
     tags: ['webgl', 'gradient', 'background'],
     href: '/tools/shader-gradient-lab',
     status: 'shipped',

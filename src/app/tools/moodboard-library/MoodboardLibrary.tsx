@@ -25,7 +25,6 @@ export function MoodboardLibrary() {
 
   // Per-category counts for the filter labels — derived from the data, not
   // hard-coded, so the control reflects whatever the catalogue actually is.
-  // editorial is intentionally 0 until milestone B; the chip still renders.
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = { all: moodboards.length };
     for (const mb of moodboards) {

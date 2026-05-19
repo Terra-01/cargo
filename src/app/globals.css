@@ -1452,13 +1452,6 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
 }
 
-/* — Builder layout (form + output, full width, stacked) — */
-.builder {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
 /* — Textarea form control — */
 .textarea {
   font-family: var(--font-sans);
