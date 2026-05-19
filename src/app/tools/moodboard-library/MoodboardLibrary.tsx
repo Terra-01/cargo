@@ -51,9 +51,10 @@ export function MoodboardLibrary() {
         }
         .mb-cat {
           display: inline-flex;
-          align-items: baseline;
+          align-items: center;
           gap: 6px;
-          padding: 5px 10px;
+          min-height: 44px;
+          padding: 5px 14px;
           background: var(--surface);
           border: 1px solid var(--border);
           border-radius: var(--radius-pill);
@@ -95,10 +96,10 @@ export function MoodboardLibrary() {
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: var(--space-4);
         }
-        @media (max-width: 860px) {
+        @media (max-width: 1023px) { /* migrated from max-width: 860px (tablet-and-below) */
           .mb-catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
-        @media (max-width: 520px) {
+        @media (max-width: 599px) { /* migrated from max-width: 520px (mobile) */
           .mb-catalog { grid-template-columns: 1fr; }
         }
         .mb-card {

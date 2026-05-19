@@ -715,9 +715,25 @@ test.describe('Text Animation Library — touch and control polish', () => {
     expect(copy!.height).toBeGreaterThanOrEqual(44);
   });
 
+  test('the PickerTray show toggle and chips meet the 44px touch floor', async ({ page }) => {
+    await page.goto('/tools/text-animations');
+    await page.getByTestId('ta-card-ta-fade-in-up').click();
+    // The show/hide toggle.
+    const toggle = page.getByTestId('picker-toggle');
+    await expect(toggle).toBeVisible();
+    expect((await toggle.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    // Expand so the chips render; the chip IS the remove control (the inner
+    // "x" is an aria-hidden span), so a 44px chip is a 44px remove target.
+    await toggle.click();
+    const chip = page.getByTestId('picker-chip-ta-fade-in-up');
+    await expect(chip).toBeVisible();
+    expect((await chip.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  });
+
   test('screenshot the PickerTray .btn--sm fix at mobile', async ({ page }, testInfo) => {
     await page.goto('/tools/text-animations');
     await page.getByTestId('ta-card-ta-fade-in-up').click();
+    await page.getByTestId('picker-toggle').click();
     await page.getByTestId('picker-tray').screenshot({
       path: `./screenshots/d2b-picker-tray-btnsm-${testInfo.project.name}.png`,
     });

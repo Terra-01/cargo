@@ -52,9 +52,10 @@ export function LoadingStates() {
         }
         .ls-cat {
           display: inline-flex;
-          align-items: baseline;
+          align-items: center;
           gap: 6px;
-          padding: 5px 10px;
+          min-height: 44px;
+          padding: 5px 14px;
           background: var(--surface);
           border: 1px solid var(--border);
           border-radius: var(--radius-pill);
@@ -96,10 +97,10 @@ export function LoadingStates() {
         .catalog.ls-catalog .loader-card__preview {
           height: 160px;
         }
-        @media (max-width: 1100px) {
+        @media (max-width: 1023px) { /* migrated from max-width: 1100px (tablet-and-below) */
           .catalog.ls-catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
-        @media (max-width: 620px) {
+        @media (max-width: 599px) { /* migrated from max-width: 620px (mobile) */
           .catalog.ls-catalog { grid-template-columns: 1fr; }
         }
 
