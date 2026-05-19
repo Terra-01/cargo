@@ -35,7 +35,9 @@ export function ProgressiveDisclosureExample() {
       <style>{`
         .upl-ex-pd__seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; margin-bottom: var(--space-4); }
         .upl-ex-pd__seg button {
-          font-family: var(--font-mono); font-size: 11px; padding: 6px 11px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; min-width: 44px; padding: 6px 13px;
+          display: inline-flex; align-items: center; justify-content: center;
           border: none; background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
         .upl-ex-pd__seg button[data-on="true"] { background: var(--accent-soft); color: var(--accent); }
@@ -53,14 +55,16 @@ export function ProgressiveDisclosureExample() {
         .upl-ex-pd__field { display: flex; flex-direction: column; gap: 5px; }
         .upl-ex-pd__field label { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
         .upl-ex-pd__field input {
-          padding: 9px 12px; background: var(--surface);
+          min-height: 44px; padding: 9px 12px; background: var(--surface);
           border: 1px solid var(--border-strong); border-radius: var(--radius-md);
           font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text);
         }
         .upl-ex-pd__field input:focus { outline: none; border-color: var(--accent); }
         .upl-ex-pd__more {
           align-self: flex-start;
-          font-family: var(--font-mono); font-size: 11px; padding: 5px 0;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; padding: 5px 0;
+          display: inline-flex; align-items: center;
           border: none; background: none; color: var(--accent); cursor: pointer;
           text-decoration: underline;
         }

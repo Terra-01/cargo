@@ -1035,3 +1035,195 @@ test.describe('UI Pattern Library — D2a-2 (toast, tabs, dropdown)', () => {
     expect(undoH).toBeGreaterThanOrEqual(44);
   });
 });
+
+test.describe('UI Pattern Library — D2b (the remaining twelve demos)', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  // The twelve lighter-pass demos, by card id.
+  const TWELVE = [
+    'accordion',
+    'confirmation-vs-undo',
+    'drag-and-drop',
+    'empty-state',
+    'inline-validation',
+    'multi-step-form',
+    'optimistic-vs-pessimistic-ui',
+    'pagination-vs-infinite-scroll',
+    'progressive-disclosure',
+    'search-as-you-type',
+    'segmented-control-vs-dropdown',
+    'skeleton-vs-spinner',
+  ];
+
+  // Effective tappable area = the visible box plus any ::after hit-expander's
+  // negative insets (the established shared-class technique). Returns the
+  // smallest control found in the card, or null if the card is absent.
+  const scanCard = (id: string) =>
+    `(() => {
+      const card = document.querySelector('[data-testid="upl-card-${id}"]');
+      if (!card) return null;
+      let minH = Infinity, minW = Infinity, worst = '';
+      card.querySelectorAll('button, input, select, textarea').forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.width === 0 || r.height === 0) return;
+        const a = getComputedStyle(el, '::after');
+        let exX = 0, exY = 0;
+        if (a.position === 'absolute') {
+          const t = Math.abs(parseFloat(a.top) || 0);
+          const b = Math.abs(parseFloat(a.bottom) || 0);
+          const l = Math.abs(parseFloat(a.left) || 0);
+          const ri = Math.abs(parseFloat(a.right) || 0);
+          exY = (parseFloat(a.top) < 0 ? t : 0) + (parseFloat(a.bottom) < 0 ? b : 0);
+          exX = (parseFloat(a.left) < 0 ? l : 0) + (parseFloat(a.right) < 0 ? ri : 0);
+        }
+        const h = r.height + exY, w = r.width + exX;
+        if (h < minH) { minH = h; }
+        if (w < minW) { minW = w; worst = el.className + '|' + el.tagName; }
+      });
+      return { minH, minW, worst };
+    })()`;
+
+  test('every control in the twelve demos meets the 44px floor at rest', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+    await page.waitForLoadState('networkidle');
+    for (const id of TWELVE) {
+      const r = (await page.evaluate(scanCard(id))) as
+        | { minH: number; minW: number; worst: string }
+        | null;
+      expect(r, `${id} card present`).not.toBeNull();
+      expect(r!.minH, `${id} min control height (${r!.worst})`).toBeGreaterThanOrEqual(44);
+      expect(r!.minW, `${id} min control width (${r!.worst})`).toBeGreaterThanOrEqual(44);
+    }
+    const over = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(over).toBeLessThanOrEqual(1);
+  });
+
+  test('controls revealed only after interaction also meet the 44px floor', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+
+    // Empty-state: the CTA only exists in "designed" mode.
+    await page.getByTestId('ex-es-mode-designed').click();
+    const cta = page.getByTestId('ex-es-cta');
+    await expect(cta).toBeVisible();
+    expect((await cta.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+
+    // Accordion: tab-mode tabs and an expanded accordion head.
+    await page.getByTestId('ex-acc-mode-tabs').click();
+    const accTab = page.getByTestId('ex-acc-tab-pro');
+    await expect(accTab).toBeVisible();
+    expect((await accTab.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await page.getByTestId('ex-acc-mode-accordion').click();
+    const accHead = page.getByTestId('ex-acc-head-team');
+    await expect(accHead).toBeVisible();
+    expect((await accHead.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+
+    // Multi-step wizard: back/next/submit chrome.
+    await page.getByTestId('ex-msf-mode-wizard').click();
+    const msfNext = page.getByTestId('ex-msf-next');
+    await expect(msfNext).toBeVisible();
+    expect((await msfNext.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+
+    // Confirmation dialog buttons.
+    await page.getByTestId('ex-cu-del-notes.md').click();
+    const cuConfirm = page.getByTestId('ex-cu-confirm');
+    await expect(cuConfirm).toBeVisible();
+    expect((await cuConfirm.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await page.getByTestId('ex-cu-cancel').click();
+
+    // Segmented-vs-dropdown: 12-option pills and the open dropdown list.
+    await page.getByTestId('ex-sd-count-12').click();
+    const pill = page.getByTestId('ex-sd-seg-Decade');
+    await expect(pill).toBeVisible();
+    expect((await pill.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await page.getByTestId('ex-sd-dropdown').click();
+    const ddList = page.getByTestId('ex-sd-dropdown-list');
+    await expect(ddList).toBeVisible();
+    const optH = await page.evaluate(() => {
+      const b = document.querySelector('[data-testid="ex-sd-dropdown-list"] button');
+      return b ? b.getBoundingClientRect().height : -1;
+    });
+    expect(optH).toBeGreaterThanOrEqual(44);
+  });
+
+  test('the drag-and-drop demo is operable by touch, not mouse-only', async ({ page }) => {
+    await page.goto('/tools/ui-pattern-library');
+    // The drag is wired with Pointer Events (which fire for touch) and the row
+    // sets touch-action:none — that is the property that lets a finger drag
+    // instead of the page scrolling. Without it the drag path is touch-broken.
+    const ta = await page.evaluate(() => {
+      const row = document.querySelector('[data-testid="ex-dnd-item-alpha"]');
+      return row ? getComputedStyle(row).touchAction : '';
+    });
+    expect(ta).toBe('none');
+
+    // The decisive proof of touch-operability: the fallback up/down controls
+    // reorder on a plain click (a tap), no drag needed at all.
+    await page.getByTestId('ex-dnd-mode-fallback').click();
+    const before = await page.getByTestId('ex-dnd-list').getAttribute('data-order');
+    await page.getByTestId('ex-dnd-down-alpha').click();
+    const after = await page.getByTestId('ex-dnd-list').getAttribute('data-order');
+    expect(after).not.toBe(before);
+
+    // Those controls keep their 26px look but expand to a 44px tap area.
+    const tap = await page.evaluate(() => {
+      const el = document.querySelector('[data-testid="ex-dnd-down-beta"]');
+      if (!el) return 0;
+      const r = el.getBoundingClientRect();
+      const a = getComputedStyle(el, '::after');
+      const y = Math.abs(parseFloat(a.top) || 0) + Math.abs(parseFloat(a.bottom) || 0);
+      const x = Math.abs(parseFloat(a.left) || 0) + Math.abs(parseFloat(a.right) || 0);
+      return Math.min(r.height + y, r.width + x);
+    });
+    expect(tap).toBeGreaterThanOrEqual(44);
+  });
+
+  test('the migrated Accordion and Segmented breakpoints reflow on the canonical bands', async ({ page }) => {
+    const trackCount = (sel: string) =>
+      `(() => { const el = document.querySelector('${sel}'); if (!el) return -1; return getComputedStyle(el).gridTemplateColumns.split(' ').length; })()`;
+
+    // Mobile (375): both collapse to a single column.
+    await page.goto('/tools/ui-pattern-library');
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.getByTestId('ex-acc-mode-showall').click();
+    expect(await page.evaluate(trackCount('[data-testid="upl-card-accordion"] .upl-ex-ac__grid'))).toBe(1);
+    expect(
+      await page.evaluate(
+        trackCount('[data-testid="upl-card-segmented-control-vs-dropdown"] .upl-ex-sd__grid')
+      )
+    ).toBe(1);
+
+    // Tablet (768): the audited multi-column layout is preserved.
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await page.getByTestId('ex-acc-mode-showall').click();
+    expect(await page.evaluate(trackCount('[data-testid="upl-card-accordion"] .upl-ex-ac__grid'))).toBe(3);
+    expect(
+      await page.evaluate(
+        trackCount('[data-testid="upl-card-segmented-control-vs-dropdown"] .upl-ex-sd__grid')
+      )
+    ).toBe(2);
+  });
+
+  test('screenshot a representative sample of the twelve demos at mobile', async ({ page }, testInfo) => {
+    await page.goto('/tools/ui-pattern-library');
+    await page.waitForLoadState('networkidle');
+    await page.addStyleTag({
+      content: '*, *::before, *::after { animation-play-state: paused !important; transition: none !important; }',
+    });
+    await page.waitForTimeout(300);
+    for (const id of [
+      'accordion',
+      'confirmation-vs-undo',
+      'drag-and-drop',
+      'multi-step-form',
+      'pagination-vs-infinite-scroll',
+      'segmented-control-vs-dropdown',
+    ]) {
+      await page.getByTestId(`upl-card-${id}`).scrollIntoViewIfNeeded();
+      await page.getByTestId(`upl-card-${id}`).screenshot({
+        path: `./screenshots/d2b-${id}-${testInfo.project.name}.png`,
+      });
+    }
+  });
+});

@@ -78,7 +78,9 @@ export function ConfirmationVsUndoExample() {
         }
         .upl-ex-cu__seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; }
         .upl-ex-cu__seg button {
-          font-family: var(--font-mono); font-size: 11px; padding: 6px 11px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; min-width: 44px; padding: 6px 13px;
+          display: inline-flex; align-items: center; justify-content: center;
           border: none; background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
         .upl-ex-cu__seg button[data-on="true"] { background: var(--accent-soft); color: var(--accent); }
@@ -96,7 +98,9 @@ export function ConfirmationVsUndoExample() {
         }
         .upl-ex-cu__item:last-child { margin-bottom: 0; }
         .upl-ex-cu__del {
-          font-family: var(--font-mono); font-size: 11px; padding: 5px 10px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; padding: 5px 12px;
+          display: inline-flex; align-items: center; justify-content: center;
           border-radius: var(--radius-sm); border: 1px solid color-mix(in srgb, #dc2626 45%, var(--border-strong));
           background: var(--surface); color: #dc2626; cursor: pointer;
         }
@@ -120,7 +124,9 @@ export function ConfirmationVsUndoExample() {
         }
         .upl-ex-cu__actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-2); }
         .upl-ex-cu__btn {
-          font-family: var(--font-mono); font-size: 11px; padding: 6px 12px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; padding: 6px 14px;
+          display: inline-flex; align-items: center; justify-content: center;
           border-radius: var(--radius-sm); border: 1px solid var(--border-strong);
           background: var(--surface); color: var(--text); cursor: pointer;
         }
@@ -136,7 +142,9 @@ export function ConfirmationVsUndoExample() {
         }
         .upl-ex-cu__toast[data-up="true"] { transform: translate(-50%, 0); }
         .upl-ex-cu__toast button {
-          font-family: var(--font-mono); font-size: 11px; padding: 3px 10px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; padding: 3px 14px;
+          display: inline-flex; align-items: center; justify-content: center;
           border-radius: var(--radius-sm); border: 1px solid color-mix(in srgb, var(--surface) 45%, transparent);
           background: transparent; color: var(--surface); cursor: pointer;
         }

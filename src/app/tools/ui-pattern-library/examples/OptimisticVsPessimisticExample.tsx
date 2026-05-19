@@ -139,6 +139,7 @@ export function OptimisticVsPessimisticExample() {
           align-self: flex-start;
           font-family: var(--font-mono);
           font-size: var(--text-sm);
+          min-height: 44px;
           padding: 8px 14px;
           border-radius: var(--radius-pill);
           border: 1px solid var(--border-strong);
@@ -201,7 +202,12 @@ export function OptimisticVsPessimisticExample() {
         .upl-ex-op__seg button {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 6px 11px;
+          min-height: 44px;
+          min-width: 44px;
+          padding: 6px 13px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           border: none;
           background: var(--surface);
           color: var(--text-muted);
@@ -215,7 +221,11 @@ export function OptimisticVsPessimisticExample() {
         .upl-ex-op__btn {
           font-family: var(--font-mono);
           font-size: var(--text-xs);
-          padding: 7px 13px;
+          min-height: 44px;
+          padding: 7px 15px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           border-radius: var(--radius-md);
           border: 1px solid var(--border-strong);
           background: var(--surface);

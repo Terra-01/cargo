@@ -55,7 +55,12 @@ export function InlineValidationExample() {
         .upl-ex-iv__seg button {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 6px 11px;
+          min-height: 44px;
+          min-width: 44px;
+          padding: 6px 13px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           border: none;
           background: var(--surface);
           color: var(--text-muted);
@@ -84,6 +89,7 @@ export function InlineValidationExample() {
           color: var(--text-muted);
         }
         .upl-ex-iv__field input {
+          min-height: 44px;
           padding: 9px 12px;
           background: var(--surface);
           border: 1px solid var(--border-strong);

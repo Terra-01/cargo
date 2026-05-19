@@ -704,4 +704,22 @@ test.describe('Text Animation Library — touch and control polish', () => {
       expect(box!.height).toBeGreaterThanOrEqual(44);
     }
   });
+
+  test('the PickerTray .btn--sm buttons meet the 44px touch floor', async ({ page }) => {
+    await page.goto('/tools/text-animations');
+    // Pick a card so the shared .btn--sm clear/copy buttons are live.
+    await page.getByTestId('ta-card-ta-fade-in-up').click();
+    const clear = await page.getByTestId('picker-clear').boundingBox();
+    const copy = await page.getByTestId('picker-copy').boundingBox();
+    expect(clear!.height).toBeGreaterThanOrEqual(44);
+    expect(copy!.height).toBeGreaterThanOrEqual(44);
+  });
+
+  test('screenshot the PickerTray .btn--sm fix at mobile', async ({ page }, testInfo) => {
+    await page.goto('/tools/text-animations');
+    await page.getByTestId('ta-card-ta-fade-in-up').click();
+    await page.getByTestId('picker-tray').screenshot({
+      path: `./screenshots/d2b-picker-tray-btnsm-${testInfo.project.name}.png`,
+    });
+  });
 });

@@ -76,14 +76,16 @@ export function SearchAsYouTypeExample() {
       <style>{`
         .upl-ex-st__seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; margin-bottom: var(--space-3); }
         .upl-ex-st__seg button {
-          font-family: var(--font-mono); font-size: 11px; padding: 6px 11px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; min-width: 44px; padding: 6px 13px;
+          display: inline-flex; align-items: center; justify-content: center;
           border: none; background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
         .upl-ex-st__seg button[data-on="true"] { background: var(--accent-soft); color: var(--accent); }
         .upl-ex-st__seg button + button { border-left: 1px solid var(--border-strong); }
         .upl-ex-st__field { position: relative; margin-bottom: var(--space-3); }
         .upl-ex-st__field input {
-          width: 100%; padding: 9px 12px; background: var(--surface);
+          width: 100%; min-height: 44px; padding: 9px 12px; background: var(--surface);
           border: 1px solid var(--border-strong); border-radius: var(--radius-md);
           font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text);
         }

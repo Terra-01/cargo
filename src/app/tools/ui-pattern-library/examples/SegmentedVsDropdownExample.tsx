@@ -52,7 +52,9 @@ export function SegmentedVsDropdownExample() {
         .upl-ex-sd__bar > span { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); }
         .upl-ex-sd__seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; }
         .upl-ex-sd__seg button {
-          font-family: var(--font-mono); font-size: 11px; padding: 6px 11px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; min-width: 44px; padding: 6px 13px;
+          display: inline-flex; align-items: center; justify-content: center;
           border: none; background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
         .upl-ex-sd__seg button[data-on="true"] { background: var(--accent-soft); color: var(--accent); }
@@ -60,7 +62,9 @@ export function SegmentedVsDropdownExample() {
         .upl-ex-sd__grid {
           display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3);
         }
-        @media (max-width: 640px) { .upl-ex-sd__grid { grid-template-columns: 1fr; } }
+        @media (max-width: 599px) { /* migrated from max-width: 640px (mobile) */
+          .upl-ex-sd__grid { grid-template-columns: 1fr; }
+        }
         .upl-ex-sd__col {
           border: 1px solid var(--border); border-radius: var(--radius-md);
           background: var(--surface-muted); padding: var(--space-4);
@@ -72,7 +76,9 @@ export function SegmentedVsDropdownExample() {
         }
         .upl-ex-sd__pills { display: flex; flex-wrap: wrap; gap: 5px; }
         .upl-ex-sd__pills button {
-          font-family: var(--font-mono); font-size: 12px; padding: 7px 11px;
+          font-family: var(--font-mono); font-size: 12px;
+          min-height: 44px; padding: 7px 13px;
+          display: inline-flex; align-items: center; justify-content: center;
           border: 1px solid var(--border-strong); border-radius: var(--radius-md);
           background: var(--surface); color: var(--text-muted); cursor: pointer;
           white-space: nowrap;
@@ -80,10 +86,11 @@ export function SegmentedVsDropdownExample() {
         .upl-ex-sd__pills button[data-on="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
         .upl-ex-sd__anchor { position: relative; display: inline-flex; }
         .upl-ex-sd__trigger {
-          font-family: var(--font-mono); font-size: 12px; padding: 8px 13px; min-width: 150px;
+          font-family: var(--font-mono); font-size: 12px;
+          min-height: 44px; padding: 8px 13px; min-width: 150px;
           border: 1px solid var(--border-strong); border-radius: var(--radius-md);
           background: var(--surface); color: var(--text); cursor: pointer;
-          display: flex; justify-content: space-between; gap: 10px;
+          display: flex; align-items: center; justify-content: space-between; gap: 10px;
         }
         .upl-ex-sd__list {
           position: absolute; top: calc(100% + 6px); left: 0; min-width: 100%;
@@ -92,8 +99,9 @@ export function SegmentedVsDropdownExample() {
           z-index: 6; padding: 5px; max-height: 160px; overflow-y: auto;
         }
         .upl-ex-sd__list button {
-          display: block; width: 100%; text-align: left; font-family: var(--font-mono);
-          font-size: 12px; padding: 7px 10px; border: none; background: none;
+          display: flex; align-items: center; width: 100%; text-align: left;
+          font-family: var(--font-mono);
+          font-size: 12px; min-height: 44px; padding: 7px 10px; border: none; background: none;
           color: var(--text-muted); cursor: pointer; border-radius: var(--radius-sm);
         }
         .upl-ex-sd__list button[data-on="true"] { color: var(--accent); }

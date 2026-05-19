@@ -29,7 +29,9 @@ export function EmptyStateExample() {
       <style>{`
         .upl-ex-em__seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; margin-bottom: var(--space-3); }
         .upl-ex-em__seg button {
-          font-family: var(--font-mono); font-size: 11px; padding: 6px 11px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; min-width: 44px; padding: 6px 13px;
+          display: inline-flex; align-items: center; justify-content: center;
           border: none; background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
         .upl-ex-em__seg button[data-on="true"] { background: var(--accent-soft); color: var(--accent); }
@@ -64,7 +66,9 @@ export function EmptyStateExample() {
         .upl-ex-em__designed p { font-size: var(--text-sm); color: var(--text-muted); line-height: 1.5; }
         .upl-ex-em__cta {
           margin-top: 4px; font-family: var(--font-mono); font-size: 12px;
-          padding: 8px 16px; border-radius: var(--radius-md);
+          min-height: 44px; padding: 8px 16px;
+          display: inline-flex; align-items: center; justify-content: center;
+          border-radius: var(--radius-md);
           border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer;
         }
         .upl-ex-em__cta:hover { background: var(--accent-hover); }

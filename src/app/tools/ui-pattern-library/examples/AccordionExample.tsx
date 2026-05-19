@@ -67,7 +67,12 @@ export function AccordionExample() {
         .upl-ex-ac__seg button {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 6px 11px;
+          min-height: 44px;
+          min-width: 44px;
+          padding: 6px 13px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           border: none;
           background: var(--surface);
           color: var(--text-muted);
@@ -94,6 +99,7 @@ export function AccordionExample() {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          min-height: 44px;
           padding: 11px 13px;
           background: var(--surface);
           border: 1px solid var(--border);
@@ -108,13 +114,18 @@ export function AccordionExample() {
         .upl-ex-ac__head span:last-child { color: var(--text-faint); }
         .upl-ex-ac__tabs {
           display: flex;
+          flex-wrap: wrap;
           gap: 4px;
           margin-bottom: 8px;
         }
         .upl-ex-ac__tab {
           font-family: var(--font-mono);
           font-size: 11px;
+          min-height: 44px;
           padding: 6px 12px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           border: 1px solid var(--border);
           border-radius: var(--radius-sm);
           background: var(--surface);
@@ -133,7 +144,7 @@ export function AccordionExample() {
           grid-template-columns: repeat(3, 1fr);
           gap: 8px;
         }
-        @media (max-width: 560px) {
+        @media (max-width: 599px) { /* migrated from max-width: 560px (mobile) */
           .upl-ex-ac__grid { grid-template-columns: 1fr; }
         }
         .upl-ex-ac__col {

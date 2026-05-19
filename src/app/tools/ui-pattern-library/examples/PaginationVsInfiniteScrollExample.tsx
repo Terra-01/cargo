@@ -165,6 +165,7 @@ export function PaginationVsInfiniteScrollExample() {
         .upl-ex-pg__pager {
           display: flex;
           align-items: center;
+          flex-wrap: wrap;
           gap: 4px;
           justify-content: center;
           padding: var(--space-3);
@@ -174,7 +175,11 @@ export function PaginationVsInfiniteScrollExample() {
         .upl-ex-pg__pager button {
           font-family: var(--font-mono);
           font-size: 11px;
-          min-width: 26px;
+          min-width: 44px;
+          min-height: 44px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           padding: 5px 8px;
           border: 1px solid var(--border);
           background: var(--surface);
@@ -208,7 +213,12 @@ export function PaginationVsInfiniteScrollExample() {
         .upl-ex-pg__seg button {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 6px 11px;
+          min-height: 44px;
+          min-width: 44px;
+          padding: 6px 13px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           border: none;
           background: var(--surface);
           color: var(--text-muted);
@@ -222,7 +232,11 @@ export function PaginationVsInfiniteScrollExample() {
         .upl-ex-pg__btn {
           font-family: var(--font-mono);
           font-size: var(--text-xs);
-          padding: 7px 13px;
+          min-height: 44px;
+          padding: 7px 15px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           border-radius: var(--radius-md);
           border: 1px solid var(--border-strong);
           background: var(--surface);

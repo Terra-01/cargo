@@ -501,6 +501,9 @@ a { color: inherit; text-decoration: none; }
 .btn--sm {
   font-size: var(--text-xs);
   padding: 5px 11px;
+  /* Compact width stays; min-height lifts the tap area to the 44px floor.
+     .btn is already inline-flex + align-items:center so the label centres. */
+  min-height: 44px;
 }
 
 /* Fields */

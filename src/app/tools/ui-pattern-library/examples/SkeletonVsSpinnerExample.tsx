@@ -54,7 +54,12 @@ export function SkeletonVsSpinnerExample() {
         .upl-ex-ss__seg button {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 6px 11px;
+          min-height: 44px;
+          min-width: 44px;
+          padding: 6px 13px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           border: none;
           background: var(--surface);
           color: var(--text-muted);
@@ -65,7 +70,11 @@ export function SkeletonVsSpinnerExample() {
         .upl-ex-ss__btn {
           font-family: var(--font-mono);
           font-size: 11px;
-          padding: 6px 11px;
+          min-height: 44px;
+          padding: 6px 14px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           border-radius: var(--radius-md);
           border: 1px solid var(--border-strong);
           background: var(--surface);

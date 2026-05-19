@@ -60,7 +60,9 @@ export function MultiStepFormExample() {
         }
         .upl-ex-ms__seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; }
         .upl-ex-ms__seg button {
-          font-family: var(--font-mono); font-size: 11px; padding: 6px 11px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; min-width: 44px; padding: 6px 13px;
+          display: inline-flex; align-items: center; justify-content: center;
           border: none; background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
         .upl-ex-ms__seg button[data-on="true"] { background: var(--accent-soft); color: var(--accent); }
@@ -75,7 +77,7 @@ export function MultiStepFormExample() {
         .upl-ex-ms__field { display: flex; flex-direction: column; gap: 5px; }
         .upl-ex-ms__field label { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
         .upl-ex-ms__field input {
-          padding: 9px 12px; background: var(--surface);
+          min-height: 44px; padding: 9px 12px; background: var(--surface);
           border: 1px solid var(--border-strong); border-radius: var(--radius-md);
           font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text);
         }
@@ -88,7 +90,9 @@ export function MultiStepFormExample() {
         .upl-ex-ms__step-label { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); }
         .upl-ex-ms__actions { display: flex; justify-content: space-between; gap: var(--space-2); margin-top: auto; }
         .upl-ex-ms__btn {
-          font-family: var(--font-mono); font-size: var(--text-xs); padding: 8px 14px;
+          font-family: var(--font-mono); font-size: var(--text-xs);
+          min-height: 44px; padding: 8px 16px;
+          display: inline-flex; align-items: center; justify-content: center;
           border-radius: var(--radius-md); border: 1px solid var(--border-strong);
           background: var(--surface); color: var(--text); cursor: pointer;
         }

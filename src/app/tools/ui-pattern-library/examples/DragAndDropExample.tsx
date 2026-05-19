@@ -106,7 +106,9 @@ export function DragAndDropExample() {
       <style>{`
         .upl-ex-dd__seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; margin-bottom: var(--space-3); }
         .upl-ex-dd__seg button {
-          font-family: var(--font-mono); font-size: 11px; padding: 6px 11px;
+          font-family: var(--font-mono); font-size: 11px;
+          min-height: 44px; min-width: 44px; padding: 6px 13px;
+          display: inline-flex; align-items: center; justify-content: center;
           border: none; background: var(--surface); color: var(--text-muted); cursor: pointer;
         }
         .upl-ex-dd__seg button[data-on="true"] { background: var(--accent-soft); color: var(--accent); }
@@ -118,6 +120,7 @@ export function DragAndDropExample() {
         }
         .upl-ex-dd__row {
           display: flex; align-items: center; gap: 12px;
+          min-height: 44px;
           padding: 12px 14px; background: var(--surface);
           border: 1px solid var(--border); border-radius: var(--radius-sm);
           font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text);
@@ -137,12 +140,19 @@ export function DragAndDropExample() {
         .upl-ex-dd__pos {
           font-size: 10px; color: var(--text-faint); min-width: 16px;
         }
-        .upl-ex-dd__ctrls { display: flex; gap: 4px; }
+        .upl-ex-dd__ctrls { display: flex; gap: 8px; }
         .upl-ex-dd__ctrls button {
+          position: relative;
           width: 26px; height: 26px; line-height: 1;
+          display: inline-flex; align-items: center; justify-content: center;
           font-family: var(--font-mono); font-size: 12px;
           border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
           background: var(--surface); color: var(--text); cursor: pointer;
+        }
+        /* 26px stays the visual size; the pseudo-element lifts the tappable
+           area to 44x44 without enlarging the tight per-row controls. */
+        .upl-ex-dd__ctrls button::after {
+          content: ''; position: absolute; inset: -9px;
         }
         .upl-ex-dd__ctrls button:hover { border-color: var(--accent); }
         .upl-ex-dd__ctrls button:disabled { opacity: 0.3; cursor: not-allowed; }
