@@ -41,7 +41,7 @@ export default function NotesPage() {
           <p className="eyebrow tool-page__eyebrow">{'// the devlog'}</p>
           <h1 className="tool-page__title">Notes from the workshop.</h1>
           <p className="tool-page__desc">
-            A log of what gets built here, and what gets learned building it. It starts today, so there is not much of it yet. One Saturday, in parts.
+            A log of what gets built here, and what gets learned building it. It has grown since it started. Two Saturdays now, in parts.
           </p>
         </header>
 
@@ -115,6 +115,65 @@ export default function NotesPage() {
           </p>
         </section>
 
+        <h2 className="heading heading--lg" style={session}>
+          Saturday Two
+        </h2>
+
+        <section style={part}>
+          <p className="eyebrow">{'// part one'}</p>
+          <h3 className="heading heading--md" style={partTitle}>
+            The tool that was almost a prompt dispenser
+          </h3>
+          <p style={prose}>
+            An old Notion doc surfaced. A six-stage prompt chain for spec-driven development, written a while ago and then forgotten. The obvious move was to ship it as written, a tool that hands you the prompts in order. I started down that road and stopped. Shipped literally it would have been a dated prompt dispenser, the exact kind of thin tool Cargo had already cut once.
+          </p>
+          <p style={prose}>
+            So it got reframed. Not a chain of prompts to paste, but a tool that teaches one hard skill: spotting what is missing from a feature spec before you hand it to an AI coding agent. It teaches with causal chains, a gap in the spec leads to an assumption the agent makes leads to a concrete thing that breaks. Worked examples first, then a self-check so you practice the spotting yourself. That version earned its place. It became the tenth tool.
+          </p>
+          <p style={prose}>
+            The document was raw material, not a product. The first idea was the wrong one, and the second only existed because the first got turned down on the way.
+          </p>
+        </section>
+
+        <section style={part}>
+          <p className="eyebrow">{'// part two'}</p>
+          <h3 className="heading heading--md" style={partTitle}>
+            Renumbering, and a coupling that made no sense
+          </h3>
+          <p style={prose}>
+            The tools had been numbered in the order they were built, which is the order that matters least to someone arriving. They got renumbered into a deliberate presentation order, the visual and immediate tools first, the quieter references after them.
+          </p>
+          <p style={prose}>
+            A small wrong thing fell out on the way. The moodboard tool used to stamp a tool catalogue number into the CSS you copy out of it. A number that means something inside this project and nothing at all in your file. It is gone from the export now. It had been there long enough that nobody questioned it, which is how that kind of thing tends to survive.
+          </p>
+        </section>
+
+        <section style={part}>
+          <p className="eyebrow">{'// part three'}</p>
+          <h3 className="heading heading--md" style={partTitle}>
+            Making it work on a phone
+          </h3>
+          <p style={prose}>
+            The whole workshop was built desktop-first and, honestly, had no real mobile support. Not rough on a phone, broken in places. So every tool and every page got opened at phone width and worked through: a real mobile navigation menu instead of a desktop one squeezed thin, touch targets big enough for a thumb everywhere, no sideways scrolling, and one consistent set of breakpoints instead of the scatter of ad hoc widths that had piled up.
+          </p>
+          <p style={prose}>
+            The UI Pattern Library was the hard one. It carries a lot of small embedded interactive demos and each had its own way of being slightly wrong on a phone. It took several passes on its own while the rest were already done.
+          </p>
+        </section>
+
+        <section style={part}>
+          <p className="eyebrow">{'// part four'}</p>
+          <h3 className="heading heading--md" style={partTitle}>
+            A sweep for things that had quietly gone untrue
+          </h3>
+          <p style={prose}>
+            The last pass did not build anything. It read the copy against what actually shipped. A tool description still said a hundred text animations when the real number was a hundred and forty six. Another offered a phone mockup frame that does not exist. One advertised spring curves and a draggable demo for a tool that has neither. None of these were lies anyone told. They were true once, and the code moved while the words stayed still. They got corrected.
+          </p>
+          <p style={prose}>
+            That is most of what Saturday Two was, looked at honestly. Not new things, but going back to finish: renumbering, mobile, the accuracy sweep. That is the unglamorous half of making something actually done, and it is the half that is easy to skip. The one good thing about doing it this way is that almost everything wrong got caught and fixed in the same pass that found it. The work stayed lumpy, same as Saturday One, and it kept correcting itself.
+          </p>
+        </section>
+
         <section style={roadmap}>
           <p className="eyebrow">{'// the roadmap'}</p>
           <h2 className="heading heading--md" style={partTitle}>
@@ -133,7 +192,7 @@ export default function NotesPage() {
             The Component Prompt Builder was retired. It was a thin idea that did not earn its place next to the rest, so it came out rather than linger half believed in.
           </p>
           <p style={prose}>
-            The Mockup Wrapper is the one still waiting. It could use more frames and a cleaner way to export, and that is the next obvious Saturday.
+            The Mockup Wrapper shipped, and went through the mobile pass with everything else. It could still use more frames, but it is no longer the one thing waiting. That clears everything that was mapped here, which is the honest state of a wishlist with no dates: the list it had has been built, and the next one is not written yet.
           </p>
           <p style={prose}>
             If you are reading this and that would help you, that is a good reason for it to jump the queue.

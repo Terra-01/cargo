@@ -70,6 +70,26 @@ test.describe('Static content pages (About + Notes)', () => {
     ).toBeVisible();
   });
 
+  test('/notes: Saturday Two and its parts render', async ({ page }) => {
+    await page.goto('/notes');
+    await expect(
+      page.getByRole('heading', { name: 'Saturday Two' })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'The tool that was almost a prompt dispenser' })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'A sweep for things that had quietly gone untrue' })
+    ).toBeVisible();
+    // Both sessions present, in order, before the roadmap.
+    const sessionOne = page.getByRole('heading', { name: 'Saturday One' });
+    const sessionTwo = page.getByRole('heading', { name: 'Saturday Two' });
+    const roadmap = page.getByRole('heading', { name: 'The roadmap, loosely' });
+    await expect(sessionOne).toBeVisible();
+    await expect(sessionTwo).toBeVisible();
+    await expect(roadmap).toBeVisible();
+  });
+
   test('screenshot /about', async ({ page }, testInfo) => {
     await page.goto('/about');
     await page.waitForLoadState('networkidle');
