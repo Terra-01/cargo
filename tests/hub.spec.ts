@@ -43,10 +43,10 @@ test.describe('Hub page foundation', () => {
     await expect(cards).toHaveCount(10);
   });
 
-  // The Component Prompt Builder (the original cargo/06) was cut. The 06 slot
-  // is now filled by The Spec Pressure-Test, so the catalogue reads 01..10
-  // with no gap. Surviving tools keep their original numbers as stable
-  // identities; 06 is reused by a new tool, not renumbered.
+  // The catalogue is numbered 01..10 in a deliberate presentation order.
+  // The phase-1 renumber reordered the whole catalogue into this sequence;
+  // tools were not kept at their original numbers. This test asserts the
+  // manifest reads 01..10 contiguously, with no gap.
   test('tool cards show the catalogue numbers 01..10, no gap', async ({ page }) => {
     await page.goto('/');
     const manifests = await page.locator('.tool-card__manifest').allTextContents();
