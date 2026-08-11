@@ -384,7 +384,7 @@ test.describe('Text Animation Library tool', () => {
     expect(bundle).toContain('<script>');
     expect(bundle).toContain('</script>');
     expect(bundle).toContain('/* Cargo Text Animations — JS drivers (picked: typewriter) */');
-    expect(bundle).toContain('function taDriverTypewriter');
+    expect(bundle).toContain('var taDriverTypewriter = function');
     expect(bundle).toContain('var __taDrivers = {');
     expect(bundle).toContain('"typewriter": taDriverTypewriter,');
     expect(bundle).toContain("document.querySelectorAll('[data-ta-anim]')");
@@ -411,8 +411,8 @@ test.describe('Text Animation Library tool', () => {
     await grantClipboard(context);
     const bundle = await copyBundle(page, ['kw-typewriter', 'kw-binary-decode']);
 
-    expect(bundle).toContain('function taDriverTypewriter');
-    expect(bundle).toContain('function taDriverBinaryDecode');
+    expect(bundle).toContain('var taDriverTypewriter = function');
+    expect(bundle).toContain('var taDriverBinaryDecode = function');
     expect(bundle).toContain('"typewriter": taDriverTypewriter,');
     expect(bundle).toContain('"binary-decode": taDriverBinaryDecode,');
     expect(bundle).toContain('(picked: typewriter, binary-decode)');
@@ -439,7 +439,7 @@ test.describe('Text Animation Library tool', () => {
     expect(bundle).toContain('.ta-fade-in-up');
     // JS section for the JS animation
     expect(bundle).toContain('<script>');
-    expect(bundle).toContain('function taDriverTypewriter');
+    expect(bundle).toContain('var taDriverTypewriter = function');
     // No undefined leaked into the CSS section
     expect(bundle).not.toContain('undefined');
   });

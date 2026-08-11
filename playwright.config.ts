@@ -12,7 +12,11 @@ export default defineConfig({
     navigationTimeout: 60_000,
   },
   webServer: {
-    command: 'npm run dev',
+    // CI runs the suite against a production build; locally it uses the dev
+    // server (fast edit-and-rerun). Dev-mode hot-reload was the root cause of
+    // the known `back link returns to the hub` and dials-modal flakes — a
+    // static build removes that whole class, so CI deliberately avoids it.
+    command: process.env.CI ? 'npm run start' : 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

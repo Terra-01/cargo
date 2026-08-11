@@ -1809,6 +1809,20 @@ const STAGGER_JS_HELPER = `/* ============================================
    document.querySelectorAll('[class*="ta-stagger"]').forEach(staggerSplit);
 */`;
 
+/**
+ * Stable identifier for an emitted JS driver, derived from its kind:
+ * `binary-decode` -> `taDriverBinaryDecode`. Matches the authored names in
+ * text-animation-drivers.js, but is computed rather than read off `fn.name`,
+ * which a production build strips. See the note in getBundleSnippet.
+ */
+function driverIdent(kind: string): string {
+  const pascal = kind
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
+  return `taDriver${pascal}`;
+}
+
 export function getBundleSnippet(animations: TextAnimation[]): string {
   if (animations.length === 0) return '';
   const hasStagger = animations.some((a) => Boolean(a.split));
@@ -1877,16 +1891,24 @@ export function getBundleSnippet(animations: TextAnimation[]): string {
     // text-animation-drivers.js via Function.toString() — single-source: the
     // emitted bytes equal the bytes the tool runs. Registry + harness are
     // generic; only which drivers/entries appear varies per pick.
+    //
+    // Each driver is bound to an identifier WE derive from the kind, rather
+    // than emitted as a bare declaration relying on `fn.name`. A production
+    // build minifies these functions to anonymous expressions, so a bare
+    // `function(a,t,e){...}` statement is a SyntaxError and `fn.name` is empty
+    // — which shipped a bundle that could not run. Assigning to a var we name
+    // ourselves is correct whether the source arrives named, anonymous, or
+    // mangled.
     const script: string[] = [];
     script.push('<script>');
     script.push(`/* Cargo Text Animations — JS drivers (picked: ${pickedList}) */`);
     script.push('(function(){');
     for (const k of jsKinds) {
-      script.push(taDrivers[k].toString());
+      script.push(`var ${driverIdent(k)} = ${taDrivers[k].toString()};`);
     }
     script.push('var __taDrivers = {');
     for (const k of jsKinds) {
-      script.push(`  "${k}": ${taDrivers[k].name},`);
+      script.push(`  "${k}": ${driverIdent(k)},`);
     }
     script.push('};');
     script.push("var nodes = document.querySelectorAll('[data-ta-anim]');");
