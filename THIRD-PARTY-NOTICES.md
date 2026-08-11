@@ -75,22 +75,61 @@ byte-faithful to upstream.
 
 ## Fonts
 
-*Pending — see the open item at the bottom of this file.*
+No font binaries are stored in this repository. All three faces are fetched at
+build time by `next/font/google` (see `src/app/layout.tsx`) and served from
+Cargo's own origin, so there is no third-party request at runtime.
+
+| Face | Role | Designer | Licence |
+|---|---|---|---|
+| Manrope | Body and headings (`--font-sans`) | Mikhail Sharanda | SIL Open Font License 1.1 |
+| Instrument Serif | The italic editorial accent (`--font-serif`) | Instrument | SIL Open Font License 1.1 |
+| IBM Plex Mono | Workshop labels (`--font-mono`) | IBM | SIL Open Font License 1.1 |
+
+**Why not General Sans.** Cargo previously self-hosted General Sans (Fontshare /
+Indian Type Foundry) and committed the `.woff2` files. The ITF Free Font License
+permits free personal and commercial *use*, but clause 02 forbids the fonts
+being "distributed, duplicated, loaned, resold or licensed in any way …
+including … uploading them in a public server". A public Git repository is
+exactly that, so the files were removed rather than published. General Sans
+remains a fine choice for a private project — download it from Fontshare
+directly.
+
+The Moodboard Library still *recommends* General Sans as part of a type pairing.
+Naming a font as a suggestion is not distributing it, and Cargo does not load it.
 
 ## Text animations
 
-*Pending — see the open item at the bottom of this file.*
+`src/lib/text-animations.ts`
 
-## Open items
+99 of the 146 entries carry a `kw-` prefix, marking them as derived from
+**Text Animation Patterns** ("100 Text Animations") by **川合卓也 (Takuya Kawai) /
+KAWAI DESIGN** — https://kawai-text-animation.pages.dev/. Cargo's set matches
+that collection's animation names, membership and ordering one-to-one, and
+Cargo's pick-several-and-copy-one-bundle interaction follows the same model.
 
-These must be resolved before the repository is made public:
+That site carries no licence grant. Its terms of service govern use of the
+website only, and the work is © 2026 KAWAI DESIGN. Cargo's use is therefore
+**by credit, not by permission** — see the open item below.
 
-1. **Fonts.** The self-hosted General Sans files were removed: Fontshare's ITF
-   Free Font License (clause 02) forbids "uploading them in a public server",
-   which a public repo is. Replacement is an SIL Open Font License face, which
-   permits bundling and redistribution. This section gets its entry once the
-   replacement lands.
-2. **Text animations.** 99 of the 146 entries in `src/lib/text-animations.ts`
-   carry a `kw-` prefix, and the About page credits "a collection of a hundred
-   handmade animations from Kawai Text Animation". The source and its licence
-   need confirming so the credit here can be accurate and the terms checked.
+Note on the underlying effects: many of these are long-standing, widely
+republished CSS effects rather than anyone's original invention. A large share
+of the names and motions (bounce, flash, pulse, rubberBand, shakeX, shakeY,
+swing, tada, jello, wobble, zoomIn, the slideIn/flipIn families) come from
+**Animate.css** by **Daniel Eden** — https://animate.style/. Cargo's values are
+re-timed adaptations rather than copies: `kw-jello`, for example, carries
+Animate.css's distinctive halving-skew progression but shifted one keyframe
+earlier with opacity added. Animate.css v4 is under the **Hippocratic License
+2.1**, which — like the Commons Clause above — is an ethical-source licence and
+not OSI open source. Later names in the set (`slit-in-vertical`,
+`tracking-expand`, `focus-in`, the `roll-in-*` family) follow the conventions of
+**Animista** — https://animista.net/.
+
+## Open item
+
+**Permission for the text-animation set.** Kawai's collection is credited above
+and on the About page, but credit is not a licence. Before relying on that set
+long-term, either obtain permission from KAWAI DESIGN
+(https://kawai-official.pages.dev/ has a contact form), or rework the set so it
+is not a one-to-one derivation — the `kw-` ids and the matching order are what
+make the derivation explicit.
+

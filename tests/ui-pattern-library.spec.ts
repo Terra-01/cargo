@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
+import { TOUCH_FLOOR_MIN } from './helpers/touch-target';
 
 const ROUTE = '/tools/ui-pattern-library';
 
@@ -885,7 +886,7 @@ test.describe('UI Pattern Library — D2a-1 (popover, modal, tooltip + chips)', 
     expect(n).toBeGreaterThan(0);
     for (let i = 0; i < n; i++) {
       const b = await chips.nth(i).boundingBox();
-      expect(b!.height).toBeGreaterThanOrEqual(44);
+      expect(b!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     }
   });
 
@@ -952,8 +953,8 @@ test.describe('UI Pattern Library — D2a-1 (popover, modal, tooltip + chips)', 
 
     // The icon itself is a 44px target.
     const box = await icon.boundingBox();
-    expect(box!.width).toBeGreaterThanOrEqual(44);
-    expect(box!.height).toBeGreaterThanOrEqual(44);
+    expect(box!.width).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
+    expect(box!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 });
 
@@ -990,7 +991,7 @@ test.describe('UI Pattern Library — D2a-2 (toast, tabs, dropdown)', () => {
     });
     expect(r!.dir).toBe('column');
     expect(r!.anyClipped).toBe(false);
-    expect(r!.minH).toBeGreaterThanOrEqual(44);
+    expect(r!.minH).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 
   test('the country dropdown opens within the viewport with 44px options', async ({ page }) => {
@@ -1010,7 +1011,7 @@ test.describe('UI Pattern Library — D2a-2 (toast, tabs, dropdown)', () => {
     });
     expect(r.within).toBe(true);
     expect(r.pageOver).toBeLessThanOrEqual(1);
-    expect(r.optH).toBeGreaterThanOrEqual(44);
+    expect(r.optH).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 
   test('the undo toast slides in within the stage, not the page', async ({ page }) => {
@@ -1095,8 +1096,8 @@ test.describe('UI Pattern Library — D2b (the remaining twelve demos)', () => {
         | { minH: number; minW: number; worst: string }
         | null;
       expect(r, `${id} card present`).not.toBeNull();
-      expect(r!.minH, `${id} min control height (${r!.worst})`).toBeGreaterThanOrEqual(44);
-      expect(r!.minW, `${id} min control width (${r!.worst})`).toBeGreaterThanOrEqual(44);
+      expect(r!.minH, `${id} min control height (${r!.worst})`).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
+      expect(r!.minW, `${id} min control width (${r!.worst})`).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     }
     const over = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth
@@ -1111,36 +1112,36 @@ test.describe('UI Pattern Library — D2b (the remaining twelve demos)', () => {
     await page.getByTestId('ex-es-mode-designed').click();
     const cta = page.getByTestId('ex-es-cta');
     await expect(cta).toBeVisible();
-    expect((await cta.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await cta.boundingBox())!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
 
     // Accordion: tab-mode tabs and an expanded accordion head.
     await page.getByTestId('ex-acc-mode-tabs').click();
     const accTab = page.getByTestId('ex-acc-tab-pro');
     await expect(accTab).toBeVisible();
-    expect((await accTab.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await accTab.boundingBox())!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     await page.getByTestId('ex-acc-mode-accordion').click();
     const accHead = page.getByTestId('ex-acc-head-team');
     await expect(accHead).toBeVisible();
-    expect((await accHead.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await accHead.boundingBox())!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
 
     // Multi-step wizard: back/next/submit chrome.
     await page.getByTestId('ex-msf-mode-wizard').click();
     const msfNext = page.getByTestId('ex-msf-next');
     await expect(msfNext).toBeVisible();
-    expect((await msfNext.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await msfNext.boundingBox())!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
 
     // Confirmation dialog buttons.
     await page.getByTestId('ex-cu-del-notes.md').click();
     const cuConfirm = page.getByTestId('ex-cu-confirm');
     await expect(cuConfirm).toBeVisible();
-    expect((await cuConfirm.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await cuConfirm.boundingBox())!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     await page.getByTestId('ex-cu-cancel').click();
 
     // Segmented-vs-dropdown: 12-option pills and the open dropdown list.
     await page.getByTestId('ex-sd-count-12').click();
     const pill = page.getByTestId('ex-sd-seg-Decade');
     await expect(pill).toBeVisible();
-    expect((await pill.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await pill.boundingBox())!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     await page.getByTestId('ex-sd-dropdown').click();
     const ddList = page.getByTestId('ex-sd-dropdown-list');
     await expect(ddList).toBeVisible();
@@ -1148,7 +1149,7 @@ test.describe('UI Pattern Library — D2b (the remaining twelve demos)', () => {
       const b = document.querySelector('[data-testid="ex-sd-dropdown-list"] button');
       return b ? b.getBoundingClientRect().height : -1;
     });
-    expect(optH).toBeGreaterThanOrEqual(44);
+    expect(optH).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 
   test('the drag-and-drop demo is operable by touch, not mouse-only', async ({ page }) => {
@@ -1180,7 +1181,7 @@ test.describe('UI Pattern Library — D2b (the remaining twelve demos)', () => {
       const x = Math.abs(parseFloat(a.left) || 0) + Math.abs(parseFloat(a.right) || 0);
       return Math.min(r.height + y, r.width + x);
     });
-    expect(tap).toBeGreaterThanOrEqual(44);
+    expect(tap).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 
   test('the migrated Accordion and Segmented breakpoints reflow on the canonical bands', async ({ page }) => {

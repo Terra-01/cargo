@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
+import { TOUCH_FLOOR_MIN } from './helpers/touch-target';
 
 test.describe('Mockup Wrapper tool', () => {
   test('renders without console errors', async ({ page }) => {
@@ -123,18 +124,18 @@ test.describe('Mockup Wrapper — touch-target sizing', () => {
     const tn = await tint.count();
     for (let i = 0; i < tn; i++) {
       const b = await tint.nth(i).boundingBox();
-      expect(b!.height).toBeGreaterThanOrEqual(44);
+      expect(b!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     }
 
     const bool = await page.locator('.bool-toggle__btn').first().boundingBox();
-    expect(bool!.height).toBeGreaterThanOrEqual(44);
+    expect(bool!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
 
     const sliders = page.locator('.slider');
     const sn = await sliders.count();
     expect(sn).toBeGreaterThan(0);
     for (let i = 0; i < sn; i++) {
       const b = await sliders.nth(i).boundingBox();
-      expect(b!.height).toBeGreaterThanOrEqual(44);
+      expect(b!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     }
   });
 });

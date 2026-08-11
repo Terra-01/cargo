@@ -2,6 +2,7 @@ import { writeFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import { grantClipboard } from './helpers/clipboard';
 import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
+import { TOUCH_FLOOR_MIN } from './helpers/touch-target';
 
 test.describe('Text Animation Library tool', () => {
   test('renders without console errors', async ({ page }) => {
@@ -701,7 +702,7 @@ test.describe('Text Animation Library — touch and control polish', () => {
     await page.goto('/tools/text-animations');
     for (const cat of ['all', 'hover', 'specialty']) {
       const box = await page.getByTestId(`ta-cat-${cat}`).boundingBox();
-      expect(box!.height).toBeGreaterThanOrEqual(44);
+      expect(box!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     }
   });
 
@@ -711,8 +712,8 @@ test.describe('Text Animation Library — touch and control polish', () => {
     await page.getByTestId('ta-card-ta-fade-in-up').click();
     const clear = await page.getByTestId('picker-clear').boundingBox();
     const copy = await page.getByTestId('picker-copy').boundingBox();
-    expect(clear!.height).toBeGreaterThanOrEqual(44);
-    expect(copy!.height).toBeGreaterThanOrEqual(44);
+    expect(clear!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
+    expect(copy!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 
   test('the PickerTray show toggle and chips meet the 44px touch floor', async ({ page }) => {
@@ -721,13 +722,13 @@ test.describe('Text Animation Library — touch and control polish', () => {
     // The show/hide toggle.
     const toggle = page.getByTestId('picker-toggle');
     await expect(toggle).toBeVisible();
-    expect((await toggle.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await toggle.boundingBox())!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     // Expand so the chips render; the chip IS the remove control (the inner
     // "x" is an aria-hidden span), so a 44px chip is a 44px remove target.
     await toggle.click();
     const chip = page.getByTestId('picker-chip-ta-fade-in-up');
     await expect(chip).toBeVisible();
-    expect((await chip.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await chip.boundingBox())!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 
   test('screenshot the PickerTray .btn--sm fix at mobile', async ({ page }, testInfo) => {

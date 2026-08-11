@@ -44,7 +44,19 @@ export default function AboutPage() {
           Built on other people&apos;s work
         </h2>
         <p style={prose}>
-          Cargo does not stand on its own. The gradient tool is a port of <strong>Neat</strong>, an open-source gradient library by <strong>FireCMS</strong>. Two of its shaders, &ldquo;Rainbow&rdquo; and &ldquo;Ether&rdquo;, come from <strong>Shadertoy</strong>, the second by an author who goes by <strong>nimitz</strong>. The text animation library grew by studying a collection of a hundred handmade animations from <strong>Kawai Text Animation</strong> and learning from how they were built. None of those people know this project exists. The work they shared openly made a good part of Cargo possible, and that is worth saying plainly.
+          Cargo does not stand on its own. The gradient tool is a port of <strong>Neat</strong>, an open-source gradient library by <strong>FireCMS</strong>. Two of its shaders, &ldquo;Rainbow&rdquo; and &ldquo;Ether&rdquo;, come from <strong>Shadertoy</strong>, the second by an author who goes by <strong>nimitz</strong>. The text animation library follows a collection of a hundred animations published by <strong>川合卓也 (Takuya Kawai)</strong> of <strong>KAWAI DESIGN</strong>, and many of the effects in it are older still, tracing back to <strong>Animate.css</strong> by <strong>Daniel Eden</strong>. The type is <strong>Manrope</strong>, <strong>Instrument Serif</strong> and <strong>IBM Plex Mono</strong>, all open-licensed. None of those people know this project exists. The work they shared openly made a good part of Cargo possible, and that is worth saying plainly.
+        </p>
+        <p style={prose}>
+          Every one of those debts is written down properly, with author, source and license, in the project&apos;s{' '}
+          <a
+            href="https://github.com/Terra-01/cargo/blob/main/THIRD-PARTY-NOTICES.md"
+            className="about__link"
+            target="_blank"
+            rel="noreferrer"
+          >
+            third-party notices
+          </a>
+          . Cargo itself is MIT licensed. A few of the files it borrows are not, and that file says exactly which.
         </p>
       </div>
 

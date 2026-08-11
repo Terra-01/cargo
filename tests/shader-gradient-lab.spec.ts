@@ -3,6 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
+import { TOUCH_FLOOR_MIN } from './helpers/touch-target';
 import { buildEmbedSnippet } from '../src/lib/standalone-export';
 import { DEFAULT_CONFIG } from '../src/lib/shader-types';
 
@@ -584,14 +585,14 @@ test.describe('Shader Gradient Lab — touch-target sizing', () => {
       const bottom = Math.abs(parseFloat(a.bottom) || 0);
       return r.height + top + bottom;
     });
-    expect(backTap).toBeGreaterThanOrEqual(44);
+    expect(backTap).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     const text = await page.getByTestId('sg-text-input').boundingBox();
-    expect(text!.height).toBeGreaterThanOrEqual(44);
+    expect(text!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     const btns = page.locator('.sg-toolbar__btn');
     const n = await btns.count();
     for (let i = 0; i < n; i++) {
       const b = await btns.nth(i).boundingBox();
-      expect(b!.height).toBeGreaterThanOrEqual(44);
+      expect(b!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     }
   });
 
@@ -600,8 +601,8 @@ test.describe('Shader Gradient Lab — touch-target sizing', () => {
     await page.getByTestId('sg-edit-dials').click();
     await expect(page.getByTestId('sg-dials-modal')).toBeVisible();
     const close = await page.getByTestId('sg-dials-close').boundingBox();
-    expect(close!.height).toBeGreaterThanOrEqual(44);
-    expect(close!.width).toBeGreaterThanOrEqual(44);
+    expect(close!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
+    expect(close!.width).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     const sub = await page.evaluate(() => {
       const modal = document.querySelector('.sg-modal');
       if (!modal) return -1;
@@ -612,6 +613,6 @@ test.describe('Shader Gradient Lab — touch-target sizing', () => {
       });
       return min;
     });
-    expect(sub).toBeGreaterThanOrEqual(44);
+    expect(sub).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 });

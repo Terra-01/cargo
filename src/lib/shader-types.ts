@@ -100,7 +100,7 @@ export interface TextOverlayConfig {
 // Curated font set — project fonts + web-safe families, usable as-is both in
 // CSS and Canvas2D `font` strings (no extra font dependencies).
 export const FONT_OPTIONS: { label: string; value: string }[] = [
-  { label: 'Sans — General Sans', value: "'General Sans', sans-serif" },
+  { label: 'Sans — Manrope', value: "'Manrope', sans-serif" },
   { label: 'Serif — Instrument Serif', value: "'Instrument Serif', Georgia, serif" },
   { label: 'Mono — IBM Plex Mono', value: "'IBM Plex Mono', monospace" },
   { label: 'Georgia', value: 'Georgia, serif' },
@@ -375,7 +375,7 @@ export const DEFAULT_CONFIG: ShaderConfig = {
   textureShapeSquiggles: 10,
   textOverlay: {
     text: '',
-    fontFamily: "'General Sans', sans-serif",
+    fontFamily: "'Manrope', sans-serif",
     fontSize: 64,
     bold: false,
     italic: false,
