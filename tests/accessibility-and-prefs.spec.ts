@@ -80,7 +80,7 @@ test.describe('Reduced motion', () => {
 
     // Pick a plain auto/CSS card: at rest it renders static, with no animation
     // class and no driver running.
-    const preview = page.getByTestId('ta-preview-kw-fade-in');
+    const preview = page.getByTestId('ta-preview-ta-fade-in');
     await expect(preview).toBeVisible();
     await expect(preview).toHaveAttribute('data-static', 'true');
 
@@ -89,9 +89,9 @@ test.describe('Reduced motion', () => {
 
     // Tapping the card plays exactly one pass: the animated span replaces the
     // static one (it carries the animation id as a class).
-    await page.getByTestId('ta-card-kw-fade-in').click();
-    const animated = page.getByTestId('ta-preview-kw-fade-in');
-    await expect(animated).toHaveClass(/kw-fade-in/);
+    await page.getByTestId('ta-card-ta-fade-in').click();
+    const animated = page.getByTestId('ta-preview-ta-fade-in');
+    await expect(animated).toHaveClass(/ta-fade-in/);
   });
 
   test('the decorative hub shimmer stops', async ({ page }) => {
@@ -111,11 +111,11 @@ test.describe('Reduced motion', () => {
 test.describe('Reduced motion off (default)', () => {
   test('text animation cards still auto-play', async ({ page }) => {
     await page.goto('/tools/text-animations');
-    const preview = page.getByTestId('ta-preview-kw-fade-in');
+    const preview = page.getByTestId('ta-preview-ta-fade-in');
     await expect(preview).toBeVisible();
     // No static marker: the animated span is mounted straight away.
     await expect(preview).not.toHaveAttribute('data-static', 'true');
-    await expect(preview).toHaveClass(/kw-fade-in/);
+    await expect(preview).toHaveClass(/ta-fade-in/);
   });
 });
 

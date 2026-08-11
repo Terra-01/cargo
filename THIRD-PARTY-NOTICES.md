@@ -101,11 +101,17 @@ Naming a font as a suggestion is not distributing it, and Cargo does not load it
 
 `src/lib/text-animations.ts`
 
-99 of the 146 entries carry a `kw-` prefix, marking them as derived from
-**Text Animation Patterns** ("100 Text Animations") by **川合卓也 (Takuya Kawai) /
-KAWAI DESIGN** — https://kawai-text-animation.pages.dev/. Cargo's set matches
-that collection's animation names, membership and ordering one-to-one, and
-Cargo's pick-several-and-copy-one-bundle interaction follows the same model.
+99 of the 146 entries are derived from **Text Animation Patterns**
+("100 Text Animations") by **川合卓也 (Takuya Kawai) / KAWAI DESIGN** —
+https://kawai-text-animation.pages.dev/. Cargo's set follows that collection's
+animation names and membership closely, and Cargo's
+pick-several-and-copy-one-bundle interaction follows the same model.
+
+Those entries previously carried a `kw-` prefix; they now share the project's
+single `ta-` namespace. The four that would have collided with an existing
+entry are suffixed `-chars`, which is what actually distinguishes them — the
+derived versions animate per character, the originals animate the whole line.
+The rename removes a marker, not the debt: the debt is recorded here.
 
 That site carries no licence grant. Its terms of service govern use of the
 website only, and the work is © 2026 KAWAI DESIGN. Cargo's use is therefore
@@ -116,7 +122,7 @@ republished CSS effects rather than anyone's original invention. A large share
 of the names and motions (bounce, flash, pulse, rubberBand, shakeX, shakeY,
 swing, tada, jello, wobble, zoomIn, the slideIn/flipIn families) come from
 **Animate.css** by **Daniel Eden** — https://animate.style/. Cargo's values are
-re-timed adaptations rather than copies: `kw-jello`, for example, carries
+re-timed adaptations rather than copies: `ta-jello`, for example, carries
 Animate.css's distinctive halving-skew progression but shifted one keyframe
 earlier with opacity added. Animate.css v4 is under the **Hippocratic License
 2.1**, which — like the Commons Clause above — is an ethical-source licence and
@@ -127,9 +133,13 @@ not OSI open source. Later names in the set (`slit-in-vertical`,
 ## Open item
 
 **Permission for the text-animation set.** Kawai's collection is credited above
-and on the About page, but credit is not a licence. Before relying on that set
-long-term, either obtain permission from KAWAI DESIGN
-(https://kawai-official.pages.dev/ has a contact form), or rework the set so it
-is not a one-to-one derivation — the `kw-` ids and the matching order are what
-make the derivation explicit.
+and on the About page, but credit is not a licence. Permission is being sought
+from KAWAI DESIGN via the contact form at https://kawai-official.pages.dev/.
+This item stays open until there is an answer, and should be updated with the
+outcome either way.
+
+The `kw-` prefix has been dropped, so Cargo no longer advertises the set as a
+one-to-one derivation. Note that the catalogue still lists the derived entries
+as a contiguous block ahead of the originals, which is the remaining structural
+echo of the source ordering.
 
