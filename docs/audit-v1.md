@@ -1,3 +1,9 @@
+> **Historical document — do not treat as current.**
+> This is a snapshot of Cargo as it stood on 2026-05-16, kept for context on how
+> the project got here. It describes seven tools and a `prompt-builder` route
+> that was later cut; the project now ships ten tools across fifteen routes. For
+> the current state, read the [README](../README.md) and `src/lib/tools.ts`.
+
 # Cargo v1 — read-only audit
 
 Generated 2026-05-16. Captures the v1 state for the v2 architect.

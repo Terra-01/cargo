@@ -1,3 +1,11 @@
+> **Working document — partly historical.**
+> Written before Cargo was open-sourced. Two of the three phases it scopes
+> (CSS Effect Lab v2, UI Pattern Dictionary) have since shipped and are marked
+> as such inline; **Mockup Wrapper v2** is the only phase still open. The
+> appendix on working style, settled decisions, and testing is still accurate
+> and is the best background reading for a contributor. Where it conflicts with
+> [CONTRIBUTING.md](../CONTRIBUTING.md), CONTRIBUTING wins.
+
 # Cargo — Roadmap for remaining work
 
 **Purpose of this document.** This is a handoff roadmap. It is written so that an agent (or person) with no prior context on Cargo can pick it up and carry the remaining work forward. It covers how the project is built, its current state, and a detailed scoping of the three phases that remain. It does not contain milestone prompts — it contains everything needed to *write* them.
@@ -247,7 +255,7 @@ These are settled. A new agent should follow them, not relitigate them.
 - **Plain CSS with tokens.** All styling uses CSS custom properties (design tokens) defined in `src/app/globals.css`. Some tools inject a scoped `<style>` block from their component for tool-specific rules. Shared, multi-tool classes live in `globals.css`. When a size/layout change affects only one tool, scope it to that tool (a tool-specific class) rather than editing a shared global class — a prior milestone correctly scoped a grid change to a new `.ta-catalog` class instead of touching the shared `.catalog` used by three tools.
 - **The tool registry is the single source of truth.** `src/lib/tools.ts` — id, number, category, title, description, tags, route, status, preview component. Update it when a tool ships or changes its description.
 - **Tool content lives in data files.** Each content-heavy tool keeps its content as a typed array in `src/lib/*` (e.g. the text animations, the shader presets, the mockup frames). New tools follow this — author content as a TypeScript data file, not MDX or inline JSX.
-- **Open-source ports keep their attribution.** The Shader Gradient Lab ports Neat (FireCMS, MIT + Commons Clause) and two Shadertoy shaders (CC BY-NC-SA 3.0). `LICENSE-SHADERS.md` records the licenses; exported code carries an attribution header. Any future port preserves origin attribution the same way.
+- **Open-source ports keep their attribution.** The Shader Gradient Lab ports Neat (FireCMS, MIT + Commons Clause) and two Shadertoy shaders (CC BY-NC-SA 3.0). [`THIRD-PARTY-NOTICES.md`](../THIRD-PARTY-NOTICES.md) records the licenses (it replaced the old `LICENSE-SHADERS.md`); exported code carries an attribution header. Any future port preserves origin attribution the same way.
 - **Exports must actually work.** Several tools produce copy-paste or downloadable output (CSS snippets, standalone HTML, bundles, PNGs). The rule throughout: what the user copies must run when pasted. Exports are verified by actually running the output, not by eyeballing it. When a tool's runtime code is also emitted to the user, it is authored as a single source that serves both (the JS animation drivers are plain dependency-free `.js` for exactly this reason).
 - **The card / preview pattern.** Tools that present a catalogue (animations, loaders) use a card grid; cards use badges, not plain-text labels, for classification; previews auto-play when scrolled into view via `IntersectionObserver` and pause off-screen. Reuse this pattern rather than inventing per-tool.
 

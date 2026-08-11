@@ -46,3 +46,6 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Local agent/editor scratch — not part of the project
+/.claude/
