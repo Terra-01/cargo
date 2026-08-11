@@ -81,7 +81,7 @@ export function MultiStepFormExample() {
           border: 1px solid var(--border-strong); border-radius: var(--radius-md);
           font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text);
         }
-        .upl-ex-ms__field input:focus { outline: none; border-color: var(--accent); }
+        .upl-ex-ms__field input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
         .upl-ex-ms__progress { display: flex; gap: 5px; }
         .upl-ex-ms__progress span {
           flex: 1; height: 4px; border-radius: 2px; background: var(--border-strong);

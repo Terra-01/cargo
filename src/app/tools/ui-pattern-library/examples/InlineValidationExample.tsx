@@ -98,7 +98,7 @@ export function InlineValidationExample() {
           font-size: var(--text-sm);
           color: var(--text);
         }
-        .upl-ex-iv__field input:focus { outline: none; border-color: var(--accent); }
+        .upl-ex-iv__field input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
         .upl-ex-iv__field input[data-state="bad"]  { border-color: #dc2626; }
         .upl-ex-iv__field input[data-state="good"] { border-color: #16a34a; }
         .upl-ex-iv__msg {

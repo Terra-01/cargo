@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, type ReactNode, type CSSProperties } from 'react';
 import { type TextAnimation, type AnimationSplit } from '@/lib/text-animations';
 import { taDrivers } from '@/lib/text-animation-drivers';
+import { usePrefersReducedMotion } from '@/lib/use-reduced-motion';
 
 interface TextAnimationCardProps {
   animation: TextAnimation;
@@ -48,6 +49,15 @@ export function TextAnimationCard({ animation, picked, onTogglePick }: TextAnima
   const trigger = animation.trigger ?? 'auto';
   const isHoverTrigger = trigger === 'hover';
   const isJs = animation.engine === 'js';
+  const reduced = usePrefersReducedMotion();
+
+  // Auto cards normally loop while on screen. Under reduced motion nothing
+  // starts on its own — the card shows its name as static text and a tap plays
+  // exactly one pass, the same one-shot the hover cards already use. The tool
+  // stays fully usable; it just stops animating at people who asked it not to.
+  const autoPlay = visible && !isHoverTrigger && !reduced;
+  const oneShot = reduced && !isHoverTrigger && playing;
+  const showPreview = isHoverTrigger ? visible : autoPlay || oneShot;
 
   // Track visibility with IntersectionObserver — off-screen cards don't animate.
   useEffect(() => {
@@ -61,22 +71,23 @@ export function TextAnimationCard({ animation, picked, onTogglePick }: TextAnima
     return () => observer.disconnect();
   }, []);
 
-  // Auto-replay loop — skip for hover-trigger animations (driven by CSS :hover).
+  // Auto-replay loop — skip for hover-trigger animations (driven by CSS :hover)
+  // and under reduced motion (a tap plays a single pass instead).
   useEffect(() => {
-    if (!visible || isHoverTrigger) return;
+    if (!autoPlay) return;
     const period = animation.durationMs ?? 2800;
     const interval = setInterval(() => {
       setReplayKey((k) => k + 1);
     }, period + 400);
     return () => clearInterval(interval);
-  }, [visible, isHoverTrigger, animation.durationMs]);
+  }, [autoPlay, animation.durationMs]);
 
   // JS-driven animations (engine === 'js'): the driver owns the preview
   // element's content and runs its own loop. Rides the same visible/replayKey
   // lifecycle as CSS cards — no parallel timer system. When replayKey ticks the
   // keyed span remounts, this effect re-runs, cleanup tears the old run down.
   useEffect(() => {
-    if (!isJs || !visible) return;
+    if (!isJs || !showPreview) return;
     const el = previewRef.current;
     const spec = animation.jsDriver;
     if (!el || !spec) return;
@@ -85,7 +96,7 @@ export function TextAnimationCard({ animation, picked, onTogglePick }: TextAnima
     const text = animation.sampleText ?? animation.name;
     const cleanup = driver(el, text, spec);
     return cleanup;
-  }, [isJs, visible, replayKey, animation.jsDriver, animation.sampleText, animation.name]);
+  }, [isJs, showPreview, replayKey, animation.jsDriver, animation.sampleText, animation.name]);
 
   // Clean up a pending one-shot play timer on unmount.
   useEffect(() => {
@@ -101,7 +112,10 @@ export function TextAnimationCard({ animation, picked, onTogglePick }: TextAnima
   // which is left intact so desktop hover-to-play is unchanged), then reverts.
   const handleClick = () => {
     onTogglePick(animation.id);
-    if (!isHoverTrigger) return;
+    // Hover cards have no auto-loop; reduced-motion auto cards have had theirs
+    // suppressed. Both play a single pass on tap.
+    if (!isHoverTrigger && !reduced) return;
+    if (reduced && !isHoverTrigger) setReplayKey((k) => k + 1);
     setPlaying(true);
     if (playTimer.current) clearTimeout(playTimer.current);
     playTimer.current = setTimeout(
@@ -146,7 +160,7 @@ export function TextAnimationCard({ animation, picked, onTogglePick }: TextAnima
         ) : null}
       </div>
       <div className="ta-card__preview">
-        {visible && (
+        {showPreview ? (
           <span
             key={replayKey}
             ref={previewRef}
@@ -156,6 +170,18 @@ export function TextAnimationCard({ animation, picked, onTogglePick }: TextAnima
           >
             {content}
           </span>
+        ) : (
+          // Reduced motion, at rest: the name still has to be readable, so the
+          // card shows it plainly with no animation class attached.
+          visible && (
+            <span
+              className="ta-card__preview-text"
+              data-static="true"
+              data-testid={`ta-preview-${animation.id}`}
+            >
+              {previewText}
+            </span>
+          )
         )}
       </div>
       <div className="ta-card__footer">

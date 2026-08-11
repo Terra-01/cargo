@@ -91,7 +91,8 @@ export function TooltipExample() {
           cursor: pointer;
           font-size: 15px;
         }
-        .upl-ex-tp__icon:hover, .upl-ex-tp__icon:focus-visible { border-color: var(--accent); outline: none; }
+        .upl-ex-tp__icon:hover { border-color: var(--accent); }
+        .upl-ex-tp__icon:focus-visible { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
         .upl-ex-tp__hint {
           position: absolute;
           bottom: calc(100% + 7px);

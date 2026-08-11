@@ -35,7 +35,7 @@ const roadmap = {
 
 export default function NotesPage() {
   return (
-    <main className="container">
+    <main id="main" className="container">
       <div className="tool-page">
         <header className="tool-page__header">
           <p className="eyebrow tool-page__eyebrow">{'// the devlog'}</p>

@@ -7,7 +7,7 @@ export default function Home() {
   const planned = plannedCount();
 
   return (
-    <main className="container">
+    <main id="main" className="container">
       <section className="hero">
         <p className="eyebrow hero__eyebrow">{'// a workshop · est. 2026'}</p>
         <h1 className="hero__title">
