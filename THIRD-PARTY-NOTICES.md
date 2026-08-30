@@ -39,17 +39,41 @@ substantially from the software — which also means Neat is not open source in
 the OSI sense. Cargo is free and non-commercial, so this is satisfied. If you
 fork Cargo commercially, this file is your problem to solve.
 
-### "Rainbow" — `src/lib/shaders/rainbow-warp.ts`
+### "Rainbow Warp" — `src/lib/shaders/rainbow-warp.ts`
+
+> **Open item: this attribution is unresolved.**
 
 | | |
 |---|---|
-| **Original** | "Rainbow" |
-| **Author** | Shadertoy contributor |
-| **Source** | https://www.shadertoy.com/view/Ws3SRn |
-| **Licence** | CC BY-NC-SA 3.0 |
+| **Original** | unidentified |
+| **Author** | unknown |
+| **Source** | unresolved |
+| **Licence** | CC BY-NC-SA 3.0 (assumed, conservatively) |
 
-The procedural `spectral_colour` wavelength→RGB table and the eight-iteration
-domain-warp loop are a faithful port, with a standard Shadertoy → WebGL2 ES 3.00
+This entry previously cited `https://www.shadertoy.com/view/Ws3SRn`. That ID is
+wrong. It resolves to "AD - Connecting dots" by **arnedecant** (2019), a
+dots-and-lines shader containing neither a spectral colour table nor a
+domain-warp loop, so it is not the source of this port. The "Ether" citation
+below was verified against its live page the same way and is correct, so this
+was one bad ID rather than a systemic problem.
+
+This mattered more than a broken link: `src/lib/standalone-export.ts` writes
+this metadata into every file a user exports, so each export credited an author
+unconnected to the work. The fields are now explicitly unknown. Naming nobody is
+better than naming the wrong person.
+
+The two ingredients are individually long-standing prior art — the branching
+wavelength→RGB approximation is widely republished, and the cos/sin
+coordinate-swap warp is a standard plasma idiom — but that does not establish
+the provenance of this particular combination, so the licence stays at the
+conservative CC BY-NC-SA 3.0 assumed for Shadertoy-derived work.
+
+**To close this:** identify the original, restore author and source, and confirm
+the licence. If it cannot be traced, remove the shader. Until then, treat it as
+non-commercial and unverified.
+
+The port itself is the `spectral_colour` wavelength→RGB table and the
+eight-iteration domain-warp loop, with a standard Shadertoy → WebGL2 ES 3.00
 translation and Cargo's shared curated tail (hue / saturation / brightness /
 grain).
 
