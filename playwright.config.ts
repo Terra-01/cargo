@@ -1,5 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
 
+// Default 3000, override with PORT. Locally `reuseExistingServer` will happily
+// adopt whatever is already on 3000 — including an unrelated project's dev
+// server — and then every spec fails with "element(s) not found" for reasons
+// that have nothing to do with this repo. `PORT=3100 npx playwright test` gets
+// you out of that without stopping the other server.
+const PORT = process.env.PORT ?? '3000';
+const BASE_URL = `http://localhost:${PORT}`;
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: false,
@@ -7,7 +15,7 @@ export default defineConfig({
   retries: 1,
   timeout: 60_000,
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: BASE_URL,
     trace: 'on-first-retry',
     navigationTimeout: 60_000,
   },
@@ -16,8 +24,10 @@ export default defineConfig({
     // server (fast edit-and-rerun). Dev-mode hot-reload was the root cause of
     // the known `back link returns to the hub` and dials-modal flakes — a
     // static build removes that whole class, so CI deliberately avoids it.
-    command: process.env.CI ? 'npm run start' : 'npm run dev',
-    url: 'http://localhost:3000',
+    command: process.env.CI
+      ? `npm run start -- --port ${PORT}`
+      : `npm run dev -- --port ${PORT}`,
+    url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

@@ -17,8 +17,14 @@ concurrency:
 permissions:
   contents: read
 
+# A same-repo pull request has the identical head SHA as the push that created
+# the branch, so both events would run the whole suite over the same commit —
+# which is exactly what happened on the dev -> main PR: two 35-minute runs of
+# e87ffdd back to back. Run pull_request only for forks, where no push event
+# fires in this repository.
 jobs:
   check:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     name: Typecheck, lint, build
     runs-on: ubuntu-latest
     steps:
@@ -33,6 +39,7 @@ jobs:
       - run: npm run build
 
   test:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     name: Playwright (chromium light/dark + firefox)
     runs-on: ubuntu-latest
     steps:
@@ -47,10 +54,14 @@ jobs:
       # CI=true makes playwright.config.ts serve the production build via
       # `npm run start` instead of the dev server — see the comment there.
       - run: npm run build
-      # xvfb-run supplies the virtual display that Firefox needs to run headed,
-      # which is the only way it gets a WebGL2 context on a GPU-less runner.
-      # Chromium ignores it and stays headless with SwiftShader.
-      - run: xvfb-run -a npx playwright test
+      # Chromium is headless with SwiftShader and needs no display. Keep it out
+      # of xvfb — wrapping the whole suite changed Chromium's environment too
+      # and made the toolbar clipboard spec flaky.
+      - run: npx playwright test --project=chromium-light --project=chromium-dark
+      # Firefox is the one that needs a real display: headless Firefox
+      # implements no WebGL at all (Mozilla bug 1375585), so it runs headed
+      # against Xvfb, where llvmpipe supplies a software WebGL2 context.
+      - run: xvfb-run -a npx playwright test --project=firefox
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

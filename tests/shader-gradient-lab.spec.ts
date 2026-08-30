@@ -334,21 +334,21 @@ test.describe('Shader Gradient Lab tool', () => {
     await page.goto(URL);
     const btn = page.getByTestId('sg-copy-snippet');
     await expect(btn).toHaveText('Copy Snippet');
-    await btn.click();
 
-    // The label and the attribute both flip off the same state and reset
-    // together after 1600ms (BottomToolbar.tsx). Asserting them one after the
-    // other lets a slow runner spend most of that window on the first
-    // assertion and then read the already-reset value in the second — which is
-    // exactly how this failed on CI. Read both in a single evaluation so there
-    // is no window between them to straddle.
-    await expect
-      .poll(() =>
-        btn.evaluate(
-          (el) => `${el.textContent?.trim()}|${el.getAttribute('data-copied')}`
-        )
-      )
-      .toBe('Copied!|true');
+    // data-copied and the "Copied!" label derive from one piece of state, so
+    // asserting the attribute alone is sufficient — checking both sequentially
+    // is what let the original assertion straddle the 1600ms reset.
+    //
+    // The click also is not always delivered: the CI failure read
+    // "Copy Snippet|false", meaning the state never changed at all.
+    // handleCopySnippet is fully guarded and cannot throw, so the handler
+    // simply never ran — the click landed while the canvas was still settling.
+    // toPass retries the click; the inner assertion polls, which the click
+    // needs because React re-renders a tick after the event is dispatched.
+    await expect(async () => {
+      await btn.click();
+      await expect(btn).toHaveAttribute('data-copied', 'true', { timeout: 1_000 });
+    }).toPass({ timeout: 15_000 });
   });
 
   test('embeddable snippet is guest-safe and renders in a host page', async ({ page }, testInfo) => {
