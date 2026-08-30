@@ -47,7 +47,10 @@ jobs:
       # CI=true makes playwright.config.ts serve the production build via
       # `npm run start` instead of the dev server — see the comment there.
       - run: npm run build
-      - run: npx playwright test
+      # xvfb-run supplies the virtual display that Firefox needs to run headed,
+      # which is the only way it gets a WebGL2 context on a GPU-less runner.
+      # Chromium ignores it and stays headless with SwiftShader.
+      - run: xvfb-run -a npx playwright test
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

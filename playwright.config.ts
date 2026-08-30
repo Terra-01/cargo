@@ -43,6 +43,15 @@ export default defineConfig({
       use: {
         ...devices['Desktop Firefox'],
         viewport: { width: 1280, height: 800 },
+        // Headless Firefox supports no WebGL whatsoever — not a blocklist we
+        // can override with a pref, simply unimplemented (Mozilla bug 1375585).
+        // Without a real display every Shader Gradient Lab spec fails, because
+        // the tool renders its error state instead of the canvas. So on CI,
+        // where there is no GPU, Firefox runs HEADED against the Xvfb display
+        // the workflow provides; llvmpipe then gives it a software WebGL2
+        // context. Locally, headless Firefox has a real GPU behind it and works
+        // fine, so it stays headless for speed.
+        headless: !process.env.CI,
         // Playwright-Firefox does not grant clipboard by default AND it
         // rejects the Chromium-only `clipboard-read`/`clipboard-write`
         // permission names ("Unknown permission"). Firefox clipboard in
