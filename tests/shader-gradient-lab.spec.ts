@@ -335,8 +335,20 @@ test.describe('Shader Gradient Lab tool', () => {
     const btn = page.getByTestId('sg-copy-snippet');
     await expect(btn).toHaveText('Copy Snippet');
     await btn.click();
-    await expect(btn).toHaveText('Copied!');
-    await expect(btn).toHaveAttribute('data-copied', 'true');
+
+    // The label and the attribute both flip off the same state and reset
+    // together after 1600ms (BottomToolbar.tsx). Asserting them one after the
+    // other lets a slow runner spend most of that window on the first
+    // assertion and then read the already-reset value in the second — which is
+    // exactly how this failed on CI. Read both in a single evaluation so there
+    // is no window between them to straddle.
+    await expect
+      .poll(() =>
+        btn.evaluate(
+          (el) => `${el.textContent?.trim()}|${el.getAttribute('data-copied')}`
+        )
+      )
+      .toBe('Copied!|true');
   });
 
   test('embeddable snippet is guest-safe and renders in a host page', async ({ page }, testInfo) => {
