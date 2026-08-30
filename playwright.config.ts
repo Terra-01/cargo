@@ -53,6 +53,16 @@ export default defineConfig({
             'dom.events.asyncClipboard.clipboardItem': true,
             'dom.events.asyncClipboard.readText': true,
             'dom.events.testing.asyncClipboard': true,
+            // Headless Firefox on a GPU-less CI runner refuses a WebGL2
+            // context, which makes Shader Gradient Lab render its error state
+            // instead of the canvas and fails every spec in that file. These
+            // two prefs are the Firefox equivalent of Chromium's swiftshader
+            // flags: the first bypasses the graphics blocklist, the second
+            // stops Firefox rejecting the context merely because the renderer
+            // is software. Keep them — the Firefox project exists precisely to
+            // catch WebGL and GLSL precision bugs Chromium misses.
+            'webgl.force-enabled': true,
+            'webgl.disable-fail-if-major-performance-caveat': true,
           },
         },
       },

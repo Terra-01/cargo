@@ -11,6 +11,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Nothing here writes to the repository. Without this block GITHUB_TOKEN
+# inherits the repository default, which on a public repo is broader than
+# these jobs need.
+permissions:
+  contents: read
+
 jobs:
   check:
     name: Typecheck, lint, build
