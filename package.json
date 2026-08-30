@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "A workshop of small, free, single-purpose tools for designers and vibe coders.",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "author": "Terra-01",
   "homepage": "https://github.com/Terra-01/cargo#readme",
   "repository": {
@@ -32,7 +32,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "playwright test",
-    "thumbnails": "npx tsx scripts/generate-look-thumbnails.ts"
+    "thumbnails": "tsx scripts/generate-look-thumbnails.ts"
   },
   "dependencies": {
     "next": "16.2.6",
@@ -42,6 +42,8 @@
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@types/node": "^20",
+    "playwright": "^1.60.0",
+    "tsx": "^4.23.13",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

@@ -41,7 +41,7 @@ export const tools: Tool[] = [
     number: '02',
     category: 'learning_tools',
     title: 'Text Animation Library',
-    description: '146 hand-crafted CSS text animations. Hover, copy, or pick several to bundle as one snippet.',
+    description: '146 curated CSS and JS text animations. Hover, copy, or pick several to bundle as one snippet.',
     tags: ['css', 'animation', 'motion'],
     href: '/tools/text-animations',
     status: 'shipped',

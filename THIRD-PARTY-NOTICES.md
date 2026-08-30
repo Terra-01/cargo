@@ -75,9 +75,16 @@ byte-faithful to upstream.
 
 ## Fonts
 
-No font binaries are stored in this repository. All three faces are fetched at
-build time by `next/font/google` (see `src/app/layout.tsx`) and served from
-Cargo's own origin, so there is no third-party request at runtime.
+No font binaries ship in the current tree or in the built site. All three faces
+are fetched at build time by `next/font/google` (see `src/app/layout.tsx`) and
+served from Cargo's own origin, so there is no third-party request at runtime.
+
+Git history is the exception, and it is deliberate. The three General Sans
+`.woff2` files described below were removed from the working tree in
+`f027de2`, but that commit removes them from the tip, not from history — the
+blobs remain reachable in earlier commits. That history is being kept rather
+than rewritten, so this section describes the shipped artefact, not every
+object in the repository.
 
 | Face | Role | Designer | Licence |
 |---|---|---|---|
@@ -90,9 +97,9 @@ Indian Type Foundry) and committed the `.woff2` files. The ITF Free Font License
 permits free personal and commercial *use*, but clause 02 forbids the fonts
 being "distributed, duplicated, loaned, resold or licensed in any way …
 including … uploading them in a public server". A public Git repository is
-exactly that, so the files were removed rather than published. General Sans
-remains a fine choice for a private project — download it from Fontshare
-directly.
+exactly that, so the files were removed from the shipped tree and the built
+site. They remain in git history, as noted above. General Sans remains a fine
+choice for a private project — download it from Fontshare directly.
 
 The Moodboard Library still *recommends* General Sans as part of a type pairing.
 Naming a font as a suggestion is not distributing it, and Cargo does not load it.

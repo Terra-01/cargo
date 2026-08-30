@@ -13,7 +13,7 @@ Ten single-purpose tools:
 | # | Tool | What it does |
 |---|---|---|
 | 01 | **Shader Gradient Lab** | WebGL2 gradient generator — a faithful Neat port plus curated Shadertoy shaders. Tweak waves, colour, flow and grain live; export PNG, standalone HTML, or an embed. |
-| 02 | **Text Animation Library** | 146 hand-crafted CSS and JS text animations. Hover to preview, copy one, or pick several and bundle them into a single snippet. |
+| 02 | **Text Animation Library** | 146 curated CSS and JS text animations. Hover to preview, copy one, or pick several and bundle them into a single snippet. See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) for what is derived and from where. |
 | 03 | **Moodboard Library** | Hand-curated vibes with palette, fonts and texture suggestions. From dusty Tokyo sunset to 90s Memphis. |
 | 04 | **Loading States Gallery** | Skeleton loaders, spinners and empty states with copy-pasteable code. |
 | 05 | **The Spec Pressure-Test** | Learn to spot the gaps in a feature spec before an AI coding agent fills them in wrongly. |
