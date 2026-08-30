@@ -133,11 +133,11 @@ Each tool route has the convention `tools/<tool>/page.tsx` (server entry) + `too
 > next build --webpack
 
 ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
- We detected multiple lockfiles and selected the directory of /Users/terra/Developer/cargo/package-lock.json as the root directory.
+ We detected multiple lockfiles and selected the directory of <repo>/package-lock.json as the root directory.
  To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
    See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
  Detected additional lockfiles:
-   * /Users/terra/Developer/cargo/.claude/worktrees/interesting-hypatia-f808cf/package-lock.json
+   * <worktree>/package-lock.json
 
 ▲ Next.js 16.2.6 (webpack)
 
@@ -570,7 +570,7 @@ Vertical flex column with `--space-5` gap. Top section is `.builder__form panel`
 
 ## 9. Known issues + technical debt
 
-**1. Multiple-lockfile workspace warning.** Build/test output begins with a Next.js warning that two `package-lock.json` files exist (one at `/Users/terra/Developer/cargo/package-lock.json` from the parent checkout, one inside this worktree). Next infers the parent as the workspace root, which is wrong. Suggested fix: either remove the stale parent lockfile or set `outputFileTracingRoot` in `next.config.ts` — but this is a worktree-environment artifact rather than a repo-level bug. Worth confirming with the parent checkout before deciding.
+**1. Multiple-lockfile workspace warning.** Build/test output begins with a Next.js warning that two `package-lock.json` files exist (one at `<repo>/package-lock.json` from the parent checkout, one inside this worktree). Next infers the parent as the workspace root, which is wrong. Suggested fix: either remove the stale parent lockfile or set `outputFileTracingRoot` in `next.config.ts` — but this is a worktree-environment artifact rather than a repo-level bug. Worth confirming with the parent checkout before deciding.
 
 **2. Flaky "back link returns to the hub" tests.** Two of 14 instances (`loading-states.spec.ts:85` and `mockup-wrapper.spec.ts:97`, both `chromium-light`) timed out in the first full run; both passed on retries 2 and 3. The brief named `moodboard-library` as the suspected flake, but in this audit `moodboard-library` passed and a different pair failed — confirming this is a **generic** flake across all `back link returns to the hub` tests, not tool-specific. Failure logs show the page re-navigating to the tool URL four times during the 60s window, which suggests the dev-server's hot-reload occasionally intercepts the click. Worth fixing in v2 by either (a) waiting for `networkidle` before clicking, (b) building with `npm run build && npm start` for tests to skip dev HMR, or (c) adding a retry budget in `playwright.config.ts`.
 

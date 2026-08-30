@@ -16,7 +16,9 @@ Read sections 1–3 before touching any phase. Sections 4–6 are the phases the
 
 ## 1. What Cargo is
 
-Cargo is a workshop of small, single-purpose web tools for designers and "vibe coders", free, no accounts, no tracking. It is a side project, built incrementally. The reset is complete: nine tools are shipped, none are planned or coming-soon, and the project is in its finished, cleaned-up state.
+Cargo is a workshop of small, single-purpose web tools for designers and design engineers, free, no accounts, no tracking. It is a side project, built incrementally. The reset is complete: none are planned or coming-soon, and the project is in its finished, cleaned-up state.
+
+> **Count note.** This document was written when nine tools were shipped. Ten ship today — the UI Pattern Library landed afterwards. `src/lib/tools.ts` is the registry and the single source of truth; where this file gives a number, trust the registry instead.
 
 **Stack:** Next.js 16 (App Router, webpack — not Turbopack), TypeScript, plain CSS with design tokens (no Tailwind, no CSS-in-JS), Playwright for tests.
 
@@ -225,7 +227,7 @@ This is closest in spirit to a content tool — like a well-written reference pa
 - Mockup Wrapper v2 — ~1–2 milestones (frames, possibly export separately).
 - UI Pattern Dictionary — ~2–3 milestones (a content plan, then tool + initial content, then full content) plus the scoping/content-design step.
 
-**Current completion point reached.** The reset is complete: Cargo has nine tools, all shipped, the registry's `coming_soon` is gone, and the closing tech-debt cleanup is done. The Component Prompt Builder was cut along the way, so the count is nine rather than ten. The one optional piece of future work still on the table is Mockup Wrapper v2. Anything beyond that is a fresh planning conversation.
+**Current completion point reached.** The reset is complete: every tool in the registry is shipped, the registry's `coming_soon` is gone, and the closing tech-debt cleanup is done. The Component Prompt Builder was cut along the way. (This paragraph counted nine at the time of writing; the UI Pattern Library shipped afterwards, bringing the registry to ten.) The one optional piece of future work still on the table is Mockup Wrapper v2. Anything beyond that is a fresh planning conversation.
 
 **A reminder carried from section 2:** every milestone prompt is self-contained, opens with the standing rules, and is written for a builder starting cold. Embedded data gets verified before it goes in. The house style is matched, never reinvented. And the project moves one Saturday at a time — milestones should be sized so one is a satisfying, shippable unit of work, not a sprawling one.
 
