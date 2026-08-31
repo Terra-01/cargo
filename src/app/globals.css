@@ -1,30 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap');
-
-/* General Sans — self-hosted (Fontshare, ITF Free Font License). Replaces the
-   former api.fontshare.com @import: removes a render-blocking third-party
-   request and the Firefox cross-site-cookie console error it caused. Weights
-   400/500/600 are the ones the project uses (see --font-sans below). */
-@font-face {
-  font-family: 'General Sans';
-  src: url('/fonts/general-sans/general-sans-400.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'General Sans';
-  src: url('/fonts/general-sans/general-sans-500.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'General Sans';
-  src: url('/fonts/general-sans/general-sans-600.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
+/* Fonts are loaded by next/font/google in src/app/layout.tsx, which fetches
+   them at build time and serves them from our own origin. That replaced both a
+   render-blocking Google Fonts @import (a third-party request on every page,
+   which contradicted the site's "nothing tracked" promise) and the self-hosted
+   General Sans, whose licence forbids redistribution in a public repo. The
+   loaders expose --font-*-loaded; the tokens below add the fallback stacks. */
 
 /* ============================================================
    Breakpoint system — the canonical set. Use these, not ad hoc values.
@@ -38,10 +17,10 @@
    ============================================================ */
 
 :root {
-  /* Type stacks */
-  --font-sans: 'General Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* Type stacks — the --font-*-loaded variables come from next/font/google. */
+  --font-sans: var(--font-sans-loaded), -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  --font-serif: var(--font-serif-loaded), Georgia, 'Times New Roman', serif;
+  --font-mono: var(--font-mono-loaded), ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* Type scale */
   --text-xs:   11px;
@@ -167,6 +146,51 @@ body {
 
 a { color: inherit; text-decoration: none; }
 ::selection { background: var(--accent); color: white; }
+
+/* Inline link inside prose. The global `a` reset strips underlines, which is
+   right for nav and cards but wrong mid-sentence — an underline is the only
+   non-colour cue that this is a link. */
+.about__link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  border-radius: 2px;
+}
+.about__link:hover { color: var(--accent-hover); }
+.about__link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Skip link — visually hidden until it takes keyboard focus, which makes it the
+   first tab stop on every page and lets a keyboard user jump the topbar. */
+.skip-link {
+  position: absolute;
+  left: var(--space-4);
+  top: var(--space-4);
+  z-index: 100;
+  transform: translateY(calc(-100% - var(--space-6)));
+  padding: 10px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: transform var(--t-fast) var(--ease);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+@media (prefers-reduced-motion: reduce) {
+  .skip-link { transition: none; }
+}
 
 /* Layout */
 .container {
@@ -479,6 +503,14 @@ a { color: inherit; text-decoration: none; }
 }
 .btn:hover { border-color: var(--text); }
 .btn:active { transform: translateY(1px); }
+/* Matches the ring used by inputs, cards and the picker tray, so keyboard
+   focus looks the same everywhere. Not an `outline: none` reset — the UA
+   outline is replaced, not removed. */
+.btn:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
 .btn--primary {
   background: var(--text);
   color: var(--bg);
@@ -588,6 +620,18 @@ a { color: inherit; text-decoration: none; }
   border-radius: 50%;
   cursor: pointer;
   border: 2px solid var(--bg);
+}
+/* The element-level `outline: none` above is needed because the 44px touch
+   target is much taller than the visible 2px track, so a default outline draws
+   a large box around empty space. Put the focus ring on the thumb instead —
+   without this a keyboard user cannot see which slider they are on. */
+.slider:focus-visible::-webkit-slider-thumb {
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--border-strong), 0 0 0 4px var(--accent-soft);
+}
+.slider:focus-visible::-moz-range-thumb {
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--border-strong), 0 0 0 4px var(--accent-soft);
 }
 
 /* Panel */
@@ -722,7 +766,10 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: -0.035em;
   line-height: 1.02;
   margin-bottom: var(--space-6);
-  max-width: 22ch;
+  /* 20ch, not 22: Manrope's ch is wider than the previous face's, so 22 set a
+     measure ~78px longer than intended. 20ch is ~701px, within 8px of what
+     22ch rendered before the font change. */
+  max-width: 20ch;
 }
 .hero__title em {
   font-family: var(--font-serif);
@@ -730,6 +777,14 @@ a { color: inherit; text-decoration: none; }
   font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--accent);
+  /* The italic phrase is the one editorial moment on this page, and it only
+     works whole. Left to itself it splits across lines whenever the font
+     metrics or the viewport happen to land badly — it did on desktop after the
+     font change, and it still did at mobile where the viewport, not the
+     measure, is the constraint. Keeping it unbreakable makes the composition
+     independent of both. It is 168px at the 40px mobile size, so it fits well
+     inside even a 320px viewport. */
+  white-space: nowrap;
 }
 .hero__lead {
   font-size: var(--text-lg);
@@ -802,9 +857,14 @@ a { color: inherit; text-decoration: none; }
    in on load and carries no information. Under reduced-motion it is shown
    immediately in its final state. Tool demonstration motion (loaders, text
    animations, the easing dot, live CSS effects) is deliberately not touched
-   here, that motion is the point of those tools. */
+   here, that motion is the point of those tools — but it is no longer started
+   *unrequested*: see `usePrefersReducedMotion` in src/lib/use-reduced-motion.ts,
+   which stops the auto-play-on-scroll catalogues from running until the visitor
+   asks. Chrome polish below is decorative and is dropped outright. */
 @media (prefers-reduced-motion: reduce) {
   .hero > * { animation: none; }
+  .tool-card, .btn, .theme-toggle { transition: none; }
+  .btn:active { transform: none; }
 }
 
 /* Responsive — migrated onto the canonical mobile band (was max-width: 720px).

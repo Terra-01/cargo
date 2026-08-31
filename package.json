@@ -2,13 +2,37 @@
   "name": "cargo",
   "version": "0.1.0",
   "private": true,
+  "description": "A workshop of small, free, single-purpose tools for designers and vibe coders.",
+  "license": "SEE LICENSE IN LICENSE",
+  "author": "Terra-01",
+  "homepage": "https://github.com/Terra-01/cargo#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Terra-01/cargo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Terra-01/cargo/issues"
+  },
+  "keywords": [
+    "design-tools",
+    "css",
+    "webgl",
+    "shaders",
+    "typography",
+    "animation",
+    "nextjs"
+  ],
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "test": "playwright test",
-    "thumbnails": "npx tsx scripts/generate-look-thumbnails.ts"
+    "thumbnails": "tsx scripts/generate-look-thumbnails.ts"
   },
   "dependencies": {
     "next": "16.2.6",
@@ -18,6 +42,8 @@
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@types/node": "^20",
+    "playwright": "^1.60.0",
+    "tsx": "^4.23.13",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

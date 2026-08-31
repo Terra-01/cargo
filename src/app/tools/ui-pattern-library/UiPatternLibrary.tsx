@@ -69,7 +69,7 @@ export function UiPatternLibrary() {
           color: var(--text);
           transition: border-color var(--t-fast) var(--ease);
         }
-        .upl-search input:focus { outline: none; border-color: var(--accent); }
+        .upl-search input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
         .upl-result-count {
           font-family: var(--font-mono);
           font-size: var(--text-xs);

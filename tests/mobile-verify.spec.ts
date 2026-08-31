@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { TOUCH_FLOOR_MIN } from './helpers/touch-target';
 
 // Phase-2 final verify milestone: the six surfaces the mobile audit
 // classified "Fine" and no fix milestone touched. Re-checked here against
@@ -49,7 +50,7 @@ const floorScan = `(() => {
       const name = ((el.getAttribute('data-testid') || el.className || el.tagName) + '').slice(0, 40);
       if (h < minH) { minH = h; worstH = name; }
       if (w < minW) { minW = w; worstW = name; }
-      if (h < 44 || w < 44) sub.push(name + ' ' + Math.round(w) + 'x' + Math.round(h));
+      if (h < ${TOUCH_FLOOR_MIN} || w < ${TOUCH_FLOOR_MIN}) sub.push(name + ' ' + Math.round(w) + 'x' + Math.round(h));
     });
   return {
     pageOver: de.scrollWidth - de.clientWidth,
@@ -85,11 +86,11 @@ test.describe('Mobile verify — the six audit-Fine surfaces', () => {
       expect(
         r.minH,
         `${id} min control height (${r.worstH}); sub-44: ${r.sub.join(', ')}`
-      ).toBeGreaterThanOrEqual(44);
+      ).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
       expect(
         r.minW,
         `${id} min control width (${r.worstW}); sub-44: ${r.sub.join(', ')}`
-      ).toBeGreaterThanOrEqual(44);
+      ).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     });
 
     test(`${id} holds at tablet (768)`, async ({ page }) => {

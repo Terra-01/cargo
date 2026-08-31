@@ -13,7 +13,7 @@ export default function UiPatternLibraryPage() {
   const tool = tools.find((t) => t.id === 'ui-pattern-library')!;
 
   return (
-    <main className="container">
+    <main id="main" className="container">
       <div className="tool-page">
         <Link href="/" className="tool-page__back">back to the workshop</Link>
         <header className="tool-page__header">

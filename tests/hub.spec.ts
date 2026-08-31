@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
+import { TOUCH_FLOOR_MIN } from './helpers/touch-target';
 
 test.describe('Hub page foundation', () => {
   test('renders without console errors', async ({ page }) => {
@@ -237,8 +238,8 @@ test.describe('Topbar mobile navigation', () => {
     await page.goto('/');
     const box = await page.getByTestId('topbar-menu-button').boundingBox();
     expect(box).not.toBeNull();
-    expect(box!.width).toBeGreaterThanOrEqual(44);
-    expect(box!.height).toBeGreaterThanOrEqual(44);
+    expect(box!.width).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
+    expect(box!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 
   test('opens the menu with the three links, each a 44px+ tap target', async ({ page }) => {
@@ -254,7 +255,7 @@ test.describe('Topbar mobile navigation', () => {
     await expect(links.filter({ hasText: 'Notes' })).toBeVisible();
     await expect(links.filter({ hasText: 'About' })).toBeVisible();
     const first = await links.first().boundingBox();
-    expect(first!.height).toBeGreaterThanOrEqual(44);
+    expect(first!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 
   test('a menu link navigates and closes the menu', async ({ page }) => {
@@ -286,8 +287,8 @@ test.describe('Topbar mobile navigation', () => {
     await page.goto('/');
     const brand = await page.locator('.topbar__brand').boundingBox();
     const toggle = await page.getByTestId('theme-toggle').boundingBox();
-    expect(brand!.height).toBeGreaterThanOrEqual(44);
-    expect(toggle!.height).toBeGreaterThanOrEqual(44);
-    expect(toggle!.width).toBeGreaterThanOrEqual(44);
+    expect(brand!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
+    expect(toggle!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
+    expect(toggle!.width).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 });

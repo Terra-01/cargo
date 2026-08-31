@@ -1,0 +1,46 @@
+name: Idea or improvement
+description: A new tool, a new catalogue entry, or a change to an existing tool
+labels: ["idea"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cargo moves one Saturday at a time, and a new tool is a real commitment.
+        Ideas are genuinely welcome — just expect a slow, considered answer.
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of idea?
+      options:
+        - A new entry in an existing catalogue (animation, loader, easing, moodboard, pattern)
+        - An improvement to an existing tool
+        - A whole new tool
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What it is, and what it would let someone do.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is this worth building?
+      description: >
+        Who needs it, and what do they do today instead? Cargo tools are
+        single-purpose — the sharper the need, the better the fit.
+    validations:
+      required: true
+
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Prior art
+      description: >
+        Links to anything similar. If the idea is derived from someone else's
+        work, say so here — attribution matters in this project.

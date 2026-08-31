@@ -49,7 +49,7 @@ export interface TextAnimation {
 
 export const textAnimations: TextAnimation[] = [
 {
-  id: "kw-fade-in",
+  id: "ta-fade-in",
   name: "Fade In",
   category: "stagger",
   keyframes: "from { opacity: 0; } to { opacity: 1; }",
@@ -60,7 +60,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1150,
 },
 {
-  id: "kw-slide-up",
+  id: "ta-slide-up",
   name: "Slide Up",
   category: "stagger",
   keyframes: "from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; }",
@@ -71,7 +71,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 900,
 },
 {
-  id: "kw-scale-in",
+  id: "ta-scale-in",
   name: "Scale In",
   category: "stagger",
   keyframes: "from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; }",
@@ -82,7 +82,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 900,
 },
 {
-  id: "kw-blur-in",
+  id: "ta-blur-in",
   name: "Blur In",
   category: "stagger",
   keyframes: "from { filter: blur(12px); opacity: 0; transform: scale(1.1); } to { filter: blur(0); opacity: 1; transform: scale(1); }",
@@ -93,7 +93,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1150,
 },
 {
-  id: "kw-glow-in",
+  id: "ta-glow-in",
   name: "Glow In",
   category: "stagger",
   keyframes: "0% { opacity: 0; text-shadow: 0 0 0px rgba(255,255,255,0); } 50% { opacity: 1; text-shadow: 0 0 20px rgba(255,255,255,1); } 100% { opacity: 1; text-shadow: 0 0 0px rgba(255,255,255,0); }",
@@ -104,7 +104,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1350,
 },
 {
-  id: "kw-bounce",
+  id: "ta-bounce",
   name: "Bounce",
   category: "stagger",
   keyframes: "0% { transform: translateY(-50px); opacity: 0; animation-timing-function: cubic-bezier(0.8, 0, 1, 1); } 50% { transform: translateY(15px); opacity: 1; animation-timing-function: cubic-bezier(0, 0, 0.2, 1); } 75% { transform: translateY(-5px); opacity: 1; animation-timing-function: cubic-bezier(0.8, 0, 1, 1); } 100% { transform: translateY(0); opacity: 1; }",
@@ -115,7 +115,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1080,
 },
 {
-  id: "kw-flip-in",
+  id: "ta-flip-in",
   name: "Flip In",
   category: "stagger",
   keyframes: "from { transform: perspective(400px) rotateX(-90deg); opacity: 0; transform-origin: bottom; } to { transform: perspective(400px) rotateX(0deg); opacity: 1; transform-origin: bottom; }",
@@ -126,7 +126,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 950,
 },
 {
-  id: "kw-rotate-in",
+  id: "ta-rotate-in",
   name: "Rotate In",
   category: "stagger",
   keyframes: "from { transform: rotate(-180deg) scale(0); opacity: 0; } to { transform: rotate(0) scale(1); opacity: 1; }",
@@ -137,7 +137,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 950,
 },
 {
-  id: "kw-slide-down",
+  id: "ta-slide-down",
   name: "Slide Down",
   category: "stagger",
   keyframes: "from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; }",
@@ -148,7 +148,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1000,
 },
 {
-  id: "kw-slide-left",
+  id: "ta-slide-left",
   name: "Slide Left",
   category: "stagger",
   keyframes: "from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; }",
@@ -159,7 +159,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1000,
 },
 {
-  id: "kw-slide-right",
+  id: "ta-slide-right",
   name: "Slide Right",
   category: "stagger",
   keyframes: "from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; }",
@@ -170,7 +170,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1050,
 },
 {
-  id: "kw-drop-in",
+  id: "ta-drop-in",
   name: "Drop In",
   category: "stagger",
   keyframes: "0% { transform: translateY(-200%); opacity: 0; } 60% { transform: translateY(20%); opacity: 1; } 80% { transform: translateY(-10%); opacity: 1; } 100% { transform: translateY(0); opacity: 1; }",
@@ -181,7 +181,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1020,
 },
 {
-  id: "kw-swing",
+  id: "ta-swing",
   name: "Swing",
   category: "decorative",
   keyframes: "0% { opacity: 0; transform: rotate(15deg); } 20% { opacity: 1; transform: rotate(15deg); } 40% { transform: rotate(-10deg); opacity: 1; } 60% { transform: rotate(5deg); opacity: 1; } 80% { transform: rotate(-5deg); opacity: 1; } 100% { transform: rotate(0deg); opacity: 1; }",
@@ -192,7 +192,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1050,
 },
 {
-  id: "kw-pulse",
+  id: "ta-pulse",
   name: "Pulse",
   category: "loop",
   keyframes: "0% { transform: scale(1); opacity: 0; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 1; }",
@@ -203,7 +203,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 750,
 },
 {
-  id: "kw-flash",
+  id: "ta-flash",
   name: "Flash",
   category: "loop",
   keyframes: "0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; }",
@@ -214,7 +214,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1250,
 },
 {
-  id: "kw-shake-x",
+  id: "ta-shake-x",
   name: "Shake X",
   category: "decorative",
   keyframes: "0%, 100% { transform: translateX(0); opacity: 0; } 10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); opacity: 1; } 20%, 40%, 60%, 80% { transform: translateX(10px); opacity: 1; }",
@@ -225,7 +225,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1150,
 },
 {
-  id: "kw-shake-y",
+  id: "ta-shake-y",
   name: "Shake Y",
   category: "decorative",
   keyframes: "0%, 100% { transform: translateY(0); opacity: 0; } 10%, 30%, 50%, 70%, 90% { transform: translateY(-10px); opacity: 1; } 20%, 40%, 60%, 80% { transform: translateY(10px); opacity: 1; }",
@@ -236,7 +236,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1150,
 },
 {
-  id: "kw-tada",
+  id: "ta-tada",
   name: "Tada",
   category: "decorative",
   keyframes: "0% { transform: scale(1); opacity: 0; } 10%, 20% { transform: scale(0.9) rotate(-3deg); opacity: 1; } 30%, 50%, 70%, 90% { transform: scale(1.1) rotate(3deg); opacity: 1; } 40%, 60%, 80% { transform: scale(1.1) rotate(-3deg); opacity: 1; } 100% { transform: scale(1) rotate(0); opacity: 1; }",
@@ -247,7 +247,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1000,
 },
 {
-  id: "kw-jello",
+  id: "ta-jello",
   name: "Jello",
   category: "decorative",
   keyframes: "0% { transform: translate(0); opacity: 0; } 11.1% { transform: skewX(-12.5deg) skewY(-12.5deg); opacity: 1; } 22.2% { transform: skewX(6.25deg) skewY(6.25deg); opacity: 1; } 33.3% { transform: skewX(-3.125deg) skewY(-3.125deg); opacity: 1; } 44.4% { transform: skewX(1.5625deg) skewY(1.5625deg); opacity: 1; } 55.5% { transform: skewX(-0.78125deg) skewY(-0.78125deg); opacity: 1; } 66.6% { transform: skewX(0.390625deg) skewY(0.390625deg); opacity: 1; } 77.7% { transform: skewX(-0.1953125deg) skewY(-0.1953125deg); opacity: 1; } 100% { transform: translate(0); opacity: 1; }",
@@ -258,7 +258,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1050,
 },
 {
-  id: "kw-rubber-band",
+  id: "ta-rubber-band-chars",
   name: "Rubber Band",
   category: "decorative",
   keyframes: "0% { transform: scale(1); opacity: 0; } 30% { transform: scaleX(1.25) scaleY(0.75); opacity: 1; } 40% { transform: scaleX(0.75) scaleY(1.25); opacity: 1; } 50% { transform: scaleX(1.15) scaleY(0.85); opacity: 1; } 65% { transform: scaleX(0.95) scaleY(1.05); opacity: 1; } 75% { transform: scaleX(1.05) scaleY(0.95); opacity: 1; } 100% { transform: scale(1); opacity: 1; }",
@@ -269,7 +269,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1350,
 },
 {
-  id: "kw-wave",
+  id: "ta-wave",
   name: "Wave",
   category: "loop",
   keyframes: "0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(-15px); opacity: 1; }",
@@ -280,7 +280,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 920,
 },
 {
-  id: "kw-stretch",
+  id: "ta-stretch",
   name: "Stretch",
   category: "stagger",
   keyframes: "0% { transform: scaleX(1); opacity: 0; } 50% { transform: scaleX(1.5); opacity: 1; } 100% { transform: scaleX(1); opacity: 1; }",
@@ -291,7 +291,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 850,
 },
 {
-  id: "kw-squeeze",
+  id: "ta-squeeze",
   name: "Squeeze",
   category: "stagger",
   keyframes: "0% { transform: scaleY(1); opacity: 0; } 50% { transform: scaleY(0.5); opacity: 1; } 100% { transform: scaleY(1); opacity: 1; }",
@@ -302,7 +302,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 850,
 },
 {
-  id: "kw-color-shift",
+  id: "ta-color-shift",
   name: "Color Shift",
   category: "loop",
   keyframes: "0% { color: #ffffff; opacity: 0; } 33% { color: #ff0055; opacity: 1; } 66% { color: #00ccff; opacity: 1; } 100% { color: #ffffff; opacity: 1; }",
@@ -313,7 +313,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1550,
 },
 {
-  id: "kw-zoom-in",
+  id: "ta-zoom-in-chars",
   name: "Zoom In",
   category: "stagger",
   keyframes: "0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; }",
@@ -324,7 +324,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 850,
 },
 {
-  id: "kw-zoom-out",
+  id: "ta-zoom-out",
   name: "Zoom Out",
   category: "stagger",
   keyframes: "0% { transform: scale(2); opacity: 0; } 100% { transform: scale(1); opacity: 1; }",
@@ -335,7 +335,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 900,
 },
 {
-  id: "kw-roll-in",
+  id: "ta-roll-in",
   name: "Roll In",
   category: "stagger",
   keyframes: "0% { transform: translateX(-100%) rotate(-120deg); opacity: 0; } 100% { transform: translateX(0) rotate(0); opacity: 1; }",
@@ -346,7 +346,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 950,
 },
 {
-  id: "kw-glitch",
+  id: "ta-glitch",
   name: "Glitch",
   category: "loop",
   keyframes: "0% { transform: translate(0); opacity: 0; } 10% { transform: translate(-2px, 2px); opacity: 1; } 20% { transform: translate(-2px, -2px); opacity: 1; } 30% { transform: translate(2px, 2px); opacity: 1; } 40% { transform: translate(2px, -2px); opacity: 1; } 50% { transform: translate(-2px, 2px); opacity: 1; } 60% { transform: translate(-2px, -2px); opacity: 1; } 70% { transform: translate(2px, 2px); opacity: 1; } 80% { transform: translate(2px, -2px); opacity: 1; } 90% { transform: translate(-2px, 2px); opacity: 1; } 100% { transform: translate(0); opacity: 1; }",
@@ -357,7 +357,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1000,
 },
 {
-  id: "kw-focus-in",
+  id: "ta-focus-in-chars",
   name: "Focus In",
   category: "stagger",
   keyframes: "0% { filter: blur(12px); transform: scale(1.5); opacity: 0; } 100% { filter: blur(0); transform: scale(1); opacity: 1; }",
@@ -368,7 +368,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1200,
 },
 {
-  id: "kw-fall-down",
+  id: "ta-fall-down",
   name: "Fall Down",
   category: "stagger",
   keyframes: "0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; }",
@@ -379,7 +379,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 950,
 },
 {
-  id: "kw-rise-up",
+  id: "ta-rise-up",
   name: "Rise Up",
   category: "stagger",
   keyframes: "0% { transform: translateY(50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; }",
@@ -390,7 +390,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 850,
 },
 {
-  id: "kw-pop-in",
+  id: "ta-pop-in",
   name: "Pop In",
   category: "stagger",
   keyframes: "0% { transform: scale(0.5); opacity: 0; } 80% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 1; }",
@@ -401,7 +401,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 800,
 },
 {
-  id: "kw-slit-in-vertical",
+  id: "ta-slit-in-vertical",
   name: "Slit In Vertical",
   category: "stagger",
   keyframes: "0% { transform: scaleY(0); opacity: 0; } 100% { transform: scaleY(1); opacity: 1; }",
@@ -412,7 +412,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1300,
 },
 {
-  id: "kw-slit-in-horizontal",
+  id: "ta-slit-in-horizontal",
   name: "Slit In Horizontal",
   category: "stagger",
   keyframes: "0% { transform: scaleX(0); opacity: 0; } 100% { transform: scaleX(1); opacity: 1; }",
@@ -423,7 +423,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1400,
 },
 {
-  id: "kw-roll-in-top",
+  id: "ta-roll-in-top",
   name: "Roll In Top",
   category: "stagger",
   keyframes: "0% { transform: translateY(-50px) rotate(-120deg); opacity: 0; } 100% { transform: translateY(0) rotate(0); opacity: 1; }",
@@ -434,7 +434,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1150,
 },
 {
-  id: "kw-roll-in-bottom",
+  id: "ta-roll-in-bottom",
   name: "Roll In Bottom",
   category: "stagger",
   keyframes: "0% { transform: translateY(50px) rotate(120deg); opacity: 0; } 100% { transform: translateY(0) rotate(0); opacity: 1; }",
@@ -445,7 +445,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1300,
 },
 {
-  id: "kw-bounce-in-left",
+  id: "ta-bounce-in-left",
   name: "Bounce In Left",
   category: "stagger",
   keyframes: "0% { transform: translateX(-50px); opacity: 0; } 60% { transform: translateX(10px); opacity: 1; } 80% { transform: translateX(-5px); opacity: 1; } 100% { transform: translateX(0); opacity: 1; }",
@@ -456,7 +456,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1300,
 },
 {
-  id: "kw-bounce-in-right",
+  id: "ta-bounce-in-right",
   name: "Bounce In Right",
   category: "stagger",
   keyframes: "0% { transform: translateX(50px); opacity: 0; } 60% { transform: translateX(-10px); opacity: 1; } 80% { transform: translateX(5px); opacity: 1; } 100% { transform: translateX(0); opacity: 1; }",
@@ -467,7 +467,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1350,
 },
 {
-  id: "kw-rotate-in-y",
+  id: "ta-rotate-in-y",
   name: "Rotate In Y",
   category: "specialty",
   keyframes: "0% { transform: perspective(400px) rotateY(90deg); opacity: 0; } 100% { transform: perspective(400px) rotateY(0deg); opacity: 1; }",
@@ -479,7 +479,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1150,
 },
 {
-  id: "kw-rotate-in-x",
+  id: "ta-rotate-in-x",
   name: "Rotate In X",
   category: "specialty",
   keyframes: "0% { transform: perspective(400px) rotateX(90deg); opacity: 0; } 100% { transform: perspective(400px) rotateX(0deg); opacity: 1; }",
@@ -491,7 +491,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1150,
 },
 {
-  id: "kw-flicker",
+  id: "ta-flicker",
   name: "Flicker",
   category: "loop",
   keyframes: "0%, 2%, 4%, 8%, 12%, 16%, 20% { opacity: 0; } 1%, 3%, 5%, 9%, 13%, 17%, 21%, 100% { opacity: 1; }",
@@ -502,7 +502,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1550,
 },
 {
-  id: "kw-blur-in-right",
+  id: "ta-blur-in-right",
   name: "Blur In Right",
   category: "stagger",
   keyframes: "0% { transform: translateX(50px); filter: blur(10px); opacity: 0; } 100% { transform: translateX(0); filter: blur(0); opacity: 1; }",
@@ -513,7 +513,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1250,
 },
 {
-  id: "kw-blur-in-left",
+  id: "ta-blur-in-left",
   name: "Blur In Left",
   category: "stagger",
   keyframes: "0% { transform: translateX(-50px); filter: blur(10px); opacity: 0; } 100% { transform: translateX(0); filter: blur(0); opacity: 1; }",
@@ -524,7 +524,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1200,
 },
 {
-  id: "kw-fly-in-up",
+  id: "ta-fly-in-up",
   name: "Fly In Up",
   category: "stagger",
   keyframes: "0% { transform: translateY(200px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; }",
@@ -535,7 +535,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1070,
 },
 {
-  id: "kw-fly-in-down",
+  id: "ta-fly-in-down",
   name: "Fly In Down",
   category: "stagger",
   keyframes: "0% { transform: translateY(-200px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; }",
@@ -546,7 +546,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1130,
 },
 {
-  id: "kw-wobble",
+  id: "ta-wobble",
   name: "Wobble",
   category: "decorative",
   keyframes: "0% { transform: translateX(0%); } 15% { transform: translateX(-15%) rotate(-5deg); opacity: 1; } 30% { transform: translateX(10%) rotate(3deg); } 45% { transform: translateX(-10%) rotate(-3deg); } 60% { transform: translateX(5%) rotate(2deg); } 75% { transform: translateX(-2%) rotate(-1deg); } 100% { transform: translateX(0%); opacity: 1; }",
@@ -557,7 +557,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1300,
 },
 {
-  id: "kw-tracking-expand",
+  id: "ta-tracking-expand",
   name: "Tracking Expand",
   category: "entrance",
   keyframes: "0% { letter-spacing: -0.5em; opacity: 0; } 100% { letter-spacing: 0.05em; opacity: 1; }",
@@ -568,7 +568,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1950,
 },
 {
-  id: "kw-tracking-contract",
+  id: "ta-tracking-contract",
   name: "Tracking Contract",
   category: "entrance",
   keyframes: "0% { letter-spacing: 1em; opacity: 0; } 100% { letter-spacing: 0.05em; opacity: 1; }",
@@ -579,7 +579,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 2050,
 },
 {
-  id: "kw-skew-in-up",
+  id: "ta-skew-in-up",
   name: "Skew In Up",
   category: "stagger",
   keyframes: "0% { transform: translateY(100%) skewY(20deg); opacity: 0; } 100% { transform: translateY(0) skewY(0deg); opacity: 1; }",
@@ -590,7 +590,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1100,
 },
 {
-  id: "kw-skew-in-down",
+  id: "ta-skew-in-down",
   name: "Skew In Down",
   category: "stagger",
   keyframes: "0% { transform: translateY(-100%) skewY(-20deg); opacity: 0; } 100% { transform: translateY(0) skewY(0deg); opacity: 1; }",
@@ -601,7 +601,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1200,
 },
 {
-  id: "kw-skew-in-left",
+  id: "ta-skew-in-left",
   name: "Skew In Left",
   category: "stagger",
   keyframes: "0% { transform: translateX(-100%) skewX(30deg); opacity: 0; } 100% { transform: translateX(0) skewX(0deg); opacity: 1; }",
@@ -612,7 +612,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1200,
 },
 {
-  id: "kw-skew-in-right",
+  id: "ta-skew-in-right",
   name: "Skew In Right",
   category: "stagger",
   keyframes: "0% { transform: translateX(100%) skewX(-30deg); opacity: 0; } 100% { transform: translateX(0) skewX(0deg); opacity: 1; }",
@@ -623,7 +623,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1250,
 },
 {
-  id: "kw-unfold-vertical",
+  id: "ta-unfold-vertical",
   name: "Unfold Vertical",
   category: "stagger",
   keyframes: "0% { transform: rotateX(-90deg); opacity: 0; } 100% { transform: rotateX(0deg); opacity: 1; }",
@@ -634,7 +634,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1350,
 },
 {
-  id: "kw-unfold-horizontal",
+  id: "ta-unfold-horizontal",
   name: "Unfold Horizontal",
   category: "stagger",
   keyframes: "0% { transform: rotateY(-90deg); opacity: 0; } 100% { transform: rotateY(0deg); opacity: 1; }",
@@ -645,7 +645,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1450,
 },
 {
-  id: "kw-outline-to-solid",
+  id: "ta-outline-to-solid",
   name: "Outline To Solid",
   category: "entrance",
   keyframes: "0% { -webkit-text-stroke: 1px #fff; color: transparent; opacity: 0; } 50% { -webkit-text-stroke: 1px #fff; color: transparent; opacity: 1; } 100% { -webkit-text-stroke: 0px transparent; color: #fff; opacity: 1; }",
@@ -656,7 +656,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1600,
 },
 {
-  id: "kw-solid-to-outline",
+  id: "ta-solid-to-outline",
   name: "Solid To Outline",
   category: "entrance",
   keyframes: "0% { -webkit-text-stroke: 0px transparent; color: #fff; opacity: 0; } 50% { -webkit-text-stroke: 0px transparent; color: #fff; opacity: 1; } 100% { -webkit-text-stroke: 1px #fff; color: transparent; opacity: 1; }",
@@ -667,7 +667,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1600,
 },
 {
-  id: "kw-smoke-in",
+  id: "ta-smoke-in",
   name: "Smoke In",
   category: "stagger",
   keyframes: "0% { transform: translateY(-20px) scale(1.5); filter: blur(20px); opacity: 0; } 100% { transform: translateY(0) scale(1); filter: blur(0); opacity: 1; }",
@@ -678,7 +678,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1200,
 },
 {
-  id: "kw-smoke-out",
+  id: "ta-smoke-out",
   name: "Smoke Out",
   category: "stagger",
   keyframes: "0% { transform: translateY(0) scale(1); filter: blur(0); opacity: 1; } 100% { transform: translateY(-20px) scale(1.5); filter: blur(20px); opacity: 0; }",
@@ -689,7 +689,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1250,
 },
 {
-  id: "kw-slot-drop",
+  id: "ta-slot-drop",
   name: "Slot Drop",
   category: "stagger",
   keyframes: "0% { transform: translateY(-300%); filter: blur(5px); opacity: 0; } 50% { transform: translateY(20%); filter: blur(2px); opacity: 1; } 100% { transform: translateY(0); filter: blur(0); opacity: 1; }",
@@ -700,7 +700,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1050,
 },
 {
-  id: "kw-elastic-scale",
+  id: "ta-elastic-scale",
   name: "Elastic Scale",
   category: "stagger",
   keyframes: "0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.3); opacity: 1; } 80% { transform: scale(0.9); opacity: 1; } 100% { transform: scale(1); opacity: 1; }",
@@ -711,7 +711,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1450,
 },
 {
-  id: "kw-glitch-rgb",
+  id: "ta-glitch-rgb-chars",
   name: "Glitch RGB",
   category: "loop",
   keyframes: "0% { text-shadow: 2px 0 0 red, -2px 0 0 blue; opacity: 0; } 20% { text-shadow: -2px 0 0 red, 2px 0 0 blue; opacity: 1; } 40% { text-shadow: 2px 0 0 red, -2px 0 0 blue; } 60% { text-shadow: -2px 0 0 red, 2px 0 0 blue; } 80% { text-shadow: 1px 0 0 red, -1px 0 0 blue; } 100% { text-shadow: 0px 0 0 transparent; opacity: 1; }",
@@ -722,7 +722,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1400,
 },
 {
-  id: "kw-water-drop",
+  id: "ta-water-drop",
   name: "Water Drop",
   category: "stagger",
   keyframes: "0% { transform: translateY(-100px) scale(0.1, 2); opacity: 0; } 50% { transform: translateY(0) scale(1.5, 0.5); opacity: 1; } 100% { transform: translateY(0) scale(1, 1); opacity: 1; }",
@@ -733,7 +733,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1100,
 },
 {
-  id: "kw-anti-gravity",
+  id: "ta-anti-gravity",
   name: "Anti Gravity",
   category: "stagger",
   keyframes: "0% { transform: translateY(0); opacity: 0; } 50% { opacity: 1; transform: translateY(-20px); } 100% { transform: translateY(-50px); opacity: 0; }",
@@ -744,7 +744,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 3200,
 },
 {
-  id: "kw-falling-leaves",
+  id: "ta-falling-leaves",
   name: "Falling Leaves",
   category: "stagger",
   keyframes: "0% { transform: translate(0, -50px) rotate(0deg); opacity: 0; } 50% { transform: translate(20px, 0) rotate(45deg); opacity: 1; } 100% { transform: translate(-20px, 50px) rotate(90deg); opacity: 0; }",
@@ -755,7 +755,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 2900,
 },
 {
-  id: "kw-slingshot",
+  id: "ta-slingshot",
   name: "Slingshot",
   category: "stagger",
   keyframes: "0% { transform: translateZ(-500px) scale(0.1); opacity: 0; } 60% { transform: translateZ(100px) scale(1.2); opacity: 1; } 100% { transform: translateZ(0) scale(1); opacity: 1; }",
@@ -766,7 +766,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1250,
 },
 {
-  id: "kw-giant-slide",
+  id: "ta-giant-slide",
   name: "Giant Slide",
   category: "stagger",
   keyframes: "0% { transform: translateX(-200%) scale(3); opacity: 0; } 100% { transform: translateX(0) scale(1); opacity: 1; }",
@@ -777,7 +777,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1150,
 },
 {
-  id: "kw-staircase",
+  id: "ta-staircase",
   name: "Staircase",
   category: "stagger",
   keyframes: "0% { transform: translateY(50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; }",
@@ -788,7 +788,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1400,
 },
 {
-  id: "kw-shadow-first",
+  id: "ta-shadow-first",
   name: "Shadow First",
   category: "stagger",
   keyframes: "0% { text-shadow: 0 50px 20px rgba(255,255,255,0); opacity: 0; color: transparent; } 50% { text-shadow: 0 0 5px rgba(255,255,255,0.8); opacity: 1; color: transparent; } 100% { text-shadow: 0 0 0 rgba(255,255,255,0); color: #fff; opacity: 1; }",
@@ -799,7 +799,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1400,
 },
 {
-  id: "kw-cube-flip-x",
+  id: "ta-cube-flip-x",
   name: "Cube Flip X",
   category: "specialty",
   keyframes: "0% { transform: perspective(400px) rotateX(-90deg) translateZ(50px); opacity: 0; } 100% { transform: perspective(400px) rotateX(0deg) translateZ(0); opacity: 1; }",
@@ -811,7 +811,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1150,
 },
 {
-  id: "kw-cube-flip-y",
+  id: "ta-cube-flip-y",
   name: "Cube Flip Y",
   category: "specialty",
   keyframes: "0% { transform: perspective(400px) rotateY(-90deg) translateZ(50px); opacity: 0; } 100% { transform: perspective(400px) rotateY(0deg) translateZ(0); opacity: 1; }",
@@ -823,7 +823,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1150,
 },
 {
-  id: "kw-speed-dash",
+  id: "ta-speed-dash",
   name: "Speed Dash",
   category: "stagger",
   keyframes: "0% { transform: translateX(-200%) skewX(-45deg); opacity: 0; } 70% { transform: translateX(10%) skewX(-10deg); opacity: 1; } 100% { transform: translateX(0) skewX(0deg); opacity: 1; }",
@@ -834,7 +834,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1000,
 },
 {
-  id: "kw-heartbeat-burst",
+  id: "ta-heartbeat-burst",
   name: "Heartbeat Burst",
   category: "loop",
   keyframes: "0% { transform: scale(0.5); opacity: 0; } 30% { transform: scale(1.2); opacity: 1; } 50% { transform: scale(0.9); opacity: 1; } 70% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 1; }",
@@ -845,7 +845,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1550,
 },
 {
-  id: "kw-movie-credits",
+  id: "ta-movie-credits",
   name: "Movie Credits",
   category: "entrance",
   keyframes: "0% { transform: translateY(50px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(-50px); opacity: 0; }",
@@ -856,7 +856,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 3300,
 },
 {
-  id: "kw-springy-text",
+  id: "ta-springy-text",
   name: "Springy Text",
   category: "stagger",
   keyframes: "0% { transform: scaleY(0); transform-origin: bottom; opacity: 0; } 50% { transform: scaleY(1.5); opacity: 1; } 75% { transform: scaleY(0.8); } 100% { transform: scaleY(1); opacity: 1; }",
@@ -867,7 +867,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1200,
 },
 {
-  id: "kw-flip-bounce",
+  id: "ta-flip-bounce",
   name: "Flip Bounce",
   category: "stagger",
   keyframes: "0% { transform: perspective(400px) rotateX(90deg); opacity: 0; } 50% { transform: perspective(400px) rotateX(-20deg); opacity: 1; } 75% { transform: perspective(400px) rotateX(10deg); opacity: 1; } 100% { transform: perspective(400px) rotateX(0deg); opacity: 1; }",
@@ -878,7 +878,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1350,
 },
 {
-  id: "kw-rotate-3d-in",
+  id: "ta-rotate-3d-in",
   name: "Rotate 3D In",
   category: "specialty",
   keyframes: "0% { transform: perspective(500px) rotate3d(1, 1, 1, 90deg); opacity: 0; } 100% { transform: perspective(500px) rotate3d(0, 0, 0, 0deg); opacity: 1; }",
@@ -890,7 +890,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1400,
 },
 {
-  id: "kw-squeeze-expand",
+  id: "ta-squeeze-expand",
   name: "Squeeze Expand",
   category: "stagger",
   keyframes: "0% { letter-spacing: -0.5em; opacity: 0; transform: scaleY(0.1); } 50% { letter-spacing: 0.2em; transform: scaleY(1.2); opacity: 1; } 100% { letter-spacing: 0.05em; transform: scaleY(1); opacity: 1; }",
@@ -901,7 +901,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1500,
 },
 {
-  id: "kw-zip-in",
+  id: "ta-zip-in",
   name: "Zip In",
   category: "stagger",
   keyframes: "0% { transform: scale(0); opacity: 0; } 80% { transform: scale(1.1) rotate(10deg); opacity: 1; } 100% { transform: scale(1) rotate(0deg); opacity: 1; }",
@@ -912,7 +912,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 800,
 },
 {
-  id: "kw-blur-drop",
+  id: "ta-blur-drop",
   name: "Blur Drop",
   category: "stagger",
   keyframes: "0% { transform: translateY(-50px); filter: blur(10px); opacity: 0; } 100% { transform: translateY(0); filter: blur(0); opacity: 1; }",
@@ -923,7 +923,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1050,
 },
 {
-  id: "kw-blur-rise",
+  id: "ta-blur-rise",
   name: "Blur Rise",
   category: "stagger",
   keyframes: "0% { transform: translateY(50px); filter: blur(10px); opacity: 0; } 100% { transform: translateY(0); filter: blur(0); opacity: 1; }",
@@ -934,7 +934,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1050,
 },
 {
-  id: "kw-swing-in",
+  id: "ta-swing-in",
   name: "Swing In",
   category: "stagger",
   keyframes: "0% { transform: rotateX(-100deg); transform-origin: top; opacity: 0; } 100% { transform: rotateX(0deg); transform-origin: top; opacity: 1; }",
@@ -945,7 +945,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1200,
 },
 {
-  id: "kw-swing-out",
+  id: "ta-swing-out",
   name: "Swing Out",
   category: "stagger",
   keyframes: "0% { transform: rotateX(0deg); transform-origin: top; opacity: 1; } 100% { transform: rotateX(-100deg); transform-origin: top; opacity: 0; }",
@@ -956,7 +956,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1250,
 },
 {
-  id: "kw-pendulum",
+  id: "ta-pendulum",
   name: "Pendulum",
   category: "decorative",
   keyframes: "0% { transform: rotate(10deg); transform-origin: top; opacity: 0; } 50% { transform: rotate(-5deg); transform-origin: top; opacity: 1; } 100% { transform: rotate(0deg); transform-origin: top; opacity: 1; }",
@@ -967,7 +967,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1400,
 },
 {
-  id: "kw-pulse-neon",
+  id: "ta-pulse-neon",
   name: "Pulse Neon",
   category: "loop",
   keyframes: "0%, 100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0ff; opacity: 1; } 50% { text-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 10px #0ff; opacity: 0.5; }",
@@ -978,7 +978,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 2000,
 },
 {
-  id: "kw-flip-in-x",
+  id: "ta-flip-in-x",
   name: "Flip In X",
   category: "specialty",
   keyframes: "0% { transform: perspective(400px) rotateX(90deg); opacity: 0; } 100% { transform: perspective(400px) rotateX(0deg); opacity: 1; }",
@@ -990,7 +990,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 950,
 },
 {
-  id: "kw-flip-in-y",
+  id: "ta-flip-in-y",
   name: "Flip In Y",
   category: "specialty",
   keyframes: "0% { transform: perspective(400px) rotateY(90deg); opacity: 0; } 100% { transform: perspective(400px) rotateY(0deg); opacity: 1; }",
@@ -1002,7 +1002,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 950,
 },
 {
-  id: "kw-boomerang",
+  id: "ta-boomerang",
   name: "Boomerang",
   category: "stagger",
   keyframes: "0% { transform: translateZ(-500px) rotate(45deg); opacity: 0; } 50% { transform: translateZ(100px) rotate(-10deg); opacity: 1; } 100% { transform: translateZ(0) rotate(0deg); opacity: 1; }",
@@ -1013,7 +1013,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1250,
 },
 {
-  id: "kw-space-in",
+  id: "ta-space-in",
   name: "Space In",
   category: "stagger",
   keyframes: "0% { transform: scale(0.2) translateZ(-1000px); opacity: 0; } 100% { transform: scale(1) translateZ(0); opacity: 1; }",
@@ -1024,7 +1024,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1400,
 },
 {
-  id: "kw-perspective-in",
+  id: "ta-perspective-in",
   name: "Perspective In",
   category: "specialty",
   keyframes: "0% { transform: perspective(800px) translateZ(300px); opacity: 0; } 100% { transform: perspective(800px) translateZ(0); opacity: 1; }",
@@ -1036,7 +1036,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1500,
 },
 {
-  id: "kw-expand-forward",
+  id: "ta-expand-forward",
   name: "Expand Forward",
   category: "stagger",
   keyframes: "0% { letter-spacing: -0.5em; transform: translateZ(-700px); opacity: 0; } 100% { letter-spacing: 0.05em; transform: translateZ(0); opacity: 1; }",
@@ -1047,7 +1047,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1700,
 },
 {
-  id: "kw-contract-back",
+  id: "ta-contract-back",
   name: "Contract Back",
   category: "stagger",
   keyframes: "0% { letter-spacing: 0.05em; transform: translateZ(0); opacity: 1; } 100% { letter-spacing: -0.5em; transform: translateZ(-500px); opacity: 0; }",
@@ -1058,7 +1058,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1650,
 },
 {
-  id: "kw-text-shadow-pop",
+  id: "ta-text-shadow-pop",
   name: "Text Shadow Pop",
   category: "decorative",
   keyframes: "0% { text-shadow: 0 0 #555, 0 0 #555; transform: translateX(0) translateY(0); opacity: 0; } 100% { text-shadow: 1px 1px #555, 2px 2px #555, 3px 3px #555, 4px 4px #555; transform: translateX(-4px) translateY(-4px); opacity: 1; }",
@@ -1069,7 +1069,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1250,
 },
 {
-  id: "kw-flicker-in",
+  id: "ta-flicker-in",
   name: "Flicker In",
   category: "stagger",
   keyframes: "0% { opacity: 0; } 10% { opacity: 1; } 20% { opacity: 0; } 30% { opacity: 1; } 40% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 1; }",
@@ -1080,7 +1080,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1700,
 },
 {
-  id: "kw-typewriter",
+  id: "ta-typewriter",
   name: "Typewriter",
   category: "specialty",
   engine: "js",
@@ -1088,7 +1088,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1700,
 },
 {
-  id: "kw-terminal-type",
+  id: "ta-terminal-type",
   name: "Terminal Type",
   category: "specialty",
   engine: "js",
@@ -1097,7 +1097,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 2300,
 },
 {
-  id: "kw-shuffle-text",
+  id: "ta-shuffle-text",
   name: "Shuffle Text",
   category: "specialty",
   engine: "js",
@@ -1105,7 +1105,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 2010,
 },
 {
-  id: "kw-binary-decode",
+  id: "ta-binary-decode",
   name: "Binary Decode",
   category: "specialty",
   engine: "js",
@@ -1114,7 +1114,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 3380,
 },
 {
-  id: "kw-random-reveal",
+  id: "ta-random-reveal",
   name: "Random Reveal",
   category: "specialty",
   engine: "js",
@@ -1122,7 +1122,7 @@ export const textAnimations: TextAnimation[] = [
   durationMs: 1550,
 },
 {
-  id: "kw-spotlight",
+  id: "ta-spotlight",
   name: "Spotlight",
   category: "specialty",
   engine: "js",
@@ -1809,6 +1809,20 @@ const STAGGER_JS_HELPER = `/* ============================================
    document.querySelectorAll('[class*="ta-stagger"]').forEach(staggerSplit);
 */`;
 
+/**
+ * Stable identifier for an emitted JS driver, derived from its kind:
+ * `binary-decode` -> `taDriverBinaryDecode`. Matches the authored names in
+ * text-animation-drivers.js, but is computed rather than read off `fn.name`,
+ * which a production build strips. See the note in getBundleSnippet.
+ */
+function driverIdent(kind: string): string {
+  const pascal = kind
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
+  return `taDriver${pascal}`;
+}
+
 export function getBundleSnippet(animations: TextAnimation[]): string {
   if (animations.length === 0) return '';
   const hasStagger = animations.some((a) => Boolean(a.split));
@@ -1877,16 +1891,24 @@ export function getBundleSnippet(animations: TextAnimation[]): string {
     // text-animation-drivers.js via Function.toString() — single-source: the
     // emitted bytes equal the bytes the tool runs. Registry + harness are
     // generic; only which drivers/entries appear varies per pick.
+    //
+    // Each driver is bound to an identifier WE derive from the kind, rather
+    // than emitted as a bare declaration relying on `fn.name`. A production
+    // build minifies these functions to anonymous expressions, so a bare
+    // `function(a,t,e){...}` statement is a SyntaxError and `fn.name` is empty
+    // — which shipped a bundle that could not run. Assigning to a var we name
+    // ourselves is correct whether the source arrives named, anonymous, or
+    // mangled.
     const script: string[] = [];
     script.push('<script>');
     script.push(`/* Cargo Text Animations — JS drivers (picked: ${pickedList}) */`);
     script.push('(function(){');
     for (const k of jsKinds) {
-      script.push(taDrivers[k].toString());
+      script.push(`var ${driverIdent(k)} = ${taDrivers[k].toString()};`);
     }
     script.push('var __taDrivers = {');
     for (const k of jsKinds) {
-      script.push(`  "${k}": ${taDrivers[k].name},`);
+      script.push(`  "${k}": ${driverIdent(k)},`);
     }
     script.push('};');
     script.push("var nodes = document.querySelectorAll('[data-ta-anim]');");

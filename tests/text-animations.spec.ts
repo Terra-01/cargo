@@ -2,6 +2,7 @@ import { writeFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import { grantClipboard } from './helpers/clipboard';
 import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
+import { TOUCH_FLOOR_MIN } from './helpers/touch-target';
 
 test.describe('Text Animation Library tool', () => {
   test('renders without console errors', async ({ page }) => {
@@ -37,18 +38,19 @@ test.describe('Text Animation Library tool', () => {
     await expect(page.getByTestId('ta-result-count')).toHaveText('146 / 146');
   });
 
-  test('catalogue renders the kw- group first (reordered: 99 kw- then 47 ta-)', async ({ page }) => {
+  // This used to assert the catalogue rendered "99 kw- then 47 ta-". The kw-
+  // prefix is gone (see THIRD-PARTY-NOTICES.md) so there are no longer two
+  // groups to order — every entry shares the one ta- namespace. What is worth
+  // holding is that the catalogue is complete and every id is unique, since the
+  // id doubles as the animation's CSS class and keyframes name.
+  test('catalogue renders all 146 entries with unique ids', async ({ page }) => {
     await page.goto('/tools/text-animations');
     const ids = await page.locator('.ta-card').evaluateAll((els) =>
       els.map((el) => el.getAttribute('data-animation-id') || '')
     );
     expect(ids).toHaveLength(146);
-    const firstTa = ids.findIndex((id) => id.startsWith('ta-'));
-    const lastKw = ids.map((id) => id.startsWith('kw-')).lastIndexOf(true);
-    // Every kw- card precedes every ta- card.
-    expect(lastKw).toBeLessThan(firstTa);
-    expect(ids.filter((id) => id.startsWith('kw-'))).toHaveLength(99);
-    expect(ids.filter((id) => id.startsWith('ta-'))).toHaveLength(47);
+    expect(new Set(ids).size).toBe(146);
+    expect(ids.every((id) => id.startsWith('ta-'))).toBe(true);
   });
 
   test('cards render no plain-text category — classification is badge-only', async ({ page }) => {
@@ -255,7 +257,7 @@ test.describe('Text Animation Library tool', () => {
   test('bundle copy includes 3D perspective note when 3D animation picked', async ({ page, context }) => {
     await grantClipboard(context);
     await page.goto('/tools/text-animations');
-    await page.getByTestId('ta-card-kw-rotate-in-y').click();
+    await page.getByTestId('ta-card-ta-rotate-in-y').click();
     await page.getByTestId('picker-copy').click();
     const clipboard = await page.evaluate(() => navigator.clipboard.readText());
     expect(clipboard).toContain('perspective');
@@ -271,12 +273,12 @@ test.describe('Text Animation Library tool', () => {
   // — JS-driven animations (engine: 'js', Milestone 2a) —
 
   const JS_ANIMATION_IDS = [
-    'kw-typewriter',
-    'kw-terminal-type',
-    'kw-shuffle-text',
-    'kw-binary-decode',
-    'kw-random-reveal',
-    'kw-spotlight',
+    'ta-typewriter',
+    'ta-terminal-type',
+    'ta-shuffle-text',
+    'ta-binary-decode',
+    'ta-random-reveal',
+    'ta-spotlight',
   ];
 
   test('the 6 JS-engine animations exist as specialty cards', async ({ page }) => {
@@ -300,38 +302,38 @@ test.describe('Text Animation Library tool', () => {
 
   test('Typewriter driver types out the animation name', async ({ page }) => {
     await page.goto('/tools/text-animations');
-    const card = page.getByTestId('ta-card-kw-typewriter');
+    const card = page.getByTestId('ta-card-ta-typewriter');
     await card.scrollIntoViewIfNeeded();
-    await expect(page.getByTestId('ta-preview-kw-typewriter')).toContainText('Typewriter', {
+    await expect(page.getByTestId('ta-preview-ta-typewriter')).toContainText('Typewriter', {
       timeout: 8000,
     });
   });
 
   test('Terminal Type driver renders the blinking cursor element + sample text', async ({ page }) => {
     await page.goto('/tools/text-animations');
-    const card = page.getByTestId('ta-card-kw-terminal-type');
+    const card = page.getByTestId('ta-card-ta-terminal-type');
     await card.scrollIntoViewIfNeeded();
-    const preview = page.getByTestId('ta-preview-kw-terminal-type');
+    const preview = page.getByTestId('ta-preview-ta-terminal-type');
     await expect(preview.locator('.ta-terminal-cursor')).toHaveCount(1);
     await expect(preview).toContainText('init system...', { timeout: 8000 });
   });
 
   test('Binary Decode driver resolves to its sample text', async ({ page }) => {
     await page.goto('/tools/text-animations');
-    const card = page.getByTestId('ta-card-kw-binary-decode');
+    const card = page.getByTestId('ta-card-ta-binary-decode');
     await card.scrollIntoViewIfNeeded();
     // Binary Decode carries a sampleText (not its name); it flickers 0/1 then
     // resolves each character. 'Decode' is the stable resolved suffix.
-    await expect(page.getByTestId('ta-preview-kw-binary-decode')).toContainText('Decode', {
+    await expect(page.getByTestId('ta-preview-ta-binary-decode')).toContainText('Decode', {
       timeout: 9000,
     });
   });
 
   test('Spotlight driver sets the text immediately with a clipped gradient', async ({ page }) => {
     await page.goto('/tools/text-animations');
-    const card = page.getByTestId('ta-card-kw-spotlight');
+    const card = page.getByTestId('ta-card-ta-spotlight');
     await card.scrollIntoViewIfNeeded();
-    const preview = page.getByTestId('ta-preview-kw-spotlight');
+    const preview = page.getByTestId('ta-preview-ta-spotlight');
     await expect(preview).toHaveText('Spotlight');
     // The driver clips a sweeping gradient to the text — assert the inline
     // style the driver set directly (avoids cross-browser computed-value
@@ -342,8 +344,8 @@ test.describe('Text Animation Library tool', () => {
 
   test('JS-engine cards replay on the shared cadence (driver re-runs on remount)', async ({ page }) => {
     await page.goto('/tools/text-animations');
-    const preview = page.getByTestId('ta-preview-kw-typewriter');
-    await page.getByTestId('ta-card-kw-typewriter').scrollIntoViewIfNeeded();
+    const preview = page.getByTestId('ta-preview-ta-typewriter');
+    await page.getByTestId('ta-card-ta-typewriter').scrollIntoViewIfNeeded();
     // Full text appears (typewriter completes ~1.7s)…
     await expect(preview).toHaveText('Typewriter', { timeout: 8000 });
     // …then the shared replayKey cadence (durationMs + 400) remounts the span
@@ -378,13 +380,13 @@ test.describe('Text Animation Library tool', () => {
     context,
   }) => {
     await grantClipboard(context);
-    const bundle = await copyBundle(page, ['kw-typewriter']);
+    const bundle = await copyBundle(page, ['ta-typewriter']);
 
     // JS section present
     expect(bundle).toContain('<script>');
     expect(bundle).toContain('</script>');
     expect(bundle).toContain('/* Cargo Text Animations — JS drivers (picked: typewriter) */');
-    expect(bundle).toContain('function taDriverTypewriter');
+    expect(bundle).toContain('var taDriverTypewriter = function');
     expect(bundle).toContain('var __taDrivers = {');
     expect(bundle).toContain('"typewriter": taDriverTypewriter,');
     expect(bundle).toContain("document.querySelectorAll('[data-ta-anim]')");
@@ -396,7 +398,7 @@ test.describe('Text Animation Library tool', () => {
     expect(bundle).not.toContain('/* Keyframes */');
     expect(bundle).not.toContain('/* Classes */');
     expect(bundle).not.toContain('undefined');
-    expect(bundle).not.toMatch(/\.kw-typewriter\s*\{\s*\}/);
+    expect(bundle).not.toMatch(/\.ta-typewriter\s*\{\s*\}/);
 
     // Only the picked driver is emitted
     for (const fn of ALL_DRIVER_FNS.filter((f) => f !== 'taDriverTypewriter')) {
@@ -409,10 +411,10 @@ test.describe('Text Animation Library tool', () => {
     context,
   }) => {
     await grantClipboard(context);
-    const bundle = await copyBundle(page, ['kw-typewriter', 'kw-binary-decode']);
+    const bundle = await copyBundle(page, ['ta-typewriter', 'ta-binary-decode']);
 
-    expect(bundle).toContain('function taDriverTypewriter');
-    expect(bundle).toContain('function taDriverBinaryDecode');
+    expect(bundle).toContain('var taDriverTypewriter = function');
+    expect(bundle).toContain('var taDriverBinaryDecode = function');
     expect(bundle).toContain('"typewriter": taDriverTypewriter,');
     expect(bundle).toContain('"binary-decode": taDriverBinaryDecode,');
     expect(bundle).toContain('(picked: typewriter, binary-decode)');
@@ -431,7 +433,7 @@ test.describe('Text Animation Library tool', () => {
     context,
   }) => {
     await grantClipboard(context);
-    const bundle = await copyBundle(page, ['ta-fade-in-up', 'kw-typewriter']);
+    const bundle = await copyBundle(page, ['ta-fade-in-up', 'ta-typewriter']);
 
     // CSS section for the CSS animation
     expect(bundle).toContain('/* Keyframes */');
@@ -439,7 +441,7 @@ test.describe('Text Animation Library tool', () => {
     expect(bundle).toContain('.ta-fade-in-up');
     // JS section for the JS animation
     expect(bundle).toContain('<script>');
-    expect(bundle).toContain('function taDriverTypewriter');
+    expect(bundle).toContain('var taDriverTypewriter = function');
     // No undefined leaked into the CSS section
     expect(bundle).not.toContain('undefined');
   });
@@ -497,14 +499,14 @@ ${scriptBlock}
     page,
     context,
   }, testInfo) => {
-    await runnableCheck(page, context, testInfo, 'kw-typewriter', 'typewriter', 'Hello Cargo');
+    await runnableCheck(page, context, testInfo, 'ta-typewriter', 'typewriter', 'Hello Cargo');
   });
 
   test('exported Binary Decode script runs in a standalone file (frame driver)', async ({
     page,
     context,
   }, testInfo) => {
-    await runnableCheck(page, context, testInfo, 'kw-binary-decode', 'binary-decode', 'Run Decode');
+    await runnableCheck(page, context, testInfo, 'ta-binary-decode', 'binary-decode', 'Run Decode');
   });
 
   // — Category filter (Milestone 3, Part 1) —
@@ -701,7 +703,7 @@ test.describe('Text Animation Library — touch and control polish', () => {
     await page.goto('/tools/text-animations');
     for (const cat of ['all', 'hover', 'specialty']) {
       const box = await page.getByTestId(`ta-cat-${cat}`).boundingBox();
-      expect(box!.height).toBeGreaterThanOrEqual(44);
+      expect(box!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     }
   });
 
@@ -711,8 +713,8 @@ test.describe('Text Animation Library — touch and control polish', () => {
     await page.getByTestId('ta-card-ta-fade-in-up').click();
     const clear = await page.getByTestId('picker-clear').boundingBox();
     const copy = await page.getByTestId('picker-copy').boundingBox();
-    expect(clear!.height).toBeGreaterThanOrEqual(44);
-    expect(copy!.height).toBeGreaterThanOrEqual(44);
+    expect(clear!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
+    expect(copy!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 
   test('the PickerTray show toggle and chips meet the 44px touch floor', async ({ page }) => {
@@ -721,13 +723,13 @@ test.describe('Text Animation Library — touch and control polish', () => {
     // The show/hide toggle.
     const toggle = page.getByTestId('picker-toggle');
     await expect(toggle).toBeVisible();
-    expect((await toggle.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await toggle.boundingBox())!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     // Expand so the chips render; the chip IS the remove control (the inner
     // "x" is an aria-hidden span), so a 44px chip is a 44px remove target.
     await toggle.click();
     const chip = page.getByTestId('picker-chip-ta-fade-in-up');
     await expect(chip).toBeVisible();
-    expect((await chip.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await chip.boundingBox())!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 
   test('screenshot the PickerTray .btn--sm fix at mobile', async ({ page }, testInfo) => {

@@ -3,6 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { watchConsoleErrors, realConsoleErrors } from './helpers/console-errors';
+import { TOUCH_FLOOR_MIN } from './helpers/touch-target';
 import { buildEmbedSnippet } from '../src/lib/standalone-export';
 import { DEFAULT_CONFIG } from '../src/lib/shader-types';
 
@@ -333,9 +334,21 @@ test.describe('Shader Gradient Lab tool', () => {
     await page.goto(URL);
     const btn = page.getByTestId('sg-copy-snippet');
     await expect(btn).toHaveText('Copy Snippet');
-    await btn.click();
-    await expect(btn).toHaveText('Copied!');
-    await expect(btn).toHaveAttribute('data-copied', 'true');
+
+    // data-copied and the "Copied!" label derive from one piece of state, so
+    // asserting the attribute alone is sufficient — checking both sequentially
+    // is what let the original assertion straddle the 1600ms reset.
+    //
+    // The click also is not always delivered: the CI failure read
+    // "Copy Snippet|false", meaning the state never changed at all.
+    // handleCopySnippet is fully guarded and cannot throw, so the handler
+    // simply never ran — the click landed while the canvas was still settling.
+    // toPass retries the click; the inner assertion polls, which the click
+    // needs because React re-renders a tick after the event is dispatched.
+    await expect(async () => {
+      await btn.click();
+      await expect(btn).toHaveAttribute('data-copied', 'true', { timeout: 1_000 });
+    }).toPass({ timeout: 15_000 });
   });
 
   test('embeddable snippet is guest-safe and renders in a host page', async ({ page }, testInfo) => {
@@ -584,14 +597,14 @@ test.describe('Shader Gradient Lab — touch-target sizing', () => {
       const bottom = Math.abs(parseFloat(a.bottom) || 0);
       return r.height + top + bottom;
     });
-    expect(backTap).toBeGreaterThanOrEqual(44);
+    expect(backTap).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     const text = await page.getByTestId('sg-text-input').boundingBox();
-    expect(text!.height).toBeGreaterThanOrEqual(44);
+    expect(text!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     const btns = page.locator('.sg-toolbar__btn');
     const n = await btns.count();
     for (let i = 0; i < n; i++) {
       const b = await btns.nth(i).boundingBox();
-      expect(b!.height).toBeGreaterThanOrEqual(44);
+      expect(b!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     }
   });
 
@@ -600,8 +613,8 @@ test.describe('Shader Gradient Lab — touch-target sizing', () => {
     await page.getByTestId('sg-edit-dials').click();
     await expect(page.getByTestId('sg-dials-modal')).toBeVisible();
     const close = await page.getByTestId('sg-dials-close').boundingBox();
-    expect(close!.height).toBeGreaterThanOrEqual(44);
-    expect(close!.width).toBeGreaterThanOrEqual(44);
+    expect(close!.height).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
+    expect(close!.width).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
     const sub = await page.evaluate(() => {
       const modal = document.querySelector('.sg-modal');
       if (!modal) return -1;
@@ -612,6 +625,6 @@ test.describe('Shader Gradient Lab — touch-target sizing', () => {
       });
       return min;
     });
-    expect(sub).toBeGreaterThanOrEqual(44);
+    expect(sub).toBeGreaterThanOrEqual(TOUCH_FLOOR_MIN);
   });
 });

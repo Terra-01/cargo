@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+# A newer push to the same branch cancels the in-flight run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Nothing here writes to the repository. Without this block GITHUB_TOKEN
+# inherits the repository default, which on a public repo is broader than
+# these jobs need.
+permissions:
+  contents: read
+
+# A same-repo pull request has the identical head SHA as the push that created
+# the branch, so both events would run the whole suite over the same commit —
+# which is exactly what happened on the dev -> main PR: two 35-minute runs of
+# e87ffdd back to back. Run pull_request only for forks, where no push event
+# fires in this repository.
+jobs:
+  check:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    name: Typecheck, lint, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+  test:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    name: Playwright (chromium light/dark + firefox)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox
+      # CI=true makes playwright.config.ts serve the production build via
+      # `npm run start` instead of the dev server — see the comment there.
+      - run: npm run build
+      # Chromium is headless with SwiftShader and needs no display. Keep it out
+      # of xvfb — wrapping the whole suite changed Chromium's environment too
+      # and made the toolbar clipboard spec flaky.
+      - run: npx playwright test --project=chromium-light --project=chromium-dark
+      # Firefox is the one that needs a real display: headless Firefox
+      # implements no WebGL at all (Mozilla bug 1375585), so it runs headed
+      # against Xvfb, where llvmpipe supplies a software WebGL2 context.
+      - run: xvfb-run -a npx playwright test --project=firefox
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

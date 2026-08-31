@@ -12,7 +12,7 @@ export default function MockupWrapperPage() {
   const tool = tools.find((t) => t.id === 'mockup-wrapper')!;
 
   return (
-    <main className="container">
+    <main id="main" className="container">
       <div className="tool-page">
         <Link href="/" className="tool-page__back">back to the workshop</Link>
         <header className="tool-page__header">

@@ -17,7 +17,7 @@ export function ManifestStrip({ shipped, planned, version }: ManifestStripProps)
       </div>
       <div className="manifest__item">
         <span className="manifest__label">License</span>
-        <span className="manifest__value">Free, forever</span>
+        <span className="manifest__value">MIT · free forever</span>
       </div>
       <div className="manifest__item">
         <span className="manifest__label">Version</span>

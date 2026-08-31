@@ -89,7 +89,7 @@ export function SearchAsYouTypeExample() {
           border: 1px solid var(--border-strong); border-radius: var(--radius-md);
           font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text);
         }
-        .upl-ex-st__field input:focus { outline: none; border-color: var(--accent); }
+        .upl-ex-st__field input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
         .upl-ex-st__meta {
           display: flex; gap: var(--space-4); margin-bottom: var(--space-2);
           font-family: var(--font-mono); font-size: 11px; color: var(--text-faint);

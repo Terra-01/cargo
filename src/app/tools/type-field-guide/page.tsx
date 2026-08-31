@@ -17,7 +17,7 @@ export default function TypeFieldGuidePage() {
   const tool = tools.find((t) => t.id === 'type-field-guide')!;
 
   return (
-    <main className="container">
+    <main id="main" className="container">
       <div className="tool-page">
         <style>{`
           .tfg-prose {

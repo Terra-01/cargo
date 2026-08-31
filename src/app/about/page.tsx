@@ -20,7 +20,7 @@ const softHeader = {
 
 export default function AboutPage() {
   return (
-    <main className="container">
+    <main id="main" className="container">
       <div className="tool-page">
         <header className="tool-page__header">
           <p className="eyebrow tool-page__eyebrow">{'// about'}</p>
@@ -44,7 +44,22 @@ export default function AboutPage() {
           Built on other people&apos;s work
         </h2>
         <p style={prose}>
-          Cargo does not stand on its own. The gradient tool is a port of <strong>Neat</strong>, an open-source gradient library by <strong>FireCMS</strong>. Two of its shaders, &ldquo;Rainbow&rdquo; and &ldquo;Ether&rdquo;, come from <strong>Shadertoy</strong>, the second by an author who goes by <strong>nimitz</strong>. The text animation library grew by studying a collection of a hundred handmade animations from <strong>Kawai Text Animation</strong> and learning from how they were built. None of those people know this project exists. The work they shared openly made a good part of Cargo possible, and that is worth saying plainly.
+          Cargo does not stand on its own. The gradient tool is a port of <strong>Neat</strong>, an open-source gradient library by <strong>FireCMS</strong>. Two of its shaders, &ldquo;Rainbow Warp&rdquo; and &ldquo;Ether&rdquo;, come from <strong>Shadertoy</strong>, the second by an author who goes by <strong>nimitz</strong>. The text animation library follows a collection of a hundred animations published by <strong>川合卓也 (Takuya Kawai)</strong> of <strong>KAWAI DESIGN</strong>, and many of the effects in it are older still, tracing back to <strong>Animate.css</strong> by <strong>Daniel Eden</strong>. The type is <strong>Manrope</strong>, <strong>Instrument Serif</strong> and <strong>IBM Plex Mono</strong>, all open-licensed. None of those people know this project exists. The work they shared openly made a good part of Cargo possible, and that is worth saying plainly.
+        </p>
+        <p style={prose}>
+          One of those debts is currently unpayable, and it should be said out loud rather than buried: the author of &ldquo;Rainbow Warp&rdquo; is <strong>unknown</strong>. The Shadertoy link this project cited for years turned out to point at a different shader by a different person, so the credit has been withdrawn rather than left pointing at the wrong author. If you recognise the shader, please say so.
+        </p>
+        <p style={prose}>
+          Every debt is written down, with whatever author, source and license is actually known, in the project&apos;s{' '}
+          <a
+            href="https://github.com/Terra-01/cargo/blob/main/THIRD-PARTY-NOTICES.md"
+            className="about__link"
+            target="_blank"
+            rel="noreferrer"
+          >
+            third-party notices
+          </a>
+          . Cargo itself is MIT licensed. A few of the files it borrows are not, and that file says exactly which.
         </p>
       </div>
 

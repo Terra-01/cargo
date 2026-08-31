@@ -24,11 +24,16 @@ const links = [
 export function TopbarNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-
-  // Close the menu on navigation (route change) and on Escape.
-  useEffect(() => {
+  // Close the menu on navigation. Each link already closes it onClick, but a
+  // browser back/forward changes the route without one — so derive the closed
+  // state from the pathname during render rather than in an effect (an effect
+  // here fires a second render pass, which react-hooks/set-state-in-effect
+  // correctly flags).
+  const [navPath, setNavPath] = useState(pathname);
+  if (navPath !== pathname) {
+    setNavPath(pathname);
     setOpen(false);
-  }, [pathname]);
+  }
 
   useEffect(() => {
     if (!open) return;

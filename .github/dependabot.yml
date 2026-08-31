@@ -1,0 +1,28 @@
+version: 2
+
+# next, react and react-dom are pinned to exact versions in package.json, so
+# nothing surfaces a patch release on its own. These two ecosystems cover the
+# whole dependency surface: npm for the app, github-actions for the CI workflow.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # One PR for the framework trio, which must move together.
+      next:
+        patterns:
+          - next
+          - eslint-config-next
+          - react
+          - react-dom
+          - "@types/react"
+          - "@types/react-dom"
+      dev:
+        dependency-type: development
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

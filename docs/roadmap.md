@@ -1,3 +1,11 @@
+> **Working document — partly historical.**
+> Written before Cargo was open-sourced. Two of the three phases it scopes
+> (CSS Effect Lab v2, UI Pattern Dictionary) have since shipped and are marked
+> as such inline; **Mockup Wrapper v2** is the only phase still open. The
+> appendix on working style, settled decisions, and testing is still accurate
+> and is the best background reading for a contributor. Where it conflicts with
+> [CONTRIBUTING.md](../CONTRIBUTING.md), CONTRIBUTING wins.
+
 # Cargo — Roadmap for remaining work
 
 **Purpose of this document.** This is a handoff roadmap. It is written so that an agent (or person) with no prior context on Cargo can pick it up and carry the remaining work forward. It covers how the project is built, its current state, and a detailed scoping of the three phases that remain. It does not contain milestone prompts — it contains everything needed to *write* them.
@@ -8,7 +16,9 @@ Read sections 1–3 before touching any phase. Sections 4–6 are the phases the
 
 ## 1. What Cargo is
 
-Cargo is a workshop of small, single-purpose web tools for designers and "vibe coders", free, no accounts, no tracking. It is a side project, built incrementally. The reset is complete: nine tools are shipped, none are planned or coming-soon, and the project is in its finished, cleaned-up state.
+Cargo is a workshop of small, single-purpose web tools for designers and design engineers, free, no accounts, no tracking. It is a side project, built incrementally. The reset is complete: none are planned or coming-soon, and the project is in its finished, cleaned-up state.
+
+> **Count note.** This document was written when nine tools were shipped. Ten ship today — the UI Pattern Library landed afterwards. `src/lib/tools.ts` is the registry and the single source of truth; where this file gives a number, trust the registry instead.
 
 **Stack:** Next.js 16 (App Router, webpack — not Turbopack), TypeScript, plain CSS with design tokens (no Tailwind, no CSS-in-JS), Playwright for tests.
 
@@ -217,7 +227,7 @@ This is closest in spirit to a content tool — like a well-written reference pa
 - Mockup Wrapper v2 — ~1–2 milestones (frames, possibly export separately).
 - UI Pattern Dictionary — ~2–3 milestones (a content plan, then tool + initial content, then full content) plus the scoping/content-design step.
 
-**Current completion point reached.** The reset is complete: Cargo has nine tools, all shipped, the registry's `coming_soon` is gone, and the closing tech-debt cleanup is done. The Component Prompt Builder was cut along the way, so the count is nine rather than ten. The one optional piece of future work still on the table is Mockup Wrapper v2. Anything beyond that is a fresh planning conversation.
+**Current completion point reached.** The reset is complete: every tool in the registry is shipped, the registry's `coming_soon` is gone, and the closing tech-debt cleanup is done. The Component Prompt Builder was cut along the way. (This paragraph counted nine at the time of writing; the UI Pattern Library shipped afterwards, bringing the registry to ten.) The one optional piece of future work still on the table is Mockup Wrapper v2. Anything beyond that is a fresh planning conversation.
 
 **A reminder carried from section 2:** every milestone prompt is self-contained, opens with the standing rules, and is written for a builder starting cold. Embedded data gets verified before it goes in. The house style is matched, never reinvented. And the project moves one Saturday at a time — milestones should be sized so one is a satisfying, shippable unit of work, not a sprawling one.
 
@@ -247,7 +257,7 @@ These are settled. A new agent should follow them, not relitigate them.
 - **Plain CSS with tokens.** All styling uses CSS custom properties (design tokens) defined in `src/app/globals.css`. Some tools inject a scoped `<style>` block from their component for tool-specific rules. Shared, multi-tool classes live in `globals.css`. When a size/layout change affects only one tool, scope it to that tool (a tool-specific class) rather than editing a shared global class — a prior milestone correctly scoped a grid change to a new `.ta-catalog` class instead of touching the shared `.catalog` used by three tools.
 - **The tool registry is the single source of truth.** `src/lib/tools.ts` — id, number, category, title, description, tags, route, status, preview component. Update it when a tool ships or changes its description.
 - **Tool content lives in data files.** Each content-heavy tool keeps its content as a typed array in `src/lib/*` (e.g. the text animations, the shader presets, the mockup frames). New tools follow this — author content as a TypeScript data file, not MDX or inline JSX.
-- **Open-source ports keep their attribution.** The Shader Gradient Lab ports Neat (FireCMS, MIT + Commons Clause) and two Shadertoy shaders (CC BY-NC-SA 3.0). `LICENSE-SHADERS.md` records the licenses; exported code carries an attribution header. Any future port preserves origin attribution the same way.
+- **Open-source ports keep their attribution.** The Shader Gradient Lab ports Neat (FireCMS, MIT + Commons Clause) and two Shadertoy shaders (CC BY-NC-SA 3.0). [`THIRD-PARTY-NOTICES.md`](../THIRD-PARTY-NOTICES.md) records the licenses (it replaced the old `LICENSE-SHADERS.md`); exported code carries an attribution header. Any future port preserves origin attribution the same way.
 - **Exports must actually work.** Several tools produce copy-paste or downloadable output (CSS snippets, standalone HTML, bundles, PNGs). The rule throughout: what the user copies must run when pasted. Exports are verified by actually running the output, not by eyeballing it. When a tool's runtime code is also emitted to the user, it is authored as a single source that serves both (the JS animation drivers are plain dependency-free `.js` for exactly this reason).
 - **The card / preview pattern.** Tools that present a catalogue (animations, loaders) use a card grid; cards use badges, not plain-text labels, for classification; previews auto-play when scrolled into view via `IntersectionObserver` and pause off-screen. Reuse this pattern rather than inventing per-tool.
 

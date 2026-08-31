@@ -15,7 +15,7 @@ export default function SpecPressureTestPage() {
   const tool = tools.find((t) => t.id === 'spec-pressure-test')!;
 
   return (
-    <main className="container">
+    <main id="main" className="container">
       <div className="tool-page">
         <style>{`
           .spt-prose {

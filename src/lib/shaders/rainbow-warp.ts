@@ -2,10 +2,33 @@ import type { ShaderProgram } from '../shader-types';
 import { CURATED_SUPPORTED_FIELDS } from '../shader-types';
 import { BASIC_VERTEX_SHADER, CURATED_HELPERS, GLSL_PRECISION } from './shared';
 
-// Rainbow Warp — port of "Rainbow", https://www.shadertoy.com/view/Ws3SRn,
-// CC BY-NC-SA 3.0. The procedural `spectral_colour` wavelength->rgb table and
-// the 8-iteration domain-warp loop are the faithful port of the Shadertoy
-// source. Standard Shadertoy -> WebGL2 ES 3.00 translation: iTime/iResolution
+// Rainbow Warp — ported from a Shadertoy shader whose origin is UNRESOLVED.
+//
+// ATTRIBUTION PROBLEM, recorded honestly rather than papered over. This file
+// used to cite https://www.shadertoy.com/view/Ws3SRn as the source. That ID is
+// wrong: it resolves to "AD - Connecting dots" by arnedecant (2019), a
+// dots-and-lines shader with no spectral colour table and no domain-warp loop
+// — nothing like what is ported below. The citation was checked against the
+// live page, and the neighbouring "Ether" citation was checked the same way and
+// is correct, so this is a single bad ID rather than a broken convention.
+//
+// The effect of the error was worse than a dead link: standalone-export.ts
+// stamps this metadata into every file a user exports, so each export credited
+// an author who had nothing to do with this shader. The author and source
+// fields below are therefore left explicitly unknown rather than guessed. That
+// is unsatisfying, but naming the wrong person is worse than naming nobody.
+//
+// The two ingredients are individually common prior art — the branching
+// wavelength-to-RGB approximation is widely republished, and the cos/sin
+// coordinate-swap warp is a standard plasma idiom — so the licence below stays
+// at the conservative CC BY-NC-SA 3.0 assumed for any Shadertoy-derived work
+// until the real source is identified.
+//
+// TO CLOSE THIS: find the original shader, restore title/author/source, and
+// confirm its licence. Until then treat this shader as non-commercial and
+// unverified. Removing it entirely is the alternative if it cannot be traced.
+//
+// Standard Shadertoy -> WebGL2 ES 3.00 translation: iTime/iResolution
 // macros (with a small mouse-lean term), a `vec2 fragCoord = v_uv *
 // u_resolution;` prelude, and the shared curated tail (hue / saturation /
 // brightness / grain) so the curated dials work.
@@ -76,9 +99,13 @@ export const rainbowWarpProgram: ShaderProgram = {
   supportedFields: CURATED_SUPPORTED_FIELDS,
   usesColorStops: false,
   attribution: {
-    title: 'Rainbow',
-    author: 'Shadertoy contributor',
-    source: 'https://www.shadertoy.com/view/Ws3SRn',
-    license: 'CC BY-NC-SA 3.0',
+    // See the file header: the previously cited Shadertoy ID belonged to a
+    // different work by a different author. Left unknown deliberately — these
+    // strings are stamped into every user export, and crediting the wrong
+    // person in someone else's distributed file is worse than crediting no one.
+    title: 'Rainbow Warp',
+    author: 'unknown (original Shadertoy author unidentified)',
+    source: 'origin unresolved — see src/lib/shaders/rainbow-warp.ts',
+    license: 'CC BY-NC-SA 3.0 (assumed)',
   },
 };

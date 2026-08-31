@@ -1,20 +1,91 @@
 import type { Metadata } from 'next';
+import { Manrope, Instrument_Serif, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 import { Topbar } from '@/components/Topbar';
 import { Footer } from '@/components/Footer';
 
+// All three faces are SIL Open Font License, fetched at build time and served
+// from our own origin. No font binaries live in this repo (the previous
+// self-hosted General Sans could not be redistributed — see
+// THIRD-PARTY-NOTICES.md) and no request leaves the site at runtime, which is
+// what makes the About page's "nothing tracked" literally true.
+const sans = Manrope({
+  subsets: ['latin'],
+  variable: '--font-sans-loaded',
+  display: 'swap',
+});
+
+const serif = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  style: ['normal', 'italic'],
+  variable: '--font-serif-loaded',
+  display: 'swap',
+});
+
+const mono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono-loaded',
+  display: 'swap',
+});
+
+// Absolute base for canonical + Open Graph URLs. Set NEXT_PUBLIC_SITE_URL for a
+// custom domain; on Vercel the production URL is picked up automatically; local
+// dev falls back to localhost so metadata still resolves.
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : 'http://localhost:3000');
+
+const title = 'Cargo — small tools for people who make things';
+const description =
+  'A workshop of free single-purpose utilities for designers and vibe coders.';
+
 export const metadata: Metadata = {
-  title: 'Cargo — small tools for people who make things',
-  description: 'A workshop of free single-purpose utilities for designers and vibe coders.',
+  metadataBase: new URL(siteUrl),
+  // No title template: every page already sets its own "<Tool> — Cargo".
+  title,
+  description,
+  applicationName: 'Cargo',
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    siteName: 'Cargo',
+    title,
+    description,
+    url: '/',
+    locale: 'en',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description,
+  },
   icons: {
     icon: '/favicon.svg',
   },
 };
 
+// Applies the saved theme before first paint, so a visitor who chose dark on a
+// light-mode OS does not get a flash of light. Static author-written string, no
+// interpolation. `auto` intentionally sets nothing and lets the CSS
+// prefers-color-scheme rules win.
+const THEME_SCRIPT = `try{var t=localStorage.getItem('cargo-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${sans.variable} ${serif.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
+        <a href="#main" className="skip-link">Skip to content</a>
         <Topbar />
         {children}
         <Footer />
