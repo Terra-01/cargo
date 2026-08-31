@@ -62,7 +62,8 @@ Open <http://localhost:3000>.
 
 ## Before you open a PR
 
-All four must pass — CI runs exactly these:
+All four must pass. CI runs exactly these on your pull request (and on every
+push to `main` and `dev`):
 
 ```bash
 npm run typecheck && npm run lint && npm run build && npx playwright test

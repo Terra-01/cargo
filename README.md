@@ -1,7 +1,7 @@
 # Cargo
 
-A workshop of small tools for designers and vibe coders. Free, forever. Built
-one Saturday at a time.
+A workshop of small tools for designers and design engineers. Free, forever.
+Built one Saturday at a time.
 
 No accounts, no tracking, no backend. Every tool runs entirely in your browser —
 nothing you type, upload, or generate leaves the page.
@@ -50,7 +50,9 @@ Open <http://localhost:3000>.
 npm run typecheck && npm run lint && npm run build && npx playwright test
 ```
 
-CI runs exactly these four on every push and PR.
+CI runs exactly these four on every push to `main` and `dev`, and on every pull
+request except one opened from `main` or `dev` itself — those already ran on
+push, and testing the identical commit twice just burns minutes.
 
 The suite runs three projects every time — `chromium-light`, `chromium-dark`
 and `firefox`, all at 1280×800. Firefox is not optional; it has caught real

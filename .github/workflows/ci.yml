@@ -17,14 +17,21 @@ concurrency:
 permissions:
   contents: read
 
-# A same-repo pull request has the identical head SHA as the push that created
-# the branch, so both events would run the whole suite over the same commit —
-# which is exactly what happened on the dev -> main PR: two 35-minute runs of
-# e87ffdd back to back. Run pull_request only for forks, where no push event
-# fires in this repository.
+# A pull request from main or dev has the identical head SHA as the push that
+# already ran, so both events would test the same commit twice — which is what
+# happened on the dev -> main PR: two 35-minute runs of e87ffdd back to back.
+#
+# The condition has to be narrower than "skip all same-repo PRs", though. The
+# push trigger only covers main and dev, so that broader form left every other
+# same-repo branch — Dependabot's especially — with no CI whatsoever, which is
+# worse than running twice. Skip only when the head branch is one push already
+# covers; forks and every other branch still run.
 jobs:
   check:
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    if: >-
+      github.event_name == 'push'
+      || github.event.pull_request.head.repo.full_name != github.repository
+      || !contains(fromJSON('["main","dev"]'), github.event.pull_request.head.ref)
     name: Typecheck, lint, build
     runs-on: ubuntu-latest
     steps:
@@ -39,7 +46,10 @@ jobs:
       - run: npm run build
 
   test:
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    if: >-
+      github.event_name == 'push'
+      || github.event.pull_request.head.repo.full_name != github.repository
+      || !contains(fromJSON('["main","dev"]'), github.event.pull_request.head.ref)
     name: Playwright (chromium light/dark + firefox)
     runs-on: ubuntu-latest
     steps:

@@ -41,7 +41,7 @@ const siteUrl =
 
 const title = 'Cargo — small tools for people who make things';
 const description =
-  'A workshop of free single-purpose utilities for designers and vibe coders.';
+  'A workshop of free single-purpose utilities for designers and design engineers.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
