@@ -14,7 +14,7 @@ export default function Home() {
           Small tools for people who <em>make things</em> on the web.
         </h1>
         <p className="hero__lead">
-          A workshop of single-purpose utilities for designers and vibe coders. Free, forever. Built one Saturday at a time.
+          A workshop of single-purpose utilities for designers and design engineers. Free, forever. Built one Saturday at a time.
         </p>
       </section>
 
